@@ -1,0 +1,2566 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TokuteiJob — Tìm việc làm Tokutei tại Nhật Bản</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FAFAFA;--surface:#FFFFFF;--surface-alt:#F4F4F6;--border:#E5E5EA;
+  --primary:#2D2CDB;--primary-soft:#EEEEFF;
+  --accent:#E8305A;--accent-soft:#FFEEF2;
+  --text-1:#111118;--text-2:#52525B;--text-3:#A1A1AA;
+  --grad:linear-gradient(135deg,#5B4FE8 0%,#8B3CD8 28%,#D44EA6 58%,#E8305A 80%,#F5834A 100%);
+  --r:12px;--sh:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+  --sh2:0 2px 8px rgba(0,0,0,.1),0 12px 40px rgba(0,0,0,.12);
+  --nav:64px
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter','Noto Sans JP',-apple-system,sans-serif;background:var(--bg);color:var(--text-1);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{line-height:1.2;letter-spacing:-.02em}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+section{padding:80px 0}
+@media(max-width:768px){section{padding:48px 0}}
+
+/* ── AUTH MODAL ── */
+.auth-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.auth-overlay.open{display:flex}
+.auth-card{background:#fff;border-radius:20px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.22)}
+.auth-card-hd{padding:28px 28px 0}
+.auth-tabs{display:flex;gap:0;background:var(--surface-alt);border-radius:10px;padding:4px;margin-bottom:24px}
+.auth-tab{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text-3);font-family:inherit}
+.auth-tab.on{background:#fff;color:var(--text-1);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.auth-card-body{padding:0 28px 28px}
+.auth-form{display:none}.auth-form.on{display:block}
+.auth-social{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.auth-social-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-1)}
+.auth-social-btn:hover{border-color:var(--text-2);background:var(--surface-alt)}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text-3);font-size:12px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;transition:border .2s;font-family:inherit;margin-bottom:10px}
+.auth-input:focus{border-color:var(--primary)}
+.auth-submit{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;margin-top:4px}
+.auth-submit:hover{background:#2420c8}
+.auth-err{font-size:12px;color:var(--accent);margin-top:6px;display:none}
+.auth-err.show{display:block}
+.auth-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-3);line-height:1}
+.auth-card{position:relative}
+/* User avatar in nav */
+.user-btn{display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;font-family:inherit;padding:4px 8px;border-radius:8px;transition:background .2s}
+.user-btn:hover{background:var(--surface-alt)}
+.user-ava{width:32px;height:32px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;flex-shrink:0;overflow:hidden}
+.user-ava img{width:100%;height:100%;object-fit:cover}
+.user-name-nav{font-size:13px;font-weight:600;color:var(--text-1);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--sh2);min-width:200px;z-index:150;overflow:hidden;display:none}
+.user-dropdown.open{display:block}
+.user-dd-info{padding:14px 16px;border-bottom:1px solid var(--border)}
+.user-dd-name{font-size:14px;font-weight:700}
+.user-dd-email{font-size:12px;color:var(--text-3);margin-top:2px}
+.user-dd-item{display:flex;align-items:center;gap:8px;padding:11px 16px;font-size:13px;font-weight:500;color:var(--text-2);cursor:pointer;transition:background .15s;border:none;background:none;width:100%;text-align:left;font-family:inherit}
+.user-dd-item:hover{background:var(--surface-alt);color:var(--text-1)}
+.user-wrap{position:relative}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav);background:rgba(255,255,255,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--border);z-index:100;transition:box-shadow .2s}
+nav.scrolled{box-shadow:var(--sh)}
+.nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:32px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
+.logo-icon{width:32px;height:32px;background:var(--grad);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:800;font-family:'Noto Sans JP',sans-serif}
+.logo-text{font-size:18px;font-weight:700;color:var(--text-1)}.logo-text em{color:var(--primary);font-style:normal}
+.nav-links{display:flex;align-items:center;gap:24px;list-style:none;flex:1}
+.nav-links a{font-size:14px;font-weight:500;color:var(--text-2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text-1)}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.lang{display:flex;align-items:center;background:var(--surface-alt);border-radius:6px;padding:3px;gap:2px}
+.lang button{font-size:12px;font-weight:600;padding:4px 8px;border:none;background:transparent;border-radius:4px;cursor:pointer;color:var(--text-3);transition:all .15s}
+.lang button.on{background:#fff;color:var(--text-1);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap}
+.btn-ghost{background:transparent;color:var(--text-2)}.btn-ghost:hover{background:var(--surface-alt);color:var(--text-1)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#2420c8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(45,44,219,.3)}
+.btn-dark{background:var(--text-1);color:#fff}.btn-dark:hover{background:#1a1a2e;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5)}.btn-outline:hover{background:rgba(255,255,255,.15);border-color:#fff}
+.btn-lg{font-size:16px;padding:12px 24px;border-radius:10px}
+.burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px;margin-left:auto}
+.burger span{display:block;width:22px;height:2px;background:var(--text-1);border-radius:2px;transition:all .3s}
+.mob-menu{display:none;position:fixed;top:var(--nav);left:0;right:0;background:#fff;border-bottom:1px solid var(--border);padding:16px 24px;z-index:99;flex-direction:column;gap:0}
+.mob-menu.open{display:flex}
+.mob-menu a{font-size:15px;font-weight:500;color:var(--text-2);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--border)}
+
+/* ── HERO ── */
+.hero{background:var(--grad);padding:calc(var(--nav) + 72px) 0 0;overflow:hidden;position:relative}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.08));pointer-events:none;z-index:1}
+.hero-in{max-width:1120px;margin:0 auto;padding:0 24px;text-align:center;position:relative;z-index:2}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:13px;font-weight:500;padding:6px 14px;border-radius:100px;margin-bottom:28px;backdrop-filter:blur(8px)}
+.badge-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(.85)}}
+.hero h1{font-size:clamp(30px,5.5vw,68px);font-weight:800;color:#fff;margin-bottom:20px;letter-spacing:-.03em}
+.hero h1 .l2{display:block;color:#ff8fa3}
+.hero-sub{font-size:clamp(15px,2vw,20px);color:rgba(255,255,255,.78);max-width:560px;margin:0 auto 32px}
+.hero-acts{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:44px;flex-wrap:wrap}
+
+/* Hero mockup */
+.mockup{background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -8px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);max-width:900px;margin:0 auto;overflow:hidden}
+.mock-bar{background:#F7F7F8;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.mock-dots{display:flex;gap:6px}
+.mock-dots span{width:10px;height:10px;border-radius:50%}
+.mock-dots span:nth-child(1){background:#FF5F57}
+.mock-dots span:nth-child(2){background:#FFBD2E}
+.mock-dots span:nth-child(3){background:#28CA42}
+.mock-url{flex:1;background:#fff;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:12px;color:var(--text-3);text-align:center}
+.mock-body{padding:20px;background:var(--bg)}
+.mock-search{display:flex;gap:8px;margin-bottom:14px}
+.mock-field{flex:1;background:#fff;border:1.5px solid var(--border);border-radius:8px;padding:9px 14px;font-size:13px;color:var(--text-2);display:flex;align-items:center;gap:6px}
+.mock-field .ic{color:var(--text-3);font-size:13px}
+.mock-field input{border:none;outline:none;flex:1;font-size:13px;color:var(--text-2);background:transparent;font-family:inherit;min-width:0}
+.mock-field input::placeholder{color:var(--text-3)}
+.mock-btn{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer}
+.mock-tags{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:500;padding:4px 10px;border-radius:100px;border:1px solid var(--border);background:#fff;color:var(--text-2)}
+.tag.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+.mock-jobs{display:grid;gap:7px}
+.mjob{background:#fff;border:1px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:12px;text-align:left}
+.mlogo{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;font-family:'Noto Sans JP',sans-serif}
+.minfo{flex:1}
+.mtitle{font-size:12px;font-weight:600;color:var(--text-1)}
+.mmeta{font-size:11px;color:var(--text-3)}
+.msal{font-size:12px;font-weight:700;color:var(--primary);white-space:nowrap}
+
+/* ── STATS ── */
+.stats{background:#fff;border-bottom:1px solid var(--border)}
+.stats-in{max-width:860px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(3,1fr)}
+.sitem{padding:32px 24px;border-right:1px solid var(--border);text-align:center}
+.sitem:last-child{border-right:none}
+.snum{font-size:36px;font-weight:800;color:var(--text-1);letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+.slabel{font-size:13px;color:var(--text-3);font-weight:600;letter-spacing:.01em}
+
+/* ── SECTION HEADER ── */
+.sec-hd{text-align:center;margin-bottom:52px}
+.sec-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
+.sec-title{font-size:clamp(26px,4vw,42px);font-weight:700;margin-bottom:14px}
+.sec-sub{font-size:17px;color:var(--text-2);max-width:540px;margin:0 auto}
+
+/* ── FEATURES GRID ── */
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.fcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:transform .2s,box-shadow .2s}
+.fcard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.fcard-body{padding:28px}
+.fcard-body h3{font-size:19px;font-weight:700;margin-bottom:8px}
+.fcard-body p{font-size:14px;color:var(--text-2);line-height:1.65}
+.fvis{background:linear-gradient(180deg,#F4F4F6 0%,#EEEEFF 100%);border-top:1px solid var(--border);min-height:200px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+
+/* mini job list in feature */
+.mjlist{width:100%;padding:14px}
+.mjrow{display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fff;border-radius:8px;margin-bottom:6px;border:1px solid var(--border)}
+.mml{width:28px;height:28px;border-radius:6px;flex-shrink:0}
+.mmi{flex:1}
+.mmt{font-size:11px;font-weight:600;color:var(--text-1)}
+.mmm{font-size:10px;color:var(--text-3)}
+.mbadge{font-size:10px;padding:2px 7px;border-radius:100px;font-weight:600;background:var(--primary-soft);color:var(--primary)}
+
+/* prefecture bars */
+.pref-con{padding:16px;width:100%;display:flex;gap:16px;align-items:flex-start}
+.pref-list{flex:1}
+.pref-row{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px}
+.pref-row:last-child{border-bottom:none}
+.pn{color:var(--text-2);font-weight:500;width:80px;flex-shrink:0}
+.pb-wrap{flex:1;height:4px;background:var(--border);border-radius:2px}
+.pb{height:100%;background:var(--primary);border-radius:2px}
+.pc{color:var(--text-3);font-weight:600;width:28px;text-align:right}
+.jpsvg{width:80px;opacity:.55}
+
+/* category mini */
+.cg-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:14px;width:100%}
+.cm{aspect-ratio:1;background:#fff;border:1px solid var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px;color:var(--text-2);font-weight:500;text-align:center;padding:4px}
+.cm .e{font-size:17px}
+
+/* tracking */
+.track-vis{padding:20px;width:100%}
+.track-nums{display:flex;gap:20px;justify-content:center;margin-bottom:16px}
+.tn{text-align:center}
+.tn-n{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.tn-l{font-size:10px;color:var(--text-3);margin-top:1px}
+.track-items{display:flex;flex-direction:column;gap:8px}
+.ti{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2)}
+.tdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ── HOW IT WORKS ── */
+.how{background:var(--surface-alt)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.step{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:28px}
+.step-n{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--primary);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.step-nb{width:24px;height:24px;background:var(--primary-soft);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--primary)}
+.step-ico{font-size:30px;margin-bottom:10px}
+.step h3{font-size:17px;font-weight:700;margin-bottom:7px}
+.step p{font-size:13px;color:var(--text-2)}
+
+/* ── CATEGORIES ── */
+.group-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
+.group-card{background:#fff;border:2px solid var(--border);border-radius:16px;padding:32px 24px;text-align:center;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:inherit}
+.group-card:hover{border-color:var(--primary);box-shadow:var(--sh2);transform:translateY(-3px)}
+.group-ico{font-size:40px;margin-bottom:4px}
+.group-name{font-size:22px;font-weight:800;color:var(--text-1)}
+.group-sub{font-size:13px;color:var(--text-3)}
+.group-count{font-size:13px;font-weight:700;color:var(--primary);background:var(--primary-soft);padding:3px 12px;border-radius:100px;margin-top:4px}
+.subcat-hd{display:flex;align-items:center;gap:16px;margin-bottom:20px;margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);transition:all .2s;font-family:inherit}
+.back-btn:hover{border-color:var(--primary);color:var(--primary)}
+.subcat-title{font-size:18px;font-weight:700;color:var(--text-1)}
+.cat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:0}
+.ccat{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 10px;text-align:center;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;display:block}
+.ccat:hover{border-color:var(--primary);background:var(--primary-soft);transform:translateY(-2px);box-shadow:var(--sh)}
+.ccat .e{font-size:26px;margin-bottom:6px;display:block}
+.ccat-n{font-size:11px;font-weight:600;color:var(--text-2);line-height:1.3}
+.ccat-c{font-size:10px;color:var(--text-3);margin-top:2px}
+
+/* ── COMPARISON ── */
+.comp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r);border:1px solid var(--border);position:relative}
+.comp-wrap::after{content:'';position:absolute;top:0;right:0;bottom:0;width:32px;background:linear-gradient(to right,transparent,rgba(255,255,255,.9));pointer-events:none;border-radius:0 var(--r) var(--r) 0}
+@media(min-width:769px){.comp-wrap::after{display:none}}
+.ctable{width:100%;border-collapse:collapse;min-width:560px;overflow:hidden}
+.ctable th{background:var(--surface-alt);padding:14px 20px;text-align:center;font-size:13px;font-weight:700;border-bottom:1px solid var(--border);border-right:1px solid var(--border);white-space:nowrap}
+.ctable th:last-child{border-right:none}
+.ctable th.hl{background:var(--primary);color:#fff}
+.ctable td{padding:12px 20px;font-size:13px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);text-align:center}
+.ctable td:first-child{text-align:left;color:var(--text-2)}
+.ctable td:last-child{border-right:none}
+.ctable tr:last-child td{border-bottom:none}
+.ctable td.hl{background:var(--primary-soft)}
+.scroll-hint{display:none;text-align:center;font-size:11px;color:var(--text-3);margin-bottom:8px;letter-spacing:.02em}
+@media(max-width:768px){.scroll-hint{display:block}}
+.ck{color:#22c55e;font-size:17px;font-weight:700}
+.cx{color:var(--text-3);font-size:17px}
+.cp{color:#f59e0b;font-size:13px;font-weight:600}
+
+/* ── PRICING ── */
+.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;align-items:start}
+.pcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:28px;transition:transform .2s,box-shadow .2s}
+.pcard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.pcard.feat{border-color:var(--primary);background:var(--primary);color:#fff;transform:translateY(-4px);box-shadow:var(--sh2)}
+.pcard.feat:hover{transform:translateY(-6px)}
+.plabel{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:4px}
+.feat .plabel{color:rgba(255,255,255,.6)}
+.pbadge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;background:var(--accent-soft);color:var(--accent);border-radius:100px;margin-bottom:14px}
+.feat .pbadge{background:rgba(255,255,255,.2);color:#fff}
+.pprice{font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:4px}
+.pper{font-size:13px;color:var(--text-3);margin-bottom:22px}
+.feat .pper{color:rgba(255,255,255,.6)}
+.pdiv{border:none;border-top:1px solid var(--border);margin:18px 0}
+.feat .pdiv{border-color:rgba(255,255,255,.2)}
+.pfeats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px}
+.pfeats li{font-size:13px;display:flex;align-items:flex-start;gap:7px}
+.pfeats li::before{content:'✓';color:var(--primary);font-weight:700;flex-shrink:0}
+.feat .pfeats li::before{color:rgba(255,255,255,.9)}
+.feat .pfeats li{color:rgba(255,255,255,.85)}
+
+/* ── TESTIMONIALS ── */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px}
+.tcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:26px}
+.tstars{color:#f59e0b;font-size:13px;margin-bottom:10px}
+.ttext{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:18px}
+.tauthor{display:flex;align-items:center;gap:10px}
+.tavatar{width:40px;height:40px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700;flex-shrink:0}
+.tname{font-size:13px;font-weight:600}
+.trole{font-size:11px;color:var(--text-3)}
+
+
+/* ── CTA ── */
+.cta{background:var(--grad);text-align:center;position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;top:-50%;left:-20%;width:60%;height:200%;background:radial-gradient(ellipse,rgba(255,255,255,.08) 0%,transparent 70%)}
+.cta h2{font-size:clamp(26px,4vw,46px);font-weight:800;color:#fff;margin-bottom:10px}
+.cta p{font-size:17px;color:rgba(255,255,255,.78);margin-bottom:32px}
+.cta-form{display:flex;gap:8px;max-width:440px;margin:0 auto}
+.cta-in{flex:1;padding:12px 16px;border-radius:10px;border:none;font-size:14px;outline:none;background:rgba(255,255,255,.95)}
+.cta-in::placeholder{color:var(--text-3)}
+
+/* ── FOOTER ── */
+footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:44px}
+.ft-tagline{font-size:13px;margin-top:8px;line-height:1.6}
+.ft-col h4{font-size:13px;font-weight:700;color:#fff;margin-bottom:14px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ft-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:#fff}
+.ft-bot{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+.soc{display:flex;gap:10px}
+.sl{width:30px;height:30px;background:rgba(255,255,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:12px;text-decoration:none;transition:all .2s}
+.sl:hover{background:rgba(255,255,255,.2);color:#fff}
+
+/* ── ANIMATIONS ── */
+.anim{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1)}
+.anim.on{opacity:1;transform:none}
+.stag>*{opacity:0;transform:translateY(18px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
+.stag.on>*:nth-child(1){opacity:1;transform:none;transition-delay:0s}
+.stag.on>*:nth-child(2){opacity:1;transform:none;transition-delay:.07s}
+.stag.on>*:nth-child(3){opacity:1;transform:none;transition-delay:.14s}
+.stag.on>*:nth-child(4){opacity:1;transform:none;transition-delay:.21s}
+.stag.on>*:nth-child(5){opacity:1;transform:none;transition-delay:.28s}
+.stag.on>*:nth-child(6){opacity:1;transform:none;transition-delay:.35s}
+.stag.on>*:nth-child(7){opacity:1;transform:none;transition-delay:.42s}
+.stag.on>*:nth-child(8){opacity:1;transform:none;transition-delay:.49s}
+.stag.on>*:nth-child(n+9){opacity:1;transform:none;transition-delay:.56s}
+
+.badge{animation:fdDown .6s cubic-bezier(.22,1,.36,1) .1s both}
+.hero h1{animation:fdUp .7s cubic-bezier(.22,1,.36,1) .2s both}
+.hero-sub{animation:fdUp .7s cubic-bezier(.22,1,.36,1) .3s both}
+.hero-acts{animation:fdUp .7s cubic-bezier(.22,1,.36,1) .4s both}
+.mockup{animation:fdUp .8s cubic-bezier(.22,1,.36,1) .5s both}
+@keyframes fdUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes fdDown{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* ── TYPE SYSTEM ── */
+:root{--viet:#22a85a;--viet-soft:#e8f8ef;--nhat:#2D2CDB;--nhat-soft:#EEEEFF;--kysis:#d97706;--kysis-soft:#fef3c7}
+
+/* job type badge on cards */
+.jbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;flex-shrink:0;letter-spacing:.01em}
+.jbadge-viet{background:var(--viet-soft);color:var(--viet)}
+.jbadge-nhat{background:var(--nhat-soft);color:var(--nhat)}
+.jbadge-kysis{background:var(--kysis-soft);color:var(--kysis)}
+.jbadge-both{background:linear-gradient(90deg,var(--viet-soft),var(--nhat-soft));color:var(--text-1)}
+
+/* mock type tabs */
+.mock-type{display:flex;gap:0;margin-bottom:14px;background:var(--surface-alt);border-radius:10px;padding:4px}
+.mtt{flex:1;padding:9px 12px;border-radius:7px;border:none;background:transparent;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--text-3)}
+.mtt .mtt-flag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+.mtt .mtt-name{font-size:12px;font-weight:700}
+.mtt .mtt-sub{font-size:10px;font-weight:400}
+.mtt.on{background:#fff;color:var(--text-1);box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.mtt.on.viet .mtt-flag{color:var(--viet)}
+.mtt.on.viet .mtt-name{color:var(--viet)}
+.mtt.on.nhat .mtt-flag{color:var(--nhat)}
+.mtt.on.nhat .mtt-name{color:var(--nhat)}
+.mtt.on.kysis .mtt-flag{color:var(--kysis)}
+.mtt.on.kysis .mtt-name{color:var(--kysis)}
+.mock-jobs-wrap{position:relative;max-height:240px;overflow-y:scroll;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.mock-jobs-wrap::-webkit-scrollbar{width:4px}
+.mock-jobs-wrap::-webkit-scrollbar-track{background:transparent}
+.mock-jobs-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.mock-jobs-wrap .jobs-panel{display:none}
+.mock-jobs-wrap .jobs-panel.on{display:grid;gap:7px}
+
+/* type choice cards section */
+.type-cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px}
+.tc{border-radius:16px;overflow:hidden;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.tc-body{background:#fff;padding:24px 28px;flex:1;display:flex;flex-direction:column}
+.tc:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.tc-head{padding:28px 28px 24px}
+.tc-type{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.tc-title{font-size:22px;font-weight:800;margin-bottom:8px;line-height:1.2}
+.tc-who{font-size:14px;opacity:.85;line-height:1.5}
+.tc-rows{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;flex:1}
+.tc-row{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text-2)}
+.tc-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.tc-row strong{color:var(--text-1)}
+.tc.viet .tc-head{background:linear-gradient(135deg,#1a9e52,#22a85a,#34c471)}
+.tc.viet .tc-type{color:rgba(255,255,255,.7)}
+.tc.viet .tc-title,.tc.viet .tc-who{color:#fff}
+.tc.viet .tc-icon-ok{color:var(--viet)}
+.tc.nhat .tc-head{background:linear-gradient(135deg,#1a1acb,#2D2CDB,#5554e8)}
+.tc.nhat .tc-type{color:rgba(255,255,255,.7)}
+.tc.nhat .tc-title,.tc.nhat .tc-who{color:#fff}
+.tc.nhat .tc-icon-ok{color:var(--nhat)}
+.tc-cta{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:all .2s}
+.tc.viet .tc-cta{background:var(--viet);color:#fff}.tc.viet .tc-cta:hover{background:#1a9e52}
+.tc.nhat .tc-cta{background:var(--nhat);color:#fff}.tc.nhat .tc-cta:hover{background:#2420c8}
+
+/* search bar */
+.search-bar{position:relative;margin:28px 0 20px}
+.search-bar input{width:100%;border:2px solid var(--border);border-radius:12px;padding:14px 48px 14px 48px;font-size:15px;color:var(--text-1);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit}
+.search-bar input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(45,44,219,.1)}
+.search-bar input::placeholder{color:var(--text-3)}
+.search-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none;color:var(--text-3)}
+.search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--surface-alt);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:16px;color:var(--text-2);display:none;align-items:center;justify-content:center;line-height:1}
+.search-clear.show{display:flex}
+/* type filter for categories */
+.type-filter{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
+.tf-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:100px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text-2)}
+.tf-btn:hover{border-color:var(--primary);color:var(--primary)}
+.tf-btn.on-all{border-color:var(--primary);background:var(--primary);color:#fff}
+.tf-btn.on-viet{border-color:var(--viet);background:var(--viet);color:#fff}
+.tf-btn.on-nhat{border-color:var(--nhat);background:var(--nhat);color:#fff}
+.tf-btn.on-kysis{border-color:var(--kysis);background:var(--kysis);color:#fff}
+
+/* 2-track how it works */
+.tracks{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px}
+.track{border-radius:16px;overflow:hidden}
+.track-hd{padding:20px 24px;display:flex;align-items:center;gap:12px}
+.track.viet .track-hd{background:linear-gradient(135deg,#1a9e52,#34c471)}
+.track.nhat .track-hd{background:linear-gradient(135deg,#1a1acb,#5554e8)}
+.track-hd-info{}
+.track-hd-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.7)}
+.track-hd-title{font-size:18px;font-weight:800;color:#fff}
+.track-hd-pill{margin-left:auto;background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap}
+.track-steps{background:#fff;border:1px solid var(--border);border-top:none;border-radius:0 0 16px 16px;padding:8px 0}
+.ts{display:flex;align-items:flex-start;gap:12px;padding:16px 24px;border-bottom:1px solid var(--border)}
+.ts:last-child{border-bottom:none}
+.ts-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:1px}
+.track.viet .ts-num{background:var(--viet-soft);color:var(--viet)}
+.track.nhat .ts-num{background:var(--nhat-soft);color:var(--nhat)}
+.ts-body{}
+.ts-title{font-size:14px;font-weight:700;margin-bottom:2px}
+.ts-sub{font-size:12px;color:var(--text-3)}
+
+@media(max-width:768px){
+  .type-cards,.tracks{grid-template-columns:1fr}
+  .mtt .mtt-sub{display:none}
+}
+@media(max-width:480px){
+  .tc-head{padding:22px 20px 18px}
+  .tc-body{padding:18px 20px}
+  .track-hd{padding:16px 18px}
+  .ts{padding:14px 18px}
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1024px){
+  .cat-grid{grid-template-columns:repeat(4,1fr)}
+  .ft-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .nav-links,.lang{display:none}
+  .burger{display:flex}
+  .nav-right .btn-ghost{display:none}
+  .stats-in{grid-template-columns:repeat(3,1fr)}
+  .sitem{padding:22px 10px;border-right:1px solid var(--border);border-bottom:none}
+  .sitem:last-child{border-right:none}
+  .snum{font-size:26px}
+  .feat-grid,.steps,.tgrid{grid-template-columns:1fr}
+  .cat-grid{grid-template-columns:repeat(4,1fr)}
+  .price-grid{grid-template-columns:1fr}
+  .pcard.feat{transform:none}.pcard.feat:hover{transform:translateY(-2px)}
+  .ft-grid{grid-template-columns:1fr;gap:24px}
+  .ft-bot{flex-direction:column;gap:14px;text-align:center}
+  .cta-form,.hero-acts{flex-direction:column;align-items:stretch}
+  .hero-acts .btn{text-align:center}
+  .mock-search{flex-wrap:wrap}
+  .mock-field{min-width:0}
+  .hero-acts{padding:0 8px}
+  .mockup{border-radius:12px 12px 0 0}
+  .fcard-body{padding:20px}
+  .fcard-body h3{font-size:17px}
+  .step{padding:20px}
+  .snum{font-size:26px}
+  .cta h2{font-size:clamp(24px,7vw,46px)}
+  .cta p{font-size:15px}
+  .fq{font-size:13px;padding:14px 18px}
+  .fans p{padding:0 18px 14px}
+}
+@media(max-width:480px){
+  .cat-grid{grid-template-columns:repeat(3,1fr)}
+  .ccat{padding:14px 6px}
+  .ccat .e{font-size:22px;margin-bottom:4px}
+  .ccat-n{font-size:10px}
+  .mock-tags{display:none}
+  .mock-field:nth-child(2){display:none}
+  .ctable th,.ctable td{padding:9px 10px;font-size:11px}
+  .ctable th:nth-child(3),.ctable td:nth-child(3){display:none}
+  .sec-sub{font-size:15px}
+  .pref-con{flex-direction:column;align-items:center}
+  .jpsvg{display:none}
+  .track-nums{gap:24px}
+}
+
+/* ── JOB CARDS ── */
+.jobs-section{margin-top:36px;padding-top:28px;border-top:1px solid var(--border)}
+.jobs-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.jobs-section-title{font-size:17px;font-weight:700}
+.jobs-count{font-size:13px;color:var(--text-3)}
+.jobs-list{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:1024px){.jobs-list{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.jobs-list{grid-template-columns:1fr}}
+.jcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:11px;transition:transform .2s,box-shadow .2s}
+.jcard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
+.jcard-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.jcard-cat{font-size:11px;color:var(--text-3);background:var(--surface-alt);padding:3px 9px;border-radius:100px;white-space:nowrap}
+.jcard-title{font-size:15px;font-weight:700;color:var(--text-1);line-height:1.35}
+.jcard-meta{display:flex;flex-wrap:wrap;gap:6px}
+.jcard-meta span{font-size:12px;color:var(--text-2)}
+.jcard-sal{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.jcard.viet .jcard-sal{color:var(--viet)}
+.jcard.nhat .jcard-sal{color:var(--nhat)}
+.jcard-desc{font-size:12px;color:var(--text-3);line-height:1.55}
+.jcard-cta{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:#0068FF;color:#fff;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none;transition:background .2s;margin-top:auto}
+.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
+.status-badge.active{background:#e8f8ef;color:#22a85a}
+.status-badge.active::before{content:'';width:6px;height:6px;background:#22a85a;border-radius:50%;display:inline-block}
+.status-badge.expired{background:#f4f4f6;color:#a1a1aa}
+.status-badge.expired::before{content:'';width:6px;height:6px;background:#a1a1aa;border-radius:50%;display:inline-block}
+.jcard.expired{opacity:.65}
+.jcard.expired .jcard-cta{background:var(--text-3);pointer-events:none}
+.jcard-cta:hover{background:#0054cc}
+.jobs-empty{text-align:center;padding:48px 24px;color:var(--text-3);grid-column:1/-1}
+.jobs-empty .ej{font-size:40px;margin-bottom:12px}
+.jobs-empty p{font-size:15px;font-weight:600;color:var(--text-2);margin-bottom:8px}
+.jobs-empty a{font-size:14px;color:var(--primary);text-decoration:none;font-weight:600}
+.ccat.active{border-color:var(--primary);background:var(--primary-soft)}
+.ccat.active .ccat-n{color:var(--primary)}
+
+/* ── APPLY FORM ── */
+.apply-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:400;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+@media(min-width:600px){.apply-overlay{align-items:center;padding:20px}}
+.apply-overlay.open{opacity:1;pointer-events:all}
+.apply-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:640px;max-height:95vh;display:flex;flex-direction:column;box-shadow:0 -8px 48px rgba(0,0,0,.22);transform:translateY(48px);transition:transform .35s cubic-bezier(.22,1,.36,1)}
+@media(min-width:600px){.apply-box{border-radius:20px;transform:translateY(24px);max-height:90vh}}
+.apply-overlay.open .apply-box{transform:none}
+.apply-hd{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
+.apply-hd h3{font-size:16px;font-weight:800}
+.apply-hd p{font-size:12px;color:var(--text-3);margin-top:1px}
+.apply-scroll{flex:1;overflow-y:auto;padding:20px;-webkit-overflow-scrolling:touch}
+.apply-section{margin-bottom:24px}
+.asec-title{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--primary);padding-bottom:8px;border-bottom:2px solid var(--primary-soft);margin-bottom:14px}
+.af{margin-bottom:10px}
+.af label{display:block;font-size:11px;font-weight:700;color:var(--text-2);margin-bottom:4px;letter-spacing:.02em}
+.af input,.af textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;outline:none;transition:border .2s;background:#fff;color:var(--text-1);line-height:1.5}
+.af input:focus,.af textarea:focus{border-color:var(--primary)}
+.af textarea{resize:vertical;min-height:56px}
+.visa-block{background:var(--surface-alt);border-radius:10px;padding:14px;margin-bottom:10px}
+.visa-block-title{font-size:12px;font-weight:700;color:var(--text-2);margin-bottom:10px}
+.docs-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.docs-list li{font-size:13px;color:var(--text-2);padding:9px 12px;background:var(--surface-alt);border-radius:8px;display:flex;align-items:flex-start;gap:8px}
+.docs-list li::before{content:'📎';flex-shrink:0}
+.apply-ft{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.apply-submit{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+.apply-submit:hover{background:#2420c8}
+.apply-done{display:none;padding:28px 24px;text-align:center;overflow-y:auto;flex:1}
+.apply-done.show{display:block}
+.apply-done .done-ico{font-size:48px;margin-bottom:10px}
+.apply-done h3{font-size:19px;font-weight:800;margin-bottom:8px}
+.apply-done p{font-size:14px;color:var(--text-2);line-height:1.7;margin-bottom:16px}
+.copy-box{background:var(--surface-alt);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:12px;font-family:monospace;white-space:pre-wrap;text-align:left;max-height:180px;overflow-y:auto;color:var(--text-2);margin-bottom:16px;line-height:1.6}
+
+/* ── JOB MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:300;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity .25s}
+@media(min-width:600px){.modal-overlay{align-items:center;padding:20px}}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;box-shadow:0 -8px 40px rgba(0,0,0,.2);transform:translateY(40px);transition:transform .35s cubic-bezier(.22,1,.36,1)}
+@media(min-width:600px){.modal-box{border-radius:20px;transform:translateY(20px)}}
+.modal-overlay.open .modal-box{transform:none}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:12px auto 0}
+@media(min-width:600px){.modal-handle{display:none}}
+.modal-hd{padding:20px 24px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.modal-close{width:32px;height:32px;border-radius:50%;border:none;background:var(--surface-alt);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background .15s;margin-top:2px}
+.modal-close:hover{background:var(--border)}
+.modal-body{padding:20px 24px 28px}
+.modal-title{font-size:20px;font-weight:800;line-height:1.25;margin-bottom:6px;letter-spacing:-.02em}
+.modal-company{font-size:14px;color:var(--text-2);margin-bottom:16px}
+.modal-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.mchip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;padding:5px 11px;border-radius:100px;background:var(--surface-alt);color:var(--text-2);border:1px solid var(--border)}
+.mchip.salary{background:var(--primary-soft);color:var(--primary);border-color:var(--primary);font-weight:700;font-size:13px}
+.mchip.salary-viet{background:var(--viet-soft);color:var(--viet);border-color:var(--viet)}
+.mchip.salary-nhat{background:var(--nhat-soft);color:var(--nhat);border-color:var(--nhat)}
+.mchip.salary-kysis{background:var(--kysis-soft);color:var(--kysis);border-color:var(--kysis)}
+.mchip.salary-both{background:var(--primary-soft);color:var(--primary);border-color:var(--primary)}
+.modal-div{border:none;border-top:1px solid var(--border);margin:18px 0}
+.modal-desc-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.modal-desc{font-size:14px;color:var(--text-2);line-height:1.75;white-space:pre-wrap}
+.modal-cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:#0068FF;color:#fff;border-radius:12px;font-size:15px;font-weight:700;text-decoration:none;margin-top:20px;transition:background .2s}
+.modal-cta:hover{background:#0054cc}
+
+/* ── SAVE BUTTON ── */
+.save-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--text-3);flex-shrink:0;font-family:inherit}
+.save-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
+.save-btn.saved{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
+
+/* ── SAVED PANEL ── */
+.saved-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:350;display:none;align-items:flex-end;justify-content:center}
+@media(min-width:600px){.saved-overlay{align-items:center;padding:20px}}
+.saved-overlay.open{display:flex}
+.saved-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:680px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 -8px 48px rgba(0,0,0,.22)}
+@media(min-width:600px){.saved-box{border-radius:20px;max-height:88vh}}
+.saved-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
+.saved-hd-left{display:flex;align-items:center;gap:8px}
+.saved-hd-title{font-size:17px;font-weight:800}
+.saved-hd-badge{font-size:12px;font-weight:700;background:var(--primary-soft);color:var(--primary);padding:3px 9px;border-radius:100px}
+.saved-hd-actions{display:flex;align-items:center;gap:8px}
+.compare-trigger{display:none;align-items:center;gap:5px;padding:7px 14px;border:none;border-radius:8px;background:var(--primary);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.compare-trigger.show{display:flex}
+.compare-trigger:hover{background:#2420c8}
+.saved-list{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.saved-empty{text-align:center;padding:48px 24px;color:var(--text-3)}
+.saved-empty .ei{font-size:42px;margin-bottom:12px}
+.saved-empty p{font-size:15px;font-weight:600;color:var(--text-2);margin-bottom:6px}
+.saved-empty small{font-size:13px;color:var(--text-3)}
+.scard{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--surface-alt);border-radius:12px;border:2px solid transparent;transition:border-color .2s,background .2s;position:relative}
+.scard:hover{background:#eeeeff44}
+.scard.checked{border-color:var(--primary);background:#eeeeff}
+.scard-cb{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--border);background:#fff;cursor:pointer;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:11px}
+.scard.checked .scard-cb{background:var(--primary);border-color:var(--primary);color:#fff}
+.scard-body{flex:1;min-width:0;cursor:pointer}
+.scard-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px}
+.scard-title{font-size:14px;font-weight:700;color:var(--text-1);line-height:1.3;margin-bottom:4px}
+.scard-meta{font-size:12px;color:var(--text-3);display:flex;flex-wrap:wrap;gap:8px}
+.scard-sal{font-size:13px;font-weight:700;margin-top:5px}
+.scard-sal.viet{color:var(--viet)}.scard-sal.nhat{color:var(--nhat)}.scard-sal.kysis{color:var(--kysis)}.scard-sal.both{color:var(--primary)}
+.scard-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0;align-items:flex-end}
+.scard-view{padding:5px 11px;border:1.5px solid var(--border);border-radius:7px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-1);white-space:nowrap;transition:all .2s;font-family:inherit}
+.scard-view:hover{border-color:var(--primary);color:var(--primary)}
+.scard-remove{padding:5px 11px;border:1.5px solid transparent;border-radius:7px;background:transparent;font-size:12px;font-weight:500;cursor:pointer;color:var(--text-3);white-space:nowrap;transition:all .2s;font-family:inherit}
+.scard-remove:hover{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
+
+/* ── COMPARE MODAL ── */
+.compare-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:500;display:none;align-items:center;justify-content:center;padding:16px}
+.compare-overlay.open{display:flex}
+.compare-box{background:#fff;border-radius:20px;width:100%;max-width:860px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.compare-hd{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;background:#fff;z-index:1}
+.compare-hd h3{font-size:16px;font-weight:800}
+.compare-body{padding:20px 24px 28px}
+.cmp-grid{display:grid;gap:16px;align-items:start}
+.cmp-grid.n2{grid-template-columns:1fr 1fr}
+.cmp-grid.n3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:640px){.cmp-grid.n2,.cmp-grid.n3{grid-template-columns:1fr}}
+.cmp-col{border:1.5px solid var(--border);border-radius:12px;overflow:hidden}
+.cmp-col-hd{padding:12px 16px;font-size:13px;font-weight:800;color:#fff;line-height:1.3}
+.cmp-col-hd.viet{background:var(--viet)}.cmp-col-hd.nhat{background:var(--nhat)}.cmp-col-hd.kysis{background:var(--kysis)}
+.cmp-row{padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px}
+.cmp-row:last-child{border-bottom:none}
+.cmp-lbl{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);margin-bottom:2px}
+.cmp-val{color:var(--text-1);font-weight:500}
+.cmp-sal{font-weight:800;font-size:14px}
+.cmp-sal.viet{color:var(--viet)}.cmp-sal.nhat{color:var(--nhat)}.cmp-sal.kysis{color:var(--kysis)}
+.cmp-footer{margin-top:20px;display:flex;justify-content:center}
+
+/* ── ARTICLES SECTION (landing preview) ── */
+.art-section{background:var(--surface-alt)}
+.art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+@media(max-width:900px){.art-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.art-grid{grid-template-columns:1fr}}
+.acard{background:#fff;border-radius:16px;overflow:hidden;border:1.5px solid var(--border);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
+.acard:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.acard-thumb{width:100%;aspect-ratio:16/9;background:var(--surface-alt);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.acard-thumb img{width:100%;height:100%;object-fit:cover}
+.acard-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.acat-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:8px}
+.acat-badge.tokutei{background:#eeeeff;color:var(--primary)}
+.acat-badge.japan-life{background:#dcfce7;color:#16a34a}
+.acat-badge.experience{background:#fef3c7;color:#d97706}
+.acat-badge.news{background:var(--accent-soft);color:var(--accent)}
+.acard h3{font-size:15px;font-weight:700;line-height:1.35;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.acard-excerpt{font-size:13px;color:var(--text-2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px;flex:1}
+.acard-ft{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text-3);margin-top:auto}
+.acard-read{font-size:12px;font-weight:700;color:var(--primary)}
+.arts-more-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1.5px solid var(--border);border-radius:12px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-2);font-family:inherit;transition:all .2s}
+.arts-more-btn:hover{border-color:var(--primary);color:var(--primary)}
+
+/* ── ARTICLES LISTING PANEL ── */
+.arts-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:360;display:none;align-items:flex-end;justify-content:center}
+@media(min-width:600px){.arts-overlay{align-items:center;padding:20px}}
+.arts-overlay.open{display:flex}
+.arts-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:800px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 -8px 48px rgba(0,0,0,.22)}
+@media(min-width:600px){.arts-box{border-radius:20px;max-height:88vh}}
+.arts-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
+.arts-hd-title{font-size:17px;font-weight:800}
+.arts-cats{display:flex;gap:6px;padding:12px 20px;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;scrollbar-width:none}
+.arts-cats::-webkit-scrollbar{display:none}
+.acat-tab{flex-shrink:0;padding:6px 14px;border-radius:100px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-2)}
+.acat-tab.on{background:var(--primary);border-color:var(--primary);color:#fff}
+.arts-list{flex:1;overflow-y:auto;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+@media(max-width:500px){.arts-list{grid-template-columns:1fr}}
+.arts-empty{text-align:center;padding:48px 24px;color:var(--text-3);grid-column:1/-1}
+
+/* ── ARTICLE DETAIL ── */
+.artd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:380;display:none;align-items:flex-end;justify-content:center}
+@media(min-width:600px){.artd-overlay{align-items:center;padding:20px}}
+.artd-overlay.open{display:flex}
+.artd-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:680px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 -8px 48px rgba(0,0,0,.22)}
+@media(min-width:600px){.artd-box{border-radius:20px;max-height:90vh}}
+.artd-hd{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
+.artd-back{display:flex;align-items:center;gap:6px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:inherit;padding:4px 0}
+.artd-scroll{flex:1;overflow-y:auto}
+.artd-thumb{width:100%;aspect-ratio:16/7;object-fit:cover;display:block}
+.artd-thumb-ph{width:100%;aspect-ratio:16/7;display:flex;align-items:center;justify-content:center;font-size:60px}
+.artd-content{padding:20px 24px 32px}
+.artd-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.artd-title{font-size:22px;font-weight:800;line-height:1.3;letter-spacing:-.02em;margin-bottom:16px}
+.artd-body{font-size:15px;color:var(--text-2);line-height:1.8}
+.artd-body p{margin-bottom:14px}
+
+/* ── ADMIN PANEL (full-screen) ── */
+.admin-overlay{position:fixed;inset:0;z-index:600;display:none}
+.admin-overlay.open{display:flex}
+.admin-sidebar{width:220px;min-width:220px;background:#12132A;display:flex;flex-direction:column;height:100%;overflow-y:auto;flex-shrink:0}
+.admin-sb-top{padding:20px 16px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.admin-avatar{width:40px;height:40px;min-width:40px;border-radius:10px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.admin-user-name{font-size:13px;font-weight:700;color:#fff;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-user-role{font-size:11px;color:rgba(255,255,255,.38)}
+.admin-sb-nav{padding:10px 8px;flex:1}
+.admin-nav-item{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:none;background:transparent;color:rgba(255,255,255,.5);font-size:13px;font-weight:600;cursor:pointer;border-radius:10px;font-family:inherit;transition:all .18s;text-align:left;text-decoration:none;margin-bottom:2px;line-height:1.4}
+.admin-nav-item:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.85)}
+.admin-nav-item.on{background:rgba(255,255,255,.12);color:#fff}
+.admin-nav-sep{height:1px;background:rgba(255,255,255,.07);margin:8px 4px}
+.admin-sb-stats{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07)}
+.admin-sb-stat{display:flex;align-items:center;justify-content:space-between;padding:4px 0}
+.admin-sb-stat-lbl{font-size:11px;color:rgba(255,255,255,.38)}
+.admin-sb-stat-val{font-size:12px;font-weight:700;color:rgba(255,255,255,.75)}
+.admin-main{flex:1;overflow-y:auto;background:#EFEFF4;min-width:0}
+.admin-view{display:none;padding:28px 32px;min-height:100%}
+.admin-view.on{display:block}
+.admin-view-hd{margin-bottom:24px}
+.admin-view-title{font-size:22px;font-weight:800;color:var(--text-1)}
+.admin-view-sub{font-size:13px;color:var(--text-3);margin-top:4px}
+.admin-view-hd-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.admin-back{display:flex;align-items:center;gap:5px;background:none;border:none;color:var(--text-3);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;padding:0;white-space:nowrap;margin-top:6px}
+.admin-back:hover{color:var(--text-1)}
+.admin-card{background:#fff;border-radius:16px;padding:24px;box-shadow:var(--sh);margin-bottom:20px}
+.admin-card-title{font-size:15px;font-weight:800;color:var(--text-1);margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.ajf-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+@media(max-width:580px){.ajf-grid{grid-template-columns:1fr}}
+.af2{margin-bottom:0}
+.af2 label{display:block;font-size:11px;font-weight:700;color:var(--text-3);margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
+.af2 input,.af2 select,.af2 textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:14px;font-family:inherit;outline:none;transition:border .2s;background:#fff;color:var(--text-1)}
+.af2 input:focus,.af2 select:focus,.af2 textarea:focus{border-color:var(--primary)}
+.af2 textarea{resize:vertical;min-height:100px}
+.type-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:2px}
+@media(max-width:560px){.type-picker{grid-template-columns:repeat(2,1fr)}}
+.type-pick-btn{padding:12px 8px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:700;cursor:pointer;text-align:center;line-height:1.4;transition:all .18s;font-family:inherit;color:var(--text-2);width:100%}
+.type-pick-btn small{font-size:10px;font-weight:400;color:var(--text-3);display:block;margin-top:3px}
+.type-pick-btn.on{border-color:var(--primary);background:var(--primary-soft);color:var(--primary)}
+.type-pick-btn.on small{color:var(--primary)}
+.admin-job-row{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);transition:background .12s}
+.admin-job-row:last-child{border-bottom:none}
+.admin-job-row:hover{background:#FAFAFD}
+.admin-job-info{flex:1;min-width:0}
+.admin-job-title{font-size:14px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-job-meta{font-size:12px;color:var(--text-3);display:flex;gap:8px;flex-wrap:wrap}
+.admin-art-row{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);transition:background .12s}
+.admin-art-row:last-child{border-bottom:none}
+.admin-art-row:hover{background:#FAFAFD}
+.admin-art-info{flex:1;min-width:0}
+.admin-art-title{font-size:14px;font-weight:700;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-art-meta{font-size:12px;color:var(--text-3);display:flex;gap:8px;flex-wrap:wrap}
+.admin-art-actions{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.admin-btn-edit{padding:5px 14px;border:1.5px solid var(--border);border-radius:7px;background:#fff;font-size:12px;font-weight:600;cursor:pointer;color:var(--text-2);font-family:inherit;transition:all .2s}
+.admin-btn-edit:hover{border-color:var(--primary);color:var(--primary)}
+.admin-btn-del{padding:5px 14px;border:1.5px solid transparent;border-radius:7px;background:transparent;font-size:12px;font-weight:500;cursor:pointer;color:var(--text-3);font-family:inherit;transition:all .2s}
+.admin-btn-del:hover{color:var(--accent);border-color:var(--accent-soft);background:var(--accent-soft)}
+.admin-add-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.admin-add-btn:hover{background:#2420c8}
+.admin-form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:18px;border-top:1px solid var(--border)}
+.admin-save-btn{display:inline-flex;align-items:center;gap:6px;padding:11px 24px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.admin-save-btn:hover{background:#2420c8}
+.admin-cancel-btn{padding:11px 20px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-2)}
+@media(max-width:700px){
+  .admin-sidebar{width:56px;min-width:56px}
+  .admin-sb-top .admin-user-name,.admin-sb-top .admin-user-role{display:none}
+  .admin-sb-top{justify-content:center;padding:16px 8px}
+  .admin-nav-label{display:none}
+  .admin-nav-item{justify-content:center;padding:12px 0}
+  .admin-sb-stats{display:none}
+  .admin-view{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <div class="logo-icon" style="background:#fff;border:1.5px solid var(--border);overflow:hidden"><svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg" style="width:26px;height:auto"><rect width="3" height="2" fill="#fff"/><circle cx="1.5" cy="1" r="0.6" fill="#BC002D"/></svg></div>
+      <span class="logo-text">Nippon <em>Tokutei</em></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" onclick="event.preventDefault();scrollToSearch()">Tìm việc làm</a></li>
+      <li><a href="#categories">Danh mục</a></li>
+      <li><a href="#thongtin" onclick="event.preventDefault();openArticles()">Thông tin</a></li>
+    </ul>
+    <div class="nav-right" id="navRight">
+      <button class="btn btn-ghost" onclick="openAuth('login')">Đăng nhập</button>
+      <button class="btn btn-primary" onclick="openAuth('register')">Đăng ký</button>
+    </div>
+    <div class="user-wrap" id="navUser" style="display:none">
+      <button class="user-btn" onclick="toggleUserDropdown()">
+        <div class="user-ava" id="navAva"></div>
+        <span class="user-name-nav" id="navUserName"></span>
+      </button>
+      <div class="user-dropdown" id="userDropdown">
+        <div class="user-dd-info">
+          <div class="user-dd-name" id="ddName"></div>
+          <div class="user-dd-email" id="ddEmail"></div>
+        </div>
+        <button class="user-dd-item" onclick="toggleUserDropdown();openSaved()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          Việc đã lưu
+          <span id="ddSavedBadge" style="display:none;background:var(--primary);color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:100px;margin-left:auto"></span>
+        </button>
+        <button class="user-dd-item" id="ddAdminItem" style="display:none" onclick="toggleUserDropdown();openAdmin()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Quản lý bài viết
+        </button>
+        <button class="user-dd-item" onclick="logout()">🚪 Đăng xuất</button>
+      </div>
+    </div>
+    <button class="burger" id="burger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobmenu">
+  <a href="#" onclick="event.preventDefault();document.getElementById('mobmenu').classList.remove('open');scrollToSearch()">Tìm việc làm</a>
+  <a href="#categories">Danh mục ngành nghề</a>
+  <a href="#thongtin" onclick="document.getElementById('mobmenu').classList.remove('open');openArticles()">Thông tin Tokutei</a>
+  <a href="https://zalo.me/0386887691" target="_blank" style="color:var(--primary);font-weight:700;border-bottom:none">💬 Liên hệ Zalo →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-in">
+    <h1>Nippon Tokutei</h1>
+    <p class="hero-sub">Hỗ trợ tìm, đăng ký ứng tuyển các đơn hàng Tokutei, Kỹ sư hai đầu Nhật - Việt</p>
+    <div class="hero-acts">
+      <a href="#categories" class="btn btn-outline btn-lg">Xem tất cả việc làm</a>
+    </div>
+    <div class="mockup">
+      <div class="mock-bar">
+        <div class="mock-dots"><span></span><span></span><span></span></div>
+        <div class="mock-url">Tìm việc Tokutei, Kỹ sư</div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-type" id="mockTypeTabs">
+          <button class="mtt viet on" onclick="switchTab('viet')">
+            <span class="mtt-name">Tokutei đầu Việt</span>
+            <span class="mtt-sub">Phí thấp · Từ Việt Nam</span>
+          </button>
+          <button class="mtt nhat" onclick="switchTab('nhat')">
+            <span class="mtt-name">Tokutei đầu Nhật</span>
+            <span class="mtt-sub">Không cọc không phí</span>
+          </button>
+          <button class="mtt kysis" onclick="switchTab('kysis')">
+            <span class="mtt-name">Kỹ sư đầu Nhật</span>
+            <span class="mtt-sub">Không cọc không phí</span>
+          </button>
+        </div>
+        <div class="mock-search">
+          <div class="mock-field"><span class="ic">🔍</span><input id="searchInput" type="search" placeholder="Ngành nghề, tỉnh thành..." oninput="doSearch(this.value)" autocomplete="off"></div>
+          <button class="mock-btn" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Tìm kiếm</button>
+        </div>
+        <div class="mock-jobs-wrap">
+          <div class="jobs-panel on" id="panel-viet">
+            <div class="mjob">
+              <div class="mlogo" style="background:#2D2CDB">豊</div>
+              <div class="minfo"><div class="mtitle">Kỹ thuật viên chế biến thực phẩm</div><div class="mmeta">Toyota Foods · Aichi · N3 · ¥200,000/月</div></div>
+              <span class="jbadge jbadge-viet">Đầu Việt</span>
+            </div>
+            <div class="mjob">
+              <div class="mlogo" style="background:#E8305A">建</div>
+              <div class="minfo"><div class="mtitle">Công nhân xây dựng</div><div class="mmeta">Osaka Build · Osaka · N4 · ¥220,000/月</div></div>
+              <span class="jbadge jbadge-viet">Đầu Việt</span>
+            </div>
+            <div class="mjob">
+              <div class="mlogo" style="background:#22c55e">農</div>
+              <div class="minfo"><div class="mtitle">Nhân viên nông nghiệp</div><div class="mmeta">Hokkaido Farm · Hokkaido · N5 · ¥185,000/月</div></div>
+              <span class="jbadge jbadge-viet">Đầu Việt</span>
+            </div>
+          </div>
+          <div class="jobs-panel" id="panel-kysis">
+            <div class="mjob">
+              <div class="mlogo" style="background:#d97706">エ</div>
+              <div class="minfo"><div class="mtitle">Kỹ sư IT (システムエンジニア)</div><div class="mmeta">Tokyo Tech · Tokyo · N3 · ¥300,000/月</div></div>
+              <span class="jbadge jbadge-kysis">Kỹ sư</span>
+            </div>
+            <div class="mjob">
+              <div class="mlogo" style="background:#d97706">機</div>
+              <div class="minfo"><div class="mtitle">Kỹ sư cơ khí (機械設計)</div><div class="mmeta">Osaka Mfg · Osaka · N3 · ¥280,000/月</div></div>
+              <span class="jbadge jbadge-kysis">Kỹ sư</span>
+            </div>
+            <div class="mjob">
+              <div class="mlogo" style="background:#d97706">建</div>
+              <div class="minfo"><div class="mtitle">Kỹ sư xây dựng (施工管理)</div><div class="mmeta">Nagoya Build · Aichi · N2 · ¥320,000/月</div></div>
+              <span class="jbadge jbadge-kysis">Kỹ sư</span>
+            </div>
+          </div>
+          <div class="jobs-panel" id="panel-nhat">
+            <div class="mjob">
+              <div class="mlogo" style="background:#8B3CD8">護</div>
+              <div class="minfo"><div class="mtitle">Điều dưỡng viên (介護福祉)</div><div class="mmeta">Sapporo Care · Hokkaido · N3 · ¥230,000/月</div></div>
+              <span class="jbadge jbadge-nhat">Đầu Nhật</span>
+            </div>
+            <div class="mjob">
+              <div class="mlogo" style="background:#f59e0b">溶</div>
+              <div class="minfo"><div class="mtitle">Thợ hàn công nghiệp</div><div class="mmeta">Kawasaki Steel · Kanagawa · N4 · ¥250,000/月</div></div>
+              <span class="jbadge jbadge-nhat">Đầu Nhật</span>
+            </div>
+            <div class="mjob">
+              <div class="mlogo" style="background:#0ea5e9">食</div>
+              <div class="minfo"><div class="mtitle">Nhân viên chế biến thuỷ sản</div><div class="mmeta">Nagasaki Fish · Nagasaki · N4 · ¥195,000/月</div></div>
+              <span class="jbadge jbadge-nhat">Đầu Nhật</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stats-in stag">
+    <div class="sitem"><div class="snum" id="stat-viet" style="color:var(--viet)">0</div><div class="slabel" style="font-weight:700;color:var(--viet)">Tokutei đầu Việt</div></div>
+    <div class="sitem"><div class="snum" id="stat-nhat" style="color:var(--nhat)">0</div><div class="slabel" style="font-weight:700;color:var(--nhat)">Tokutei đầu Nhật</div></div>
+    <div class="sitem"><div class="snum" id="stat-kysis" style="color:var(--kysis)">0</div><div class="slabel" style="font-weight:700;color:var(--kysis)">Việc kỹ sư</div></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section id="categories">
+  <div class="container">
+    <div class="sec-hd anim">
+      <h2 class="sec-title">Tìm việc theo ngành nghề</h2>
+      <p class="sec-sub">Lựa chọn công việc phù hợp với visa và chứng chỉ/bằng cấp của bạn</p>
+    </div>
+    <!-- Cấp 1: chọn nhóm -->
+    <div class="group-grid anim" id="groupGrid">
+      <button class="group-card" onclick="selectGroup('tokutei')">
+        <div class="group-ico">🏭</div>
+        <div class="group-name">Tokutei</div>
+        <div class="group-sub">Nông nghiệp · Xây dựng · Thực phẩm · 14 ngành</div>
+        <div class="group-count" id="gc-tokutei">0 việc</div>
+      </button>
+      <button class="group-card" onclick="selectGroup('kysis')">
+        <div class="group-ico">💻</div>
+        <div class="group-name">Kỹ sư</div>
+        <div class="group-sub">IT · Cơ khí · Xây dựng · Kinh tế</div>
+        <div class="group-count" id="gc-kysis">0 việc</div>
+      </button>
+    </div>
+
+    <!-- Cấp 2: ngành con (ẩn cho đến khi chọn nhóm) -->
+    <div id="subcatLevel" style="display:none">
+      <div class="subcat-hd">
+        <button class="back-btn" onclick="backToGroups()">← Quay lại</button>
+        <span class="subcat-title" id="subcatTitle"></span>
+      </div>
+      <!-- Tokutei: 14 ngành -->
+      <div class="cat-grid stag" id="catGridTokutei" style="display:none">
+        <a href="#" class="ccat" data-cat="🌾 Nông nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🌾</span><div class="ccat-n">Nông nghiệp</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🐟 Ngư nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🐟</span><div class="ccat-n">Ngư nghiệp</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🏗️ Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🏗️</span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🚢 Đóng tàu &amp; Cơ khí tàu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚢</span><div class="ccat-n">Đóng tàu</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🍱 Chế biến thực phẩm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🍱</span><div class="ccat-n">Chế biến thực phẩm</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🍽️ Dịch vụ ăn uống" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🍽️</span><div class="ccat-n">Dịch vụ ăn uống</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🚗 Ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚗</span><div class="ccat-n">Ô tô</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="✈️ Hàng không" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">✈️</span><div class="ccat-n">Hàng không</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🏨 Lưu trú / Khách sạn" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🏨</span><div class="ccat-n">Lưu trú</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🧹 Vệ sinh tòa nhà" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🧹</span><div class="ccat-n">Vệ sinh tòa nhà</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="⚙️ Nhóm ngành 1 (Cơ khí)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚙️</span><div class="ccat-n">Nhóm ngành 1 (Cơ khí)</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🔌 Nhóm ngành 2 (Điện tử)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🔌</span><div class="ccat-n">Nhóm ngành 2 (Điện tử)</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="💊 Điều dưỡng / Hộ lý" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">💊</span><div class="ccat-n">Điều dưỡng</div><div class="ccat-c">0 việc</div></a>
+      </div>
+      <!-- Kỹ sư: các ngành -->
+      <div class="cat-grid stag" id="catGridKysis" style="display:none">
+        <a href="#" class="ccat" data-cat="💻 IT / Phần mềm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">💻</span><div class="ccat-n">IT / Phần mềm</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="📊 Kinh tế / Tài chính" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">📊</span><div class="ccat-n">Kinh tế</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="⚙️ Cơ khí" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚙️</span><div class="ccat-n">Cơ khí</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🏗️ Xây dựng / Kiến trúc" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🏗️</span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="⚡ Điện / Điện tử" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚡</span><div class="ccat-n">Điện - Điện tử</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🧪 Hóa chất / Môi trường" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🧪</span><div class="ccat-n">Hóa chất</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🔧 Cơ điện tử" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🔧</span><div class="ccat-n">Cơ điện tử</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="🚗 Ô tô / Giao thông" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚗</span><div class="ccat-n">Ô tô / GT</div><div class="ccat-c">0 việc</div></a>
+      </div>
+    </div>
+    <div class="jobs-section">
+      <div class="jobs-section-hd">
+        <div class="jobs-section-title">Danh sách việc làm</div>
+        <div class="jobs-count" id="jobsCount">0 việc làm</div>
+      </div>
+      <div class="jobs-list" id="jobsList"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- THÔNG TIN TOKUTEI -->
+<section id="thongtin" class="art-section">
+  <div class="container">
+    <div class="sec-hd anim">
+      <div class="sec-label">Blog · Kiến thức</div>
+      <h2 class="sec-title">Thông tin Tokutei</h2>
+      <p class="sec-sub">Cập nhật kiến thức về visa Tokutei, cuộc sống Nhật Bản và kinh nghiệm từ người đi trước.</p>
+    </div>
+    <div class="art-grid anim" id="artPreviewGrid"></div>
+    <div style="text-align:center;margin-top:32px">
+      <button class="arts-more-btn" onclick="openArticles()">Xem tất cả bài viết →</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container" style="position:relative;z-index:1">
+    <div class="anim">
+      <div class="sec-label" style="color:rgba(255,255,255,.6)">Liên hệ ngay</div>
+      <h2>Hỗ trợ, giải đáp cụ thể mọi thông tin về các đơn hàng</h2>
+      <a href="https://www.facebook.com/trungphamtokutei" target="_blank" class="btn btn-dark btn-lg" style="font-size:18px;padding:14px 32px;margin-bottom:16px">
+        Liên hệ
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div style="max-width:1120px;margin:0 auto;padding:0 24px">
+    <div class="ft-grid">
+      <div>
+        <a href="/" class="logo"><div class="logo-icon" style="background:#fff;border:1.5px solid rgba(255,255,255,.3);overflow:hidden"><svg viewBox="0 0 3 2" xmlns="http://www.w3.org/2000/svg" style="width:26px;height:auto"><rect width="3" height="2" fill="#fff"/><circle cx="1.5" cy="1" r="0.6" fill="#BC002D"/></svg></div><span class="logo-text" style="color:#fff">Nippon <em>Tokutei</em></span></a>
+        <p class="ft-tagline">Việc làm visa đặc định kỹ năng được tuyển chọn kỹ càng. Tư vấn trực tiếp — không qua trung gian.</p>
+        <button onclick="openZaloQR()" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:#0068FF;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer">Zalo</button>
+      </div>
+      <div class="ft-col">
+        <h4>Tìm việc làm</h4>
+        <ul class="ft-links">
+          <li><a href="#jobs">Tất cả việc làm</a></li>
+          <li><a href="#categories">14 Ngành Tokutei</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Hỗ trợ ứng viên</h4>
+        <ul class="ft-links">
+          <li><a href="#">Hướng dẫn Visa Tokutei</a></li>
+          <li><a href="#">Điều kiện đăng ký</a></li>
+          <li><a href="#">Chuẩn bị hồ sơ</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Liên hệ</h4>
+        <ul class="ft-links">
+          <li><a href="https://zalo.me/0386887691" target="_blank">💬 Zalo: 0386887691</a></li>
+          <li><a href="#" id="about">Về Nippon Tokutei</a></li>
+          <li><a href="#">Điều khoản dịch vụ</a></li>
+          <li><a href="#">Chính sách bảo mật</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <span>© 2026 Nippon Tokutei. Bảo lưu mọi quyền.</span>
+      <div class="soc">
+        <a href="#" class="sl">f</a>
+        <a href="#" class="sl">in</a>
+        <a href="#" class="sl">𝕏</a>
+        <a href="#" class="sl">▶</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- SAVED JOBS PANEL -->
+<div class="saved-overlay" id="savedOverlay" onclick="if(event.target===this)closeSaved()">
+  <div class="saved-box">
+    <div class="saved-hd">
+      <div class="saved-hd-left">
+        <span class="saved-hd-title">Việc đã lưu</span>
+        <span class="saved-hd-badge" id="savedHdCount">0</span>
+      </div>
+      <div class="saved-hd-actions">
+        <button class="compare-trigger" id="compareBtn" onclick="openCompare()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="18"/><rect x="14" y="3" width="7" height="18"/></svg>
+          So sánh <span id="compareBtnCount">0</span> việc
+        </button>
+        <button class="modal-close" onclick="closeSaved()">✕</button>
+      </div>
+    </div>
+    <div class="saved-list" id="savedList"></div>
+  </div>
+</div>
+
+<!-- COMPARE MODAL -->
+<div class="compare-overlay" id="compareOverlay" onclick="if(event.target===this)closeCompare()">
+  <div class="compare-box">
+    <div class="compare-hd">
+      <h3>So sánh việc làm</h3>
+      <button class="modal-close" onclick="closeCompare()">✕</button>
+    </div>
+    <div class="compare-body" id="compareBody"></div>
+  </div>
+</div>
+
+<!-- ARTICLES LISTING PANEL -->
+<div class="arts-overlay" id="artsOverlay" onclick="if(event.target===this)closeArticles()">
+  <div class="arts-box">
+    <div class="arts-hd">
+      <span class="arts-hd-title">📰 Thông tin Tokutei</span>
+      <button class="modal-close" onclick="closeArticles()">✕</button>
+    </div>
+    <div class="arts-cats">
+      <button class="acat-tab on" data-cat="all" onclick="currentArtCat='all';renderArticlesPanel()">Tất cả</button>
+      <button class="acat-tab" data-cat="tokutei" onclick="currentArtCat='tokutei';renderArticlesPanel()">📋 Tokutei</button>
+      <button class="acat-tab" data-cat="japan-life" onclick="currentArtCat='japan-life';renderArticlesPanel()">🗾 Cuộc sống Nhật</button>
+      <button class="acat-tab" data-cat="experience" onclick="currentArtCat='experience';renderArticlesPanel()">💡 Kinh nghiệm</button>
+      <button class="acat-tab" data-cat="news" onclick="currentArtCat='news';renderArticlesPanel()">📰 Tin tức</button>
+    </div>
+    <div class="arts-list" id="artsList"></div>
+  </div>
+</div>
+
+<!-- ARTICLE DETAIL -->
+<div class="artd-overlay" id="artdOverlay" onclick="if(event.target===this)closeArticle()">
+  <div class="artd-box">
+    <div class="artd-hd">
+      <button class="artd-back" onclick="closeArticle()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Quay lại
+      </button>
+      <button class="modal-close" onclick="closeArticle()">✕</button>
+    </div>
+    <div class="artd-scroll" id="artdContent"></div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="admin-overlay" id="adminOverlay">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-sb-top">
+      <div class="admin-avatar">TP</div>
+      <div style="min-width:0">
+        <div class="admin-user-name">Trung Phạm Tokutei</div>
+        <div class="admin-user-role">Admin Dashboard</div>
+      </div>
+    </div>
+    <nav class="admin-sb-nav">
+      <button class="admin-nav-item on" id="navBtnJobsList" onclick="adminNav('jobs-list')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg>
+        <span class="admin-nav-label">Quản lý việc làm</span>
+      </button>
+      <button class="admin-nav-item" id="navBtnJobsAdd" onclick="adminNav('jobs-form')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span class="admin-nav-label">Thêm việc làm mới</span>
+      </button>
+      <button class="admin-nav-item" id="navBtnArticles" onclick="adminNav('articles')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        <span class="admin-nav-label">Quản lý bài viết</span>
+      </button>
+      <div class="admin-nav-sep"></div>
+      <button class="admin-nav-item" id="navBtnDeploy" onclick="adminNav('deploy')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        <span class="admin-nav-label">Xuất & Deploy</span>
+      </button>
+      <button class="admin-nav-item" onclick="closeAdmin()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span class="admin-nav-label">Xem website</span>
+      </button>
+    </nav>
+    <div class="admin-sb-stats" id="adminSbStats"></div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+
+    <!-- VIEW: Quản lý việc làm -->
+    <div class="admin-view on" id="adminViewJobsList">
+      <div class="admin-view-hd">
+        <div class="admin-view-hd-row">
+          <div>
+            <div class="admin-view-title">Quản lý việc làm</div>
+            <div class="admin-view-sub" id="adminJobCount"></div>
+          </div>
+          <button class="admin-add-btn" onclick="adminNav('jobs-form')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Thêm tin mới
+          </button>
+        </div>
+      </div>
+      <div class="admin-card" style="padding:0;overflow:hidden">
+        <div id="adminJobList"></div>
+      </div>
+    </div>
+
+    <!-- VIEW: Thêm / Sửa việc làm -->
+    <div class="admin-view" id="adminViewJobsForm">
+      <div class="admin-view-hd">
+        <div class="admin-view-hd-row">
+          <div>
+            <div class="admin-view-title" id="adminJobFormTitle">Thêm việc làm mới</div>
+            <div class="admin-view-sub">Điền đầy đủ thông tin để đăng tin tuyển dụng</div>
+          </div>
+          <button class="admin-back" onclick="adminNav('jobs-list')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Quay lại
+          </button>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Thông tin việc làm</div>
+        <div class="ajf-grid">
+          <div class="af2" style="grid-column:1/-1">
+            <label>Loại Tokutei *</label>
+            <input type="hidden" id="ajf-type" value="viet">
+            <div class="type-picker">
+              <button type="button" class="type-pick-btn on" data-val="viet" onclick="adminPickType('viet')">Tokutei đầu Việt<small>Phí dịch vụ · Từ Việt Nam</small></button>
+              <button type="button" class="type-pick-btn" data-val="nhat" onclick="adminPickType('nhat')">Tokutei đầu Nhật<small>0 đồng · Đang ở Nhật</small></button>
+              <button type="button" class="type-pick-btn" data-val="both" onclick="adminPickType('both')">Việt - Nhật<small>Tuyển cả hai đầu</small></button>
+              <button type="button" class="type-pick-btn" data-val="kysis" onclick="adminPickType('kysis')">Kỹ sư<small>IT · Cơ khí · Xây dựng</small></button>
+            </div>
+          </div>
+          <div class="af2" style="grid-column:1/-1">
+            <label>Tên công việc *</label>
+            <input id="ajf-title" type="text" placeholder="VD: Kỹ thuật viên chế biến thực phẩm">
+          </div>
+          <div class="af2">
+            <label>Ngành nghề *</label>
+            <select id="ajf-cat"></select>
+          </div>
+          <div class="af2">
+            <label>Địa điểm làm việc *</label>
+            <input id="ajf-city" type="text" placeholder="VD: Aichi 愛知 hoặc Osaka — Nhà máy Yodogawa">
+          </div>
+          <div class="af2" style="grid-column:1/-1">
+            <label>Lương *</label>
+            <input id="ajf-salary" type="text" placeholder="VD: ¥185,000~¥210,000/月 hoặc ¥1,050/時 hoặc Thỏa thuận">
+          </div>
+          <div class="af2">
+            <label>Số lượng tuyển (người)</label>
+            <input id="ajf-count" type="text" placeholder="VD: 3">
+          </div>
+          <div class="af2">
+            <label>Giới tính</label>
+            <select id="ajf-gender">
+              <option value="">Không yêu cầu</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Nam / Nữ">Nam / Nữ</option>
+            </select>
+          </div>
+          <div class="af2">
+            <label>Trình độ tiếng Nhật yêu cầu</label>
+            <input id="ajf-japanese" type="text" placeholder="VD: N5 trở lên (cơ bản), N4, không yêu cầu...">
+          </div>
+          <div class="af2">
+            <label>Giờ làm việc</label>
+            <input id="ajf-workHours" type="text" placeholder="VD: 8h/ngày, 40h/tuần">
+          </div>
+          <div class="af2">
+            <label>Ngày nghỉ</label>
+            <input id="ajf-daysOff" type="text" placeholder="VD: Thứ 7 & Chủ nhật">
+          </div>
+          <div class="af2">
+            <label>Số giờ tăng ca</label>
+            <input id="ajf-overtime" type="text" placeholder="VD: 20-30h/tháng">
+          </div>
+          <div class="af2">
+            <label>Tăng lương</label>
+            <input id="ajf-raise" type="text" placeholder="VD: 1lần/năm, ~3%">
+          </div>
+          <div class="af2">
+            <label>Thưởng</label>
+            <input id="ajf-bonus" type="text" placeholder="VD: 2 lần/năm (T6 & T12)">
+          </div>
+          <div class="af2" style="grid-column:1/-1">
+            <label>Nhà ở (tiền nhà)</label>
+            <input id="ajf-housing" type="text" placeholder="VD: Ký túc xá ¥15,000/tháng hoặc Bao nhà ở miễn phí">
+          </div>
+          <div class="af2" style="grid-column:1/-1">
+            <label>Mô tả công việc</label>
+            <textarea id="ajf-desc" rows="4" placeholder="Công việc cụ thể, điều kiện làm việc, quyền lợi..."></textarea>
+          </div>
+          <div class="af2" style="grid-column:1/-1">
+            <label>Trạng thái hiển thị</label>
+            <select id="ajf-status">
+              <option value="active">✅ Đang hiển thị trên website</option>
+              <option value="expired">○ Ẩn / Hết hạn</option>
+            </select>
+          </div>
+        </div>
+        <div class="admin-form-actions">
+          <button class="admin-cancel-btn" onclick="adminResetJobForm()">Làm mới form</button>
+          <button class="admin-save-btn" onclick="adminSaveJob()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Lưu việc làm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW: Quản lý bài viết -->
+    <div class="admin-view" id="adminViewArticles">
+      <div class="admin-view-hd">
+        <div class="admin-view-hd-row">
+          <div>
+            <div class="admin-view-title">Quản lý bài viết</div>
+            <div class="admin-view-sub" id="adminArtCount"></div>
+          </div>
+          <button class="admin-add-btn" onclick="adminShowForm(null)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Thêm bài viết
+          </button>
+        </div>
+      </div>
+      <div class="admin-card" id="adminForm" style="display:none">
+        <div class="admin-card-title" id="adminFormTitle">Thêm bài viết mới</div>
+        <div class="af2" style="margin-bottom:14px"><label>Tiêu đề</label><input id="af-art-title" type="text" placeholder="Tiêu đề bài viết..."></div>
+        <div class="af2" style="margin-bottom:14px"><label>Danh mục</label>
+          <select id="af-art-cat">
+            <option value="tokutei">📋 Thông tin Tokutei</option>
+            <option value="japan-life">🗾 Cuộc sống Nhật Bản</option>
+            <option value="experience">💡 Kinh nghiệm</option>
+            <option value="news">📰 Tin tức</option>
+          </select>
+        </div>
+        <div class="af2" style="margin-bottom:14px"><label>Ảnh thumbnail (URL)</label><input id="af-art-thumb" type="url" placeholder="https://..."></div>
+        <div class="af2" style="margin-bottom:14px"><label>Mô tả ngắn (hiển thị trên card)</label><textarea id="af-art-excerpt" rows="2" placeholder="Tóm tắt ngắn gọn nội dung bài viết..."></textarea></div>
+        <div class="af2" style="margin-bottom:14px"><label>Nội dung (xuống 2 dòng trống = đoạn mới)</label><textarea id="af-art-content" rows="10" placeholder="Nội dung đầy đủ bài viết...&#10;&#10;Đoạn 2..."></textarea></div>
+        <div class="af2" style="margin-bottom:0"><label>Trạng thái</label>
+          <select id="af-art-status">
+            <option value="published">● Đã đăng</option>
+            <option value="draft">○ Bản nháp</option>
+          </select>
+        </div>
+        <div class="admin-form-actions">
+          <button class="admin-cancel-btn" onclick="document.getElementById('adminForm').style.display='none'">Huỷ</button>
+          <button class="admin-save-btn" onclick="adminSaveArticle()">Lưu bài viết</button>
+        </div>
+      </div>
+      <div class="admin-card" style="padding:0;overflow:hidden">
+        <div id="adminArtList"></div>
+      </div>
+    </div>
+
+    <!-- VIEW: Xuất & Deploy -->
+    <div class="admin-view" id="adminViewDeploy">
+      <div class="admin-view-hd">
+        <div class="admin-view-title">Xuất & Deploy</div>
+        <div class="admin-view-sub">Xuất dữ liệu và xem thống kê tổng quan</div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Xuất dữ liệu (JSON)</div>
+        <p style="font-size:14px;color:var(--text-2);margin-bottom:16px">Tải xuống dữ liệu việc làm và bài viết dưới dạng JSON để backup.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="admin-add-btn" onclick="adminExportJobs()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Xuất Jobs (JSON)
+          </button>
+          <button class="admin-add-btn" style="background:var(--text-2)" onclick="adminExportArticles()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Xuất Bài viết (JSON)
+          </button>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-title">Thống kê tổng quan</div>
+        <div id="adminDeployStats"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- APPLICATION FORM MODAL -->
+<div class="apply-overlay" id="applyModal" onclick="if(event.target===this)closeApply()">
+  <div class="apply-box">
+    <div class="apply-hd">
+      <div>
+        <h3>📝 Đơn ứng tuyển</h3>
+        <p id="applyJobTitle">Điền đầy đủ thông tin bên dưới</p>
+      </div>
+      <button class="modal-close" onclick="closeApply()">✕</button>
+    </div>
+
+    <div class="apply-scroll" id="applyScroll">
+
+      <div class="apply-section">
+        <div class="asec-title">Thông tin cá nhân</div>
+        <div class="af"><label>1. Họ tên</label><input id="af-name" type="text" placeholder="Nguyễn Văn A"></div>
+        <div class="af"><label>2. Tên Katakana</label><input id="af-kata" type="text" placeholder="グエン バン エー"></div>
+        <div class="af"><label>3. Địa chỉ hiện tại (tiếng Nhật)</label><input id="af-addr" type="text" placeholder="愛知県名古屋市..."></div>
+        <div class="af"><label>4. Chiều cao / Cân nặng / Size quần áo / Size giày</label><input id="af-body" type="text" placeholder="170cm / 65kg / M / 26cm"></div>
+        <div class="af"><label>5. Nhóm máu</label><input id="af-blood" type="text" placeholder="A / B / O / AB"></div>
+        <div class="af"><label>6. Tình trạng hôn nhân</label><input id="af-marry" type="text" placeholder="Độc thân / Đã kết hôn"></div>
+        <div class="af"><label>7. Trình độ tiếng Nhật</label><input id="af-jlpt" type="text" placeholder="N3 / N4 / Tương đương N3..."></div>
+        <div class="af"><label>8. Nguyện vọng lấy Nenkin không?</label><input id="af-nenkin" type="text" placeholder="Có / Không"></div>
+        <div class="af"><label>9. Khi nào có thể bắt đầu đi làm?</label><input id="af-start" type="text" placeholder="VD: Tháng 8/2025 hoặc Ngay lập tức"></div>
+        <div class="af"><label>10. Thời gian có thể check tiếng (phỏng vấn)</label><input id="af-check" type="text" placeholder="VD: Chiều T2–T6, từ 19h"></div>
+        <div class="af"><label>11. Thông tin gia đình (Họ tên — Tuổi — Nghề nghiệp)</label><textarea id="af-family" rows="3" placeholder="VD: Nguyễn Thị B — 48 tuổi — Nông dân&#10;Nguyễn Văn C — 22 tuổi — Sinh viên"></textarea></div>
+        <div class="af"><label>12. Trường học cấp cuối cùng &amp; Niên khóa</label><input id="af-school" type="text" placeholder="VD: THPT Nguyễn Huệ — 2018~2021"></div>
+      </div>
+
+      <div class="apply-section">
+        <div class="asec-title">Quá trình làm việc</div>
+
+        <div class="visa-block">
+          <div class="visa-block-title">🔵 Visa TTS (Thực tập sinh)</div>
+          <div class="af"><label>Thời gian</label><input id="af-tts-time" type="text" placeholder="VD: 04/2020 ~ 04/2023"></div>
+          <div class="af"><label>Tên xí nghiệp</label><input id="af-tts-co" type="text" placeholder=""></div>
+          <div class="af"><label>Tên Nghiệp đoàn</label><input id="af-tts-nd" type="text" placeholder=""></div>
+          <div class="af"><label>Nội dung công việc</label><input id="af-tts-job" type="text" placeholder=""></div>
+        </div>
+
+        <div class="visa-block">
+          <div class="visa-block-title">🟡 Visa Katsudo — nếu có (để trống nếu không)</div>
+          <div class="af"><label>Thời gian</label><input id="af-kat-time" type="text" placeholder="VD: 04/2023 ~ 04/2024"></div>
+          <div class="af"><label>Tên xí nghiệp</label><input id="af-kat-co" type="text" placeholder=""></div>
+          <div class="af"><label>Tên Nghiệp đoàn</label><input id="af-kat-nd" type="text" placeholder=""></div>
+          <div class="af"><label>Nội dung công việc</label><input id="af-kat-job" type="text" placeholder=""></div>
+        </div>
+
+        <div class="visa-block">
+          <div class="visa-block-title">🟢 Visa Tokutei — nếu có (để trống nếu không)</div>
+          <div class="af"><label>Thời gian</label><input id="af-tok-time" type="text" placeholder="VD: 05/2024 ~ nay"></div>
+          <div class="af"><label>Tên xí nghiệp</label><input id="af-tok-co" type="text" placeholder=""></div>
+          <div class="af"><label>Tên Nghiệp đoàn</label><input id="af-tok-nd" type="text" placeholder=""></div>
+          <div class="af"><label>Nội dung công việc</label><input id="af-tok-job" type="text" placeholder=""></div>
+        </div>
+      </div>
+
+      <div class="apply-section">
+        <div class="asec-title">Giấy tờ — gửi ảnh qua Zalo sau</div>
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;line-height:1.65">Sau khi gửi thông tin, chụp ảnh <strong>rõ nét, ngay ngắn, đủ sáng</strong> và gửi thêm qua Zalo:</p>
+        <ul class="docs-list">
+          <li>Thẻ ngoại kiều <strong>2 mặt</strong></li>
+          <li>Sơ yếu lý lịch gốc</li>
+          <li>Giấy kết thúc TTS 3 năm</li>
+          <li>Bằng senmonkyu hoặc giấy đánh giá kỹ năng</li>
+          <li>Ảnh hồ sơ (ảnh thẻ) — mặt tươi tỉnh, đủ sáng</li>
+          <li>Bằng tiếng Nhật, chứng chỉ Tokutei… (nếu có)</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="apply-ft" id="applyFt">
+      <button class="apply-submit" onclick="submitApply()">Gửi thông tin &amp; Mở Zalo →</button>
+    </div>
+
+    <div class="apply-done" id="applyDone">
+      <div class="done-ico">✅</div>
+      <h3>Đã sao chép xong!</h3>
+      <p>Thông tin đã copy vào clipboard.<br>Nhấn <strong>"Mở Zalo"</strong> rồi <strong>dán (paste)</strong> vào chat với Trung Phạm.<br>Nhớ gửi kèm ảnh giấy tờ qua Zalo nhé.</p>
+      <div class="copy-box" id="applyPreview"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <a id="done-zalo" href="https://zalo.me/0386887691" target="_blank" class="modal-cta" style="background:#0068FF">💬 Mở Zalo</a>
+        <a id="done-fb"   href="https://www.facebook.com/trungphamtokutei" target="_blank" class="modal-cta" style="background:#1877F2">📘 Facebook</a>
+      </div>
+      <button onclick="closeApply()" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-size:13px;cursor:pointer;color:var(--text-2)">Đóng</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- JOB DETAIL MODAL -->
+<div class="modal-overlay" id="jobModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="auth-overlay" id="authOverlay" onclick="handleOverlayClick(event)">
+  <div class="auth-card">
+    <button class="auth-close" onclick="closeAuth()">×</button>
+    <div class="auth-card-hd">
+      <div class="auth-tabs">
+        <button class="auth-tab on" id="tabLogin" onclick="switchAuthTab('login')">Đăng nhập</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Đăng ký</button>
+      </div>
+    </div>
+    <div class="auth-card-body">
+      <!-- LOGIN FORM -->
+      <div class="auth-form on" id="formLogin">
+        <div class="auth-social">
+          <button class="auth-social-btn" onclick="loginGoogle()">
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Google
+          </button>
+          <button class="auth-social-btn" onclick="loginFacebook()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            Facebook
+          </button>
+        </div>
+        <div class="auth-divider">hoặc</div>
+        <input class="auth-input" id="loginEmail" type="email" placeholder="Email của bạn">
+        <input class="auth-input" id="loginPassword" type="password" placeholder="Mật khẩu" onkeydown="if(event.key==='Enter')submitLogin()">
+        <div class="auth-err" id="loginErr"></div>
+        <button class="auth-submit" onclick="submitLogin()">Đăng nhập</button>
+      </div>
+      <!-- REGISTER FORM -->
+      <div class="auth-form" id="formRegister">
+        <div class="auth-social">
+          <button class="auth-social-btn" onclick="loginGoogle()">
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Google
+          </button>
+          <button class="auth-social-btn" onclick="loginFacebook()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            Facebook
+          </button>
+        </div>
+        <div class="auth-divider">hoặc</div>
+        <input class="auth-input" id="regName" type="text" placeholder="Họ và tên">
+        <input class="auth-input" id="regEmail" type="email" placeholder="Email của bạn">
+        <input class="auth-input" id="regPassword" type="password" placeholder="Mật khẩu (tối thiểu 6 ký tự)" onkeydown="if(event.key==='Enter')submitRegister()">
+        <div class="auth-err" id="registerErr"></div>
+        <button class="auth-submit" onclick="submitRegister()">Tạo tài khoản</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), {passive:true});
+
+// Hamburger
+document.getElementById('burger').addEventListener('click', () => {
+  document.getElementById('mobmenu').classList.toggle('open');
+});
+
+// Scroll animations
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); });
+}, {threshold:0.08, rootMargin:'-50px 0px'});
+document.querySelectorAll('.anim,.stag').forEach(el => io.observe(el));
+
+
+// Hero mockup tab switcher
+function switchTab(type) {
+  document.querySelectorAll('.mtt').forEach(b => b.classList.remove('on'));
+  document.querySelector(`.mtt.${type}`).classList.add('on');
+  document.querySelectorAll('.jobs-panel').forEach(p => p.classList.remove('on'));
+  document.getElementById('panel-' + type).classList.add('on');
+}
+
+// ── JOB DATA ──
+const STORE_KEY  = 'tp_tokutei_jobs';
+const SAVED_KEY  = 'tp_saved_jobs';
+const ZALO_URL   = 'https://zalo.me/0386887691';
+const FB_URL     = 'https://www.facebook.com/trungphamtokutei';
+const SVG_BOOKMARK_OUT = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+const SVG_BOOKMARK_FILL = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+let currentGroup = null; // null | 'tokutei' | 'kysis'
+let currentType = 'all';
+let currentCat = null;
+let currentSearch = '';
+
+function scrollToSearch() {
+  const inp = document.getElementById('searchInput');
+  if (!inp) return;
+  inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => inp.focus(), 400);
+}
+
+function doSearch(val) {
+  currentSearch = val.trim().toLowerCase();
+  renderJobs();
+}
+
+function clearSearch() {
+  currentSearch = '';
+  const inp = document.getElementById('searchInput');
+  if (inp) inp.value = '';
+  renderJobs();
+}
+
+function getJobs() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch { return []; }
+}
+
+function updateStats() {
+  const jobs = getJobs().filter(j => j.status === 'active');
+  const sv = document.getElementById('stat-viet');
+  const sn = document.getElementById('stat-nhat');
+  const sk = document.getElementById('stat-kysis');
+  if(sv) sv.textContent = jobs.filter(j => j.type === 'viet' || j.type === 'both').length;
+  if(sn) sn.textContent = jobs.filter(j => j.type === 'nhat' || j.type === 'both').length;
+  if(sk) sk.textContent = jobs.filter(j => j.type === 'kysis').length;
+  updateGroupCounts();
+}
+
+function updateCatCounts() {
+  const jobs = getJobs().filter(j => j.status === 'active');
+  document.querySelectorAll('.ccat[data-cat]').forEach(el => {
+    const base = currentType === 'all' ? jobs : jobs.filter(j => j.type === currentType);
+    const count = base.filter(j => j.category === el.dataset.cat).length;
+    const countEl = el.querySelector('.ccat-c');
+    if(countEl) countEl.textContent = count + ' việc';
+  });
+}
+
+const FLAG_VN_SVG = (w,h) => `<svg viewBox="0 0 3 2" style="width:${w}px;height:${h}px;border-radius:4px;display:block;border:1px solid rgba(0,0,0,.08)" xmlns="http://www.w3.org/2000/svg"><rect width="3" height="2" fill="#DA251D"/><polygon points="1.5,0.38 1.66,0.88 2.15,0.88 1.74,1.16 1.9,1.65 1.5,1.37 1.1,1.65 1.26,1.16 0.85,0.88 1.34,0.88" fill="#FFCD00"/></svg>`;
+const FLAG_JP_SVG = (w,h) => `<svg viewBox="0 0 3 2" style="width:${w}px;height:${h}px;border-radius:4px;display:block;border:1px solid rgba(0,0,0,.08)" xmlns="http://www.w3.org/2000/svg"><rect width="3" height="2" fill="#fff"/><circle cx="1.5" cy="1" r="0.6" fill="#BC002D"/></svg>`;
+
+function getHeroFlagHTML(type) {
+  if (type === 'viet') return FLAG_VN_SVG(36,24);
+  if (type === 'nhat') return FLAG_JP_SVG(36,24);
+  if (type === 'both') return `<div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">${FLAG_VN_SVG(36,16)}${FLAG_JP_SVG(36,16)}</div>`;
+  return `<div style="width:36px;height:36px;flex-shrink:0;background:#EEEEFF;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(45,44,219,.15)">🎓</div>`;
+}
+
+function renderHeroJobs() {
+  const jobs = getJobs().filter(j => j.status === 'active');
+  ['viet','nhat','kysis'].forEach(type => {
+    const panel = document.getElementById('panel-' + type);
+    if(!panel) return;
+    const typeJobs = jobs.filter(j => j.type === type || (j.type === 'both' && (type === 'viet' || type === 'nhat')));
+    if(!typeJobs.length) return;
+    panel.innerHTML = typeJobs.map(j => {
+      const sal = j.salary || '';
+      return `<div class="mjob">
+        <div class="minfo">
+          <div class="mtitle">${j.title}</div>
+          <div class="mmeta">${[j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
+        </div>
+        ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+      </div>`;
+    }).join('');
+  });
+}
+
+function renderJobs() {
+  const container = document.getElementById('jobsList');
+  if(!container) return;
+  let jobs = getJobs().filter(j => j.status === 'active');
+  if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
+  else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type !== 'kysis');
+  if(currentCat) jobs = jobs.filter(j => j.category === currentCat);
+  if(currentSearch) {
+    const q = currentSearch;
+    jobs = jobs.filter(j =>
+      (j.title||'').toLowerCase().includes(q) ||
+      (j.city||'').toLowerCase().includes(q) ||
+      (j.category||'').toLowerCase().includes(q) ||
+      (j.desc||'').toLowerCase().includes(q)
+    );
+  }
+
+  jobs = jobs.slice(0, 9);
+
+  const countEl = document.getElementById('jobsCount');
+  if(countEl) countEl.textContent = jobs.length + ' việc làm';
+
+  if(!jobs.length) {
+    container.innerHTML = `<div class="jobs-empty">
+      <div class="ej">💼</div>
+      <p>Không tìm thấy việc làm${currentSearch ? ` cho "<strong>${currentSearch}</strong>"` : currentCat ? ' trong ngành này' : ''}</p>
+      <a href="https://zalo.me/0386887691" target="_blank">Nhắn Zalo để hỏi thêm →</a>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = jobs.map(j => {
+    const sal = j.salary || 'Liên hệ để biết lương';
+    const desc = j.desc ? j.desc.slice(0, 80) + (j.desc.length > 80 ? '…' : '') : '';
+    const isActive = j.status === 'active';
+    const saved = isSaved(j.id);
+    return `<div class="jcard ${j.type}${isActive?'':' expired'}" onclick="openJob('${j.id}')" style="cursor:pointer">
+      <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="jcard-top">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+              <span class="jcard-cat">${j.category||''}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <span class="status-badge ${isActive?'active':'expired'}">${isActive?'Đang tuyển':'Hết hạn'}</span>
+              <button class="save-btn${saved?' saved':''}" data-id="${j.id}" onclick="event.stopPropagation();toggleSave('${j.id}')" title="${saved?'Bỏ lưu':'Lưu việc làm'}">${saved?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
+            </div>
+          </div>
+          <div class="jcard-title">${j.title}</div>
+          <div class="jcard-meta">
+            ${j.city?`<span>📍 ${j.city}</span>`:''}
+            ${j.japanese?`<span>🗣️ ${j.japanese}</span>`:''}
+          </div>
+          <div class="jcard-sal">${sal}</div>
+          ${desc?`<div class="jcard-desc">${desc}</div>`:''}
+      </div>
+      <button class="jcard-cta" style="width:100%;background:var(--primary)" onclick="event.stopPropagation();openJob('${j.id}')">Xem chi tiết →</button>
+    </div>`;
+  }).join('');
+}
+
+function getJobFlagHTML(type) {
+  if (type === 'viet') return FLAG_VN_SVG(48,32);
+  if (type === 'nhat') return FLAG_JP_SVG(48,32);
+  if (type === 'both') return `<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0">${FLAG_VN_SVG(48,21)}${FLAG_JP_SVG(48,21)}</div>`;
+  return `<div style="width:48px;height:32px;flex-shrink:0;background:#EEEEFF;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(45,44,219,.15)">🎓</div>`;
+}
+
+function selectGroup(group) {
+  currentGroup = group;
+  currentCat = null;
+  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
+  document.getElementById('groupGrid').style.display = 'none';
+  document.getElementById('subcatLevel').style.display = 'block';
+  document.getElementById('catGridTokutei').style.display = group === 'tokutei' ? 'grid' : 'none';
+  document.getElementById('catGridKysis').style.display = group === 'kysis' ? 'grid' : 'none';
+  document.getElementById('subcatTitle').textContent = group === 'tokutei' ? 'Tokutei — 14 ngành' : 'Kỹ sư';
+  updateCatCounts();
+  renderJobs();
+}
+
+function backToGroups() {
+  currentGroup = null;
+  currentCat = null;
+  currentType = 'all';
+  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
+  document.getElementById('groupGrid').style.display = 'grid';
+  document.getElementById('subcatLevel').style.display = 'none';
+  updateGroupCounts();
+  renderJobs();
+}
+
+function updateGroupCounts() {
+  const jobs = getJobs().filter(j => j.status === 'active');
+  const gt = document.getElementById('gc-tokutei');
+  const gk = document.getElementById('gc-kysis');
+  if(gt) gt.textContent = jobs.filter(j => j.type !== 'kysis').length + ' việc';
+  if(gk) gk.textContent = jobs.filter(j => j.type === 'kysis').length + ' việc';
+}
+
+function filterType(type) {
+  currentType = type;
+  currentCat = null;
+  const btns = document.querySelectorAll('.tf-btn');
+  btns.forEach(b => b.classList.remove('on-all','on-viet','on-nhat','on-kysis'));
+  if(type === 'all')   document.querySelector('.tf-btn:nth-child(1)').classList.add('on-all');
+  if(type === 'viet')  document.querySelector('.tf-btn:nth-child(2)').classList.add('on-viet');
+  if(type === 'nhat')  document.querySelector('.tf-btn:nth-child(3)').classList.add('on-nhat');
+  if(type === 'kysis') document.querySelector('.tf-btn:nth-child(4)').classList.add('on-kysis');
+  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
+  updateCatCounts();
+  renderJobs();
+}
+
+function filterCat(cat) {
+  currentCat = (currentCat === cat) ? null : cat;
+  document.querySelectorAll('.ccat').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCat));
+  renderJobs();
+}
+
+// ── MODAL ──
+function openJob(id) {
+  const j = getJobs().find(x => x.id === id);
+  if(!j) return;
+
+  const salDisplay = j.salary || null;
+  const sc = 'salary-' + j.type;
+
+  function row(icon, label, value) {
+    if(!value) return '';
+    return `<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:16px;flex-shrink:0;width:22px;text-align:center">${icon}</span>
+      <div style="flex:1">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-3);margin-bottom:2px">${label}</div>
+        <div style="font-size:14px;color:var(--text-1);font-weight:500">${value}</div>
+      </div>
+    </div>`;
+  }
+
+  const savedNow = isSaved(j.id);
+  document.getElementById('modalContent').innerHTML = `
+    <div class="modal-hd">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+          ${j.type==='both'?`<span class="jbadge jbadge-viet">🇻🇳 Tokutei đầu Việt</span><span class="jbadge jbadge-nhat">🇯🇵 Tokutei đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'🇻🇳 Tokutei đầu Việt':j.type==='kysis'?'💼 Kỹ sư đầu Nhật':'🇯🇵 Tokutei đầu Nhật'}</span>`}
+          ${j.category?`<span style="font-size:12px;color:var(--text-3)">${j.category}</span>`:''}
+        </div>
+        <div class="modal-title">${j.title}</div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:8px">
+        <button class="save-btn${savedNow?' saved':''}" id="modalSaveBtn" data-id="${j.id}" onclick="toggleSave('${j.id}')" title="${savedNow?'Bỏ lưu':'Lưu việc làm'}" style="width:36px;height:36px;margin-top:2px">${savedNow?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px">
+        ${salDisplay?`<span class="mchip ${sc}">💰 ${salDisplay}</span>`:''}
+        ${j.city?`<span class="mchip">📍 ${j.city}</span>`:''}
+        ${j.count?`<span class="mchip">👥 ${j.count} người</span>`:''}
+        ${j.gender?`<span class="mchip">${j.gender==='Nam'?'👨':j.gender==='Nữ'?'👩':'👥'} ${j.gender}</span>`:''}
+      </div>
+
+      <div style="background:var(--surface-alt);border-radius:10px;padding:4px 14px;margin-bottom:16px">
+        ${row('🗣️','Tiếng Nhật yêu cầu', j.japanese)}
+        ${row('🕐','Giờ làm việc', j.workHours)}
+        ${row('📅','Ngày nghỉ', j.daysOff)}
+        ${row('⏰','Tăng ca', j.overtime)}
+        ${row('📈','Tăng lương', j.raise)}
+        ${row('🎁','Thưởng', j.bonus)}
+        ${row('🏠','Nhà ở / Ký túc xá', j.housing)}
+      </div>
+
+      ${j.desc?`
+        <div class="modal-desc-label">Mô tả công việc</div>
+        <div class="modal-desc" style="margin-bottom:16px">${j.desc}</div>
+      `:''}
+
+      <div style="text-align:center;font-size:13px;color:var(--text-3);margin-bottom:10px">
+        ${j.type==='kysis'?'🆓 0 đồng cho ứng viên':j.type==='nhat'?'🆓 0 đồng cho ứng viên':'💰 Phí thấp, rõ ràng từ đầu'} · Tư vấn miễn phí
+      </div>
+      <button onclick="openApplyForm('${j.id}')" class="modal-cta" style="border:none;cursor:pointer;font-family:inherit;font-size:15px;margin-bottom:10px;width:100%">
+        📝 Điền đơn ứng tuyển
+      </button>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <a href="${ZALO_URL}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;background:#0068FF;color:#fff;font-size:13px;font-weight:700;text-decoration:none;border-radius:8px"><svg width="20" height="20" viewBox="0 0 44 44" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M22 3C11.51 3 3 10.85 3 20.5c0 5.26 2.62 9.97 6.75 13.13l-1.5 5.37 5.9-2.95A20.6 20.6 0 0022 38c10.49 0 19-7.85 19-17.5S32.49 3 22 3zm0 31.8a17.3 17.3 0 01-5.9-1.02l-3.7 1.85.9-3.2A14.2 14.2 0 017.4 20.5C7.4 12.04 13.93 5.2 22 5.2s14.6 6.84 14.6 15.3-6.53 15.3-14.6 15.3z"/></svg>Zalo</a>
+        <a href="${FB_URL}" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:7px;padding:10px;background:#1877F2;color:#fff;font-size:13px;font-weight:700;text-decoration:none;border-radius:8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>Facebook</a>
+      </div>
+    </div>
+  `;
+  document.getElementById('jobModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('jobModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') { closeAdmin(); closeArticle(); closeArticles(); closeCompare(); closeSaved(); closeModal(); closeApply(); }
+});
+
+// ── APPLY FORM ──
+let applyJobId = null;
+
+function openApplyForm(jobId) {
+  applyJobId = jobId;
+  const j = getJobs().find(x => x.id === jobId);
+  document.getElementById('applyJobTitle').textContent = j ? j.title : 'Điền đầy đủ thông tin';
+  document.getElementById('applyScroll').style.display = '';
+  document.getElementById('applyFt').style.display = '';
+  document.getElementById('applyDone').classList.remove('show');
+  closeModal();
+  document.getElementById('applyModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeApply() {
+  document.getElementById('applyModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function g(id) { return (document.getElementById(id)?.value || '').trim() || '—'; }
+
+function submitApply() {
+  const name = (document.getElementById('af-name')?.value || '').trim();
+  if(!name) { alert('Vui lòng nhập họ tên để tiếp tục.'); return; }
+
+  const j = applyJobId ? getJobs().find(x => x.id === applyJobId) : null;
+  const jobLine = j ? `\n📌 Vị trí: ${j.title} (${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':j.type==='both'?'Đầu Việt + Đầu Nhật':'Đầu Nhật'})` : '';
+
+  const text =
+`♻️ ĐƠN ỨNG TUYỂN TOKUTEI${jobLine}
+━━━━━━━━━━━━━━━━━━
+THÔNG TIN CÁ NHÂN
+1. Họ tên: ${g('af-name')}
+2. Tên Katakana: ${g('af-kata')}
+3. Địa chỉ: ${g('af-addr')}
+4. Cao/Nặng/Size áo/Size giày: ${g('af-body')}
+5. Nhóm máu: ${g('af-blood')}
+6. Hôn nhân: ${g('af-marry')}
+7. Tiếng Nhật: ${g('af-jlpt')}
+8. Nguyện vọng Nenkin: ${g('af-nenkin')}
+9. Bắt đầu đi làm: ${g('af-start')}
+10. Thời gian check tiếng: ${g('af-check')}
+11. Gia đình: ${g('af-family')}
+12. Trường học & niên khóa: ${g('af-school')}
+━━━━━━━━━━━━━━━━━━
+QUÁ TRÌNH LÀM VIỆC
+🔵 Visa TTS
+  Thời gian: ${g('af-tts-time')}
+  Xí nghiệp: ${g('af-tts-co')}
+  Nghiệp đoàn: ${g('af-tts-nd')}
+  Nội dung: ${g('af-tts-job')}
+🟡 Visa Katsudo
+  Thời gian: ${g('af-kat-time')}
+  Xí nghiệp: ${g('af-kat-co')}
+  Nghiệp đoàn: ${g('af-kat-nd')}
+  Nội dung: ${g('af-kat-job')}
+🟢 Visa Tokutei
+  Thời gian: ${g('af-tok-time')}
+  Xí nghiệp: ${g('af-tok-co')}
+  Nghiệp đoàn: ${g('af-tok-nd')}
+  Nội dung: ${g('af-tok-job')}
+━━━━━━━━━━━━━━━━━━
+📎 Sẽ gửi ảnh giấy tờ qua Zalo.`;
+
+  navigator.clipboard.writeText(text).catch(() => {});
+  document.getElementById('applyPreview').textContent = text;
+  document.getElementById('done-zalo').href = ZALO_URL;
+  document.getElementById('done-fb').href = FB_URL;
+  document.getElementById('applyScroll').style.display = 'none';
+  document.getElementById('applyFt').style.display = 'none';
+  document.getElementById('applyDone').classList.add('show');
+}
+
+// ── AUTH SYSTEM ──
+const AUTH_USERS_KEY = 'tp_auth_users';
+const AUTH_USER_KEY  = 'tp_current_user';
+// Thay 2 giá trị này bằng Client ID thật từ Google Console và Facebook Developers
+const GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
+const FB_APP_ID        = 'YOUR_FB_APP_ID';
+
+function getUsers() { try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)||'[]'); } catch(e){return[];} }
+function saveUsers(u) { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(u)); }
+function getCurrentUser() { try { return JSON.parse(localStorage.getItem(AUTH_USER_KEY)||'null'); } catch(e){return null;} }
+function saveCurrentUser(u) { localStorage.setItem(AUTH_USER_KEY, JSON.stringify(u)); }
+
+function openAuth(tab) {
+  document.getElementById('authOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  switchAuthTab(tab || 'login');
+}
+function closeAuth() {
+  document.getElementById('authOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleOverlayClick(e) { if(e.target === document.getElementById('authOverlay')) closeAuth(); }
+function switchAuthTab(tab) {
+  document.getElementById('tabLogin').classList.toggle('on', tab==='login');
+  document.getElementById('tabRegister').classList.toggle('on', tab==='register');
+  document.getElementById('formLogin').classList.toggle('on', tab==='login');
+  document.getElementById('formRegister').classList.toggle('on', tab==='register');
+}
+
+function submitLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPassword').value;
+  const err   = document.getElementById('loginErr');
+  if(!email || !pass) { showErr(err,'Vui lòng nhập đầy đủ thông tin'); return; }
+  const users = getUsers();
+  const user  = users.find(u => u.email===email && u.password===btoa(pass));
+  if(!user) { showErr(err,'Email hoặc mật khẩu không đúng'); return; }
+  err.classList.remove('show');
+  loginSuccess({name:user.name, email:user.email, avatar:user.avatar||null, provider:'email'});
+}
+
+function submitRegister() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPassword').value;
+  const err   = document.getElementById('registerErr');
+  if(!name||!email||!pass) { showErr(err,'Vui lòng nhập đầy đủ thông tin'); return; }
+  if(pass.length < 6)      { showErr(err,'Mật khẩu tối thiểu 6 ký tự'); return; }
+  const users = getUsers();
+  if(users.find(u => u.email===email)) { showErr(err,'Email này đã được đăng ký'); return; }
+  users.push({name, email, password:btoa(pass), avatar:null});
+  saveUsers(users);
+  err.classList.remove('show');
+  loginSuccess({name, email, avatar:null, provider:'email'});
+}
+
+function loginGoogle() {
+  if(typeof google === 'undefined') { alert('Google SDK chưa tải. Kiểm tra kết nối internet.'); return; }
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: function(resp) {
+      const payload = JSON.parse(atob(resp.credential.split('.')[1]));
+      loginSuccess({name:payload.name, email:payload.email, avatar:payload.picture, provider:'google'});
+    }
+  });
+  google.accounts.id.prompt();
+}
+
+function loginFacebook() {
+  if(typeof FB === 'undefined') { alert('Facebook SDK chưa tải. Kiểm tra kết nối internet.'); return; }
+  FB.login(function(resp) {
+    if(resp.authResponse) {
+      FB.api('/me',{fields:'name,email,picture.width(200)'},function(user){
+        loginSuccess({name:user.name,email:user.email||'',avatar:user.picture?.data?.url||null,provider:'facebook'});
+      });
+    }
+  },{scope:'public_profile,email'});
+}
+
+function loginSuccess(user) {
+  saveCurrentUser(user);
+  closeAuth();
+  renderNavUser(user);
+  renderJobs();
+  updateSavedCount();
+}
+
+function logout() {
+  localStorage.removeItem(AUTH_USER_KEY);
+  document.getElementById('navRight').style.display = 'flex';
+  document.getElementById('navUser').style.display = 'none';
+  document.getElementById('userDropdown').classList.remove('open');
+  renderJobs();
+  updateSavedCount();
+}
+
+function renderNavUser(user) {
+  document.getElementById('navRight').style.display = 'none';
+  document.getElementById('navUser').style.display = 'flex';
+  document.getElementById('navUserName').textContent = user.name.split(' ').pop();
+  document.getElementById('ddName').textContent = user.name;
+  document.getElementById('ddEmail').textContent = user.email;
+  const ava = document.getElementById('navAva');
+  if(user.avatar) {
+    ava.innerHTML = `<img src="${user.avatar}" alt="">`;
+  } else {
+    ava.textContent = user.name.trim().charAt(0).toUpperCase();
+    ava.style.background = 'var(--primary)';
+  }
+  const adminItem = document.getElementById('ddAdminItem');
+  if(adminItem) adminItem.style.display = (user.email===ADMIN_EMAIL)?'flex':'none';
+}
+
+function toggleUserDropdown() {
+  document.getElementById('userDropdown').classList.toggle('open');
+}
+document.addEventListener('click', function(e){
+  const wrap = document.getElementById('navUser');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('userDropdown').classList.remove('open');
+});
+
+function showErr(el, msg) { el.textContent=msg; el.classList.add('show'); }
+
+// ── SAVED JOBS ──
+function getSaved() {
+  const user = getCurrentUser();
+  if(!user) return [];
+  try {
+    const all = JSON.parse(localStorage.getItem(SAVED_KEY)||'{}');
+    return all[user.email] || [];
+  } catch { return []; }
+}
+function setSaved(ids) {
+  const user = getCurrentUser();
+  if(!user) return;
+  try {
+    const all = JSON.parse(localStorage.getItem(SAVED_KEY)||'{}');
+    all[user.email] = ids;
+    localStorage.setItem(SAVED_KEY, JSON.stringify(all));
+  } catch {}
+}
+function isSaved(jobId) { return getSaved().includes(jobId); }
+function toggleSave(jobId) {
+  const user = getCurrentUser();
+  if(!user) { openAuth('login'); return; }
+  const saved = getSaved();
+  const idx = saved.indexOf(jobId);
+  if(idx >= 0) saved.splice(idx, 1); else saved.push(jobId);
+  setSaved(saved);
+  const nowSaved = saved.includes(jobId);
+  // Update all save buttons for this job (card + modal)
+  document.querySelectorAll(`.save-btn[data-id="${jobId}"]`).forEach(btn => {
+    btn.classList.toggle('saved', nowSaved);
+    btn.title = nowSaved ? 'Bỏ lưu' : 'Lưu việc làm';
+    btn.innerHTML = nowSaved ? SVG_BOOKMARK_FILL : SVG_BOOKMARK_OUT;
+  });
+  updateSavedCount();
+}
+function updateSavedCount() {
+  const n = getSaved().length;
+  const badge = document.getElementById('ddSavedBadge');
+  if(badge){ badge.textContent=n; badge.style.display = n>0?'':'none'; }
+  const hd = document.getElementById('savedHdCount');
+  if(hd) hd.textContent = n;
+}
+
+// ── SAVED PANEL ──
+let compareSelected = [];
+function openSaved() {
+  compareSelected = [];
+  renderSavedPanel();
+  document.getElementById('savedOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSaved() {
+  document.getElementById('savedOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function renderSavedPanel() {
+  const savedIds = getSaved();
+  const hd = document.getElementById('savedHdCount');
+  if(hd) hd.textContent = savedIds.length;
+  updateCompareBtn();
+  const list = document.getElementById('savedList');
+  if(!savedIds.length) {
+    list.innerHTML = `<div class="saved-empty"><div class="ei">🔖</div><p>Chưa có việc làm nào được lưu</p><small>Nhấn biểu tượng bookmark trên mỗi tin tuyển dụng để lưu lại</small></div>`;
+    return;
+  }
+  const jobs = getJobs();
+  const cards = savedIds.map(id => {
+    const j = jobs.find(x => x.id === id);
+    if(!j) return '';
+    const checked = compareSelected.includes(id);
+    const isActive = j.status === 'active';
+    return `<div class="scard${checked?' checked':''}" id="scard-${id}">
+      <div class="scard-cb" onclick="toggleCompareSelect('${id}')">${checked?'✓':''}</div>
+      <div class="scard-body" onclick="closeSaved();openJob('${id}')">
+        <div class="scard-top">
+          ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+          <span class="status-badge ${isActive?'active':'expired'}" style="font-size:10px">${isActive?'Đang tuyển':'Hết hạn'}</span>
+        </div>
+        <div class="scard-title">${j.title}</div>
+        <div class="scard-meta">
+          ${j.city?`<span>📍 ${j.city}</span>`:''}
+          ${j.japanese?`<span>🗣️ ${j.japanese}</span>`:''}
+          ${j.category?`<span>${j.category}</span>`:''}
+        </div>
+        ${j.salary?`<div class="scard-sal ${j.type}">${j.salary}</div>`:''}
+      </div>
+      <div class="scard-actions">
+        <button class="scard-view" onclick="event.stopPropagation();closeSaved();openJob('${id}')">Xem →</button>
+        <button class="scard-remove" onclick="event.stopPropagation();removeSaved('${id}')">✕ Bỏ lưu</button>
+      </div>
+    </div>`;
+  }).join('');
+  list.innerHTML = cards || `<div class="saved-empty"><div class="ei">💼</div><p>Dữ liệu việc làm không tồn tại</p></div>`;
+}
+function removeSaved(jobId) {
+  const saved = getSaved().filter(id => id !== jobId);
+  setSaved(saved);
+  compareSelected = compareSelected.filter(id => id !== jobId);
+  // Update bookmark button on card/modal if visible
+  document.querySelectorAll(`.save-btn[data-id="${jobId}"]`).forEach(btn => {
+    btn.classList.remove('saved');
+    btn.title = 'Lưu việc làm';
+    btn.innerHTML = SVG_BOOKMARK_OUT;
+  });
+  renderSavedPanel();
+  updateSavedCount();
+}
+function toggleCompareSelect(id) {
+  const idx = compareSelected.indexOf(id);
+  if(idx >= 0) compareSelected.splice(idx, 1);
+  else if(compareSelected.length < 3) compareSelected.push(id);
+  else { alert('Chỉ có thể so sánh tối đa 3 việc làm'); return; }
+  renderSavedPanel();
+}
+function updateCompareBtn() {
+  const btn = document.getElementById('compareBtn');
+  const cnt = document.getElementById('compareBtnCount');
+  if(!btn) return;
+  btn.classList.toggle('show', compareSelected.length >= 2);
+  if(cnt) cnt.textContent = compareSelected.length;
+}
+
+// ── COMPARE ──
+function openCompare() {
+  if(compareSelected.length < 2) return;
+  const jobs = getJobs();
+  const selected = compareSelected.map(id => jobs.find(j => j.id===id)).filter(Boolean);
+  const n = selected.length;
+  function row(label, vals) {
+    return `<tr>${vals.map(v=>`<td style="padding:9px 14px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top"><div style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--text-3);margin-bottom:2px">${label}</div><div style="color:var(--text-1);font-weight:500">${v||'—'}</div></td>`).join('')}</tr>`;
+  }
+  const body = document.getElementById('compareBody');
+  body.innerHTML = `
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;min-width:${n*200}px">
+        <thead>
+          <tr>${selected.map(j=>`<th style="padding:12px 14px;text-align:left;background:${j.type==='viet'?'var(--viet)':j.type==='kysis'?'var(--kysis)':j.type==='both'?'var(--primary)':'var(--nhat)'};color:#fff;font-size:13px;font-weight:800">${j.title}</th>`).join('')}</tr>
+        </thead>
+        <tbody>
+          ${row('Loại hình', selected.map(j=>j.type==='viet'?'Tokutei đầu Việt':j.type==='kysis'?'Kỹ sư đầu Nhật':j.type==='both'?'Tokutei đầu Việt + Nhật':'Tokutei đầu Nhật'))}
+          ${row('Ngành nghề', selected.map(j=>j.category||''))}
+          ${row('Địa điểm', selected.map(j=>j.city||''))}
+          ${row('Mức lương', selected.map(j=>`<strong style="font-size:14px">${j.salary||'Liên hệ'}</strong>`))}
+          ${row('Tiếng Nhật', selected.map(j=>j.japanese||''))}
+          ${row('Giờ làm việc', selected.map(j=>j.workHours||''))}
+          ${row('Ngày nghỉ', selected.map(j=>j.daysOff||''))}
+          ${row('Tăng ca', selected.map(j=>j.overtime||''))}
+          ${row('Nhà ở / KTX', selected.map(j=>j.housing||''))}
+          ${row('Trạng thái', selected.map(j=>j.status==='active'?'<span style="color:#22a85a;font-weight:700">● Đang tuyển</span>':'<span style="color:#a1a1aa">● Hết hạn</span>'))}
+        </tbody>
+      </table>
+    </div>
+    <div class="cmp-footer">
+      <button onclick="closeCompare()" style="padding:10px 28px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;color:var(--text-2)">Đóng</button>
+    </div>`;
+  document.getElementById('compareOverlay').classList.add('open');
+}
+function closeCompare() {
+  document.getElementById('compareOverlay').classList.remove('open');
+}
+
+// ── ARTICLES MODULE ──
+const ART_KEY = 'tp_articles';
+const ADMIN_EMAIL = 'trungtokutei@gmail.com';
+const ART_CATS = {tokutei:'📋 Tokutei','japan-life':'🗾 Cuộc sống Nhật',experience:'💡 Kinh nghiệm',news:'📰 Tin tức'};
+const ART_COLORS = {tokutei:'#2D2CDB','japan-life':'#22a85a',experience:'#f59e0b',news:'#E8305A'};
+const ART_EMOJIS = {tokutei:'📋','japan-life':'🗾',experience:'💡',news:'📰'};
+
+function isAdmin() { const u=getCurrentUser(); return !!(u&&u.email===ADMIN_EMAIL); }
+function getArticles() { try{return JSON.parse(localStorage.getItem(ART_KEY)||'[]');}catch{return[];} }
+function saveArticles(a) { localStorage.setItem(ART_KEY,JSON.stringify(a)); }
+
+function formatDate(s) {
+  if(!s) return '';
+  try{return new Date(s+'T00:00:00').toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});}catch{return s;}
+}
+
+function initSampleArticles() {
+  if(getArticles().length) return;
+  saveArticles([
+    {id:'art_1',title:'Tokutei là gì? Toàn bộ thông tin bạn cần biết về visa đặc định kỹ năng',category:'tokutei',thumbnail:'',excerpt:'Visa Tokutei (特定技能) là loại visa lao động đặc biệt của Nhật Bản, cho phép người nước ngoài làm việc trong 14 ngành nghề thiếu nhân lực — không cần bằng đại học.',content:'Visa Tokutei (特定技能) là gì?\n\nTokutei Ginou là visa lao động cấp bậc kỹ năng đặc định của Nhật Bản, được giới thiệu năm 2019 nhằm giải quyết tình trạng thiếu nhân lực nghiêm trọng tại nhiều ngành công nghiệp.\n\nCó 2 loại Tokutei:\n\n• Tokutei 1 (特定技能1号): Thời hạn tối đa 5 năm, không được đưa gia đình sang. Yêu cầu JLPT N4 và thi kỹ năng ngành tương ứng.\n\n• Tokutei 2 (特定技能2号): Được gia hạn vô thời hạn, được đưa gia đình sang theo. Yêu cầu kỹ năng cao hơn, hiện mở cho 12 ngành.\n\n14 ngành được phép:\n\nNông nghiệp, Ngư nghiệp, Chế biến thực phẩm, Dịch vụ ăn uống, Xây dựng, Đóng tàu & Cơ khí tàu, Ô tô, Hàng không, Lưu trú/Khách sạn, Vệ sinh tòa nhà, Điều dưỡng/Hộ lý, Nhóm ngành Cơ khí, Nhóm ngành Điện tử, Nông sản trồng trọt.\n\nĐiều kiện cơ bản:\n\nTuổi từ 18 trở lên. Có chứng chỉ tiếng Nhật (JLPT N4 hoặc tương đương). Có chứng chỉ kỹ năng ngành tương ứng. Đặc biệt: thực tập sinh đã hoàn thành 3 năm TTS được miễn thi kỹ năng — chuyển thẳng sang Tokutei.',publishedAt:'2026-05-10',status:'published'},
+    {id:'art_2',title:'Chi phí sinh hoạt Nhật Bản 2026: Bao nhiêu tiền là đủ sống và tiết kiệm?',category:'japan-life',thumbnail:'',excerpt:'Sinh hoạt tại Nhật tốn bao nhiêu? Tiền nhà, tiền ăn, đi lại — tất cả chi phí thực tế mà người lao động Tokutei cần biết trước khi sang.',content:'Chi phí sinh hoạt thực tế tại Nhật Bản năm 2026\n\nMột trong những câu hỏi phổ biến nhất: "Sống ở Nhật tốn bao nhiêu?" Câu trả lời ngắn gọn: đủ sống và tiết kiệm được — nếu bạn biết chi tiêu hợp lý.\n\nChi phí hàng tháng (ước tính cho tỉnh trung bình):\n\n• Tiền nhà/KTX: ¥20,000–¥40,000 (nhiều công ty trợ cấp 50%)\n• Tiền ăn (tự nấu): ¥25,000–¥40,000\n• Đi lại (xe đạp + tàu điện): ¥8,000–¥18,000\n• Điện/Nước/Gas: ¥8,000–¥15,000\n• Bảo hiểm y tế + hưu trí (bắt buộc): ¥18,000–¥25,000\n• Điện thoại: ¥1,000–¥3,000 (gói SIM giá rẻ)\n• Chi tiêu linh tinh: ¥15,000–¥25,000\n\nTổng ước tính: ¥95,000–¥166,000/tháng\nTiết kiệm được: ¥50,000–¥120,000/tháng (8–20 triệu VNĐ)\n\nMẹo tiết kiệm hiệu quả:\n\n• Mua thực phẩm lúc siêu thị gần đóng cửa — giảm 20–50%\n• Dùng xe đạp cho khoảng cách dưới 5km thay vì xe buýt\n• Đăng ký gói SIM giá rẻ (格安SIM): chỉ ¥1,000–¥2,000/tháng\n• Tận dụng 100-yen shop (Daiso, Seria) cho đồ dùng hằng ngày\n• Nấu ăn theo nhóm với đồng nghiệp — tiết kiệm và vui hơn',publishedAt:'2026-05-08',status:'published'},
+    {id:'art_3',title:'Kinh nghiệm thi JLPT N3: Đậu trong 6 tháng từ con số 0',category:'experience',thumbnail:'',excerpt:'Lộ trình học tiếng Nhật từ mức 0 đến N3 trong 6 tháng — tài liệu cụ thể, thời gian biểu và những mẹo thi thực tế từ người đã trải qua.',content:'Lộ trình học JLPT N3 trong 6 tháng từ đầu\n\nCâu hỏi hay nhất tôi nhận được: "Học N3 cần bao lâu?" Với 2 giờ/ngày nghiêm túc và đúng tài liệu, 6 tháng là hoàn toàn khả thi.\n\nTháng 1–2: Xây nền Hiragana, Katakana và Kanji N5\n\n• Tuần 1: Học thuộc 46 Hiragana (5–7 ngày)\n• Tuần 2: Học thuộc 46 Katakana\n• Tuần 3–8: 15 Kanji/ngày + ngữ pháp Genki I (bài 1–12)\n• App hỗ trợ: Anki (flashcard), LingoDeer\n\nTháng 3–4: Nâng lên N4\n\n• Hoàn thành Genki II hoặc Minna no Nihongo II\n• Từ vựng theo chủ đề (mỗi ngày 20 từ)\n• Nghe: NHK Web Easy 30 phút/ngày\n• Bắt đầu làm đề thi thử N4\n\nTháng 5–6: Tập trung ôn N3\n\n• Tài liệu chính: Try! N3 + Shin Kanzen Master N3\n• Làm 2–3 đề thi thử/tuần, chữa kỹ từng lỗi sai\n• Tập Choukai (nghe): nhiều người trượt vì phần này\n• Mục tiêu điểm: 120+ (ngưỡng đậu là 95/180)\n\nMẹo quan trọng nhất:\n\n• Học đều đặn mỗi ngày quan trọng hơn học nhiều 1 ngày rồi nghỉ\n• Đừng bỏ qua Dokkai (đọc hiểu) — chiếm 60/180 điểm\n• Đăng ký thi ít nhất 3 tháng trước — slot đầy rất nhanh\n• Thi tháng 7 hoặc tháng 12 — chỉ có 2 kỳ/năm',publishedAt:'2026-05-05',status:'published'}
+  ]);
+}
+
+function artCardHTML(a) {
+  const color=ART_COLORS[a.category]||'#888';
+  const emoji=ART_EMOJIS[a.category]||'📄';
+  const label=ART_CATS[a.category]||a.category;
+  const thumb=a.thumbnail
+    ? `<img src="${a.thumbnail}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=font-size:32px>${emoji}</span>'">`
+    : `<span style="font-size:32px">${emoji}</span>`;
+  return `<div class="acard" onclick="openArticle('${a.id}')">
+    <div class="acard-thumb" style="${a.thumbnail?'':'background:'+color+'22'}">${thumb}</div>
+    <div class="acard-body">
+      <span class="acat-badge ${a.category}">${label}</span>
+      <h3>${a.title}</h3>
+      <p class="acard-excerpt">${a.excerpt}</p>
+      <div class="acard-ft"><span>${formatDate(a.publishedAt)}</span><span class="acard-read">Đọc tiếp →</span></div>
+    </div>
+  </div>`;
+}
+
+function renderArticlePreview() {
+  const grid=document.getElementById('artPreviewGrid');
+  if(!grid) return;
+  const arts=getArticles().filter(a=>a.status==='published').sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)).slice(0,3);
+  grid.innerHTML=arts.length?arts.map(artCardHTML).join(''):'<p style="color:var(--text-3);text-align:center;padding:40px;grid-column:1/-1">Chưa có bài viết nào.</p>';
+}
+
+let currentArtCat='all';
+function openArticles(cat) {
+  currentArtCat=cat||'all';
+  renderArticlesPanel();
+  document.getElementById('artsOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeArticles() {
+  document.getElementById('artsOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function renderArticlesPanel() {
+  const all=getArticles().filter(a=>a.status==='published').sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));
+  document.querySelectorAll('.acat-tab').forEach(t=>t.classList.toggle('on',t.dataset.cat===currentArtCat));
+  const filtered=currentArtCat==='all'?all:all.filter(a=>a.category===currentArtCat);
+  const list=document.getElementById('artsList');
+  list.innerHTML=filtered.length?filtered.map(artCardHTML).join(''):'<div class="arts-empty"><div style="font-size:40px;margin-bottom:12px">📭</div><p style="font-size:15px;font-weight:600;color:var(--text-2)">Chưa có bài viết nào</p></div>';
+}
+
+function openArticle(id) {
+  const a=getArticles().find(x=>x.id===id);
+  if(!a) return;
+  const color=ART_COLORS[a.category]||'#888';
+  const emoji=ART_EMOJIS[a.category]||'📄';
+  const label=ART_CATS[a.category]||a.category;
+  const bodyHTML=a.content.split(/\n\n+/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+  document.getElementById('artdContent').innerHTML=`
+    ${a.thumbnail?`<img src="${a.thumbnail}" class="artd-thumb" alt="">`:`<div class="artd-thumb-ph" style="background:${color}22">${emoji}</div>`}
+    <div class="artd-content">
+      <div class="artd-meta">
+        <span class="acat-badge ${a.category}">${label}</span>
+        <span style="font-size:12px;color:var(--text-3)">${formatDate(a.publishedAt)}</span>
+      </div>
+      <h2 class="artd-title">${a.title}</h2>
+      <div class="artd-body">${bodyHTML}</div>
+    </div>`;
+  document.getElementById('artdOverlay').classList.add('open');
+}
+function closeArticle() { document.getElementById('artdOverlay').classList.remove('open'); }
+
+// ── ADMIN ──
+function saveJobs(jobs) { localStorage.setItem(STORE_KEY, JSON.stringify(jobs)); }
+
+const CAT_TOKUTEI = ['🌾 Nông nghiệp','🐟 Ngư nghiệp','🏗️ Xây dựng','🚢 Đóng tàu & Cơ khí tàu','🍱 Chế biến thực phẩm','🍽️ Dịch vụ ăn uống','🚗 Ô tô','✈️ Hàng không','🏨 Lưu trú / Khách sạn','🧹 Vệ sinh tòa nhà','⚙️ Nhóm ngành 1 (Cơ khí)','🔌 Nhóm ngành 2 (Điện tử)','💊 Điều dưỡng / Hộ lý'];
+const CAT_KYSIS   = ['💻 IT / Phần mềm','📊 Kinh tế / Tài chính','⚙️ Cơ khí','🏗️ Xây dựng / Kiến trúc','⚡ Điện / Điện tử','🧪 Hóa chất / Môi trường','🔧 Cơ điện tử','🚗 Ô tô / Giao thông'];
+
+function adminPickType(val) {
+  document.getElementById('ajf-type').value = val;
+  document.querySelectorAll('.type-pick-btn').forEach(b => b.classList.toggle('on', b.dataset.val === val));
+  adminJobTypeChange();
+}
+
+function adminJobTypeChange() {
+  const type = document.getElementById('ajf-type').value;
+  const cats = (type === 'kysis') ? CAT_KYSIS : CAT_TOKUTEI;
+  const sel = document.getElementById('ajf-cat');
+  const cur = sel.value;
+  sel.innerHTML = cats.map(c => `<option value="${c}"${c===cur?' selected':''}>${c}</option>`).join('');
+}
+
+let adminEditId = null;
+let adminJobEditId = null;
+let currentAdminNav = 'jobs-list';
+
+function adminNav(view, jobId) {
+  currentAdminNav = view;
+  const navMap = {'jobs-list':'navBtnJobsList','jobs-form':'navBtnJobsAdd','articles':'navBtnArticles','deploy':'navBtnDeploy'};
+  document.querySelectorAll('.admin-nav-item').forEach(b => b.classList.remove('on'));
+  if(navMap[view]) document.getElementById(navMap[view]).classList.add('on');
+  document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('on'));
+  const viewMap = {'jobs-list':'adminViewJobsList','jobs-form':'adminViewJobsForm','articles':'adminViewArticles','deploy':'adminViewDeploy'};
+  if(viewMap[view]) document.getElementById(viewMap[view]).classList.add('on');
+  if(view === 'jobs-list') renderAdminJobs();
+  else if(view === 'jobs-form') adminShowJobForm(jobId || null);
+  else if(view === 'articles') renderAdminPanel();
+  else if(view === 'deploy') renderDeployStats();
+  const main = document.querySelector('.admin-main');
+  if(main) main.scrollTop = 0;
+}
+
+function openAdmin() {
+  if(!isAdmin()){alert('Bạn không có quyền truy cập.');return;}
+  document.getElementById('adminOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  adminNav(currentAdminNav);
+  renderAdminSideStats();
+}
+function closeAdmin() {
+  document.getElementById('adminOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function renderAdminSideStats() {
+  const jobs = getJobs();
+  const el = document.getElementById('adminSbStats');
+  if(!el) return;
+  el.innerHTML = [
+    ['Tổng việc làm', jobs.length],
+    ['🇻🇳 Đầu Việt', jobs.filter(j=>j.type==='viet'||j.type==='both').length],
+    ['🇯🇵 Đầu Nhật', jobs.filter(j=>j.type==='nhat'||j.type==='both').length],
+    ['🎓 Kỹ sư', jobs.filter(j=>j.type==='kysis').length],
+  ].map(([l,v])=>`<div class="admin-sb-stat"><span class="admin-sb-stat-lbl">${l}</span><span class="admin-sb-stat-val">${v}</span></div>`).join('');
+}
+
+// ── JOB MANAGEMENT ──
+function renderAdminJobs() {
+  const jobs = getJobs().sort((a,b) => (b.id||'').localeCompare(a.id||''));
+  const cnt = document.getElementById('adminJobCount');
+  if(cnt) cnt.textContent = jobs.length + ' tin tuyển dụng';
+  const typeLabel = t => t==='viet'?'🇻🇳 Đầu Việt':t==='nhat'?'🇯🇵 Đầu Nhật':t==='both'?'🇻🇳+🇯🇵 Cả hai đầu':'🎓 Kỹ sư';
+  const stLabel   = s => s==='active'?'<span style="color:#22a85a;font-weight:700">● Đang tuyển</span>':'<span style="color:var(--text-3)">○ Hết hạn</span>';
+  document.getElementById('adminJobList').innerHTML = jobs.length
+    ? jobs.map(j => `<div class="admin-job-row">
+        <div class="admin-job-info">
+          <div class="admin-job-title">${j.title}</div>
+          <div class="admin-job-meta"><span>${typeLabel(j.type)}</span><span>${j.category||''}</span>${j.city?`<span>📍 ${j.city}</span>`:''}<span>${stLabel(j.status)}</span></div>
+        </div>
+        <div class="admin-art-actions">
+          <button class="admin-btn-edit" onclick="adminEditJob('${j.id}')">Sửa</button>
+          <button class="admin-btn-del" onclick="adminDeleteJob('${j.id}')">Xoá</button>
+        </div>
+      </div>`).join('')
+    : '<p style="color:var(--text-3);text-align:center;padding:32px">Chưa có tin nào. Nhấn "Thêm tin mới" để bắt đầu.</p>';
+}
+
+function adminShowJobForm(id) {
+  adminJobTypeChange();
+  if(id) {
+    const j = getJobs().find(x => x.id === id);
+    if(!j) return;
+    adminJobEditId = id;
+    adminPickType(j.type || 'viet');
+    document.getElementById('ajf-cat').value = j.category || '';
+    document.getElementById('ajf-title').value = j.title || '';
+    document.getElementById('ajf-city').value = j.city || '';
+    document.getElementById('ajf-salary').value = j.salary || '';
+    document.getElementById('ajf-japanese').value = j.japanese || '';
+    document.getElementById('ajf-count').value = j.count || '';
+    document.getElementById('ajf-gender').value = j.gender || '';
+    document.getElementById('ajf-workHours').value = j.workHours || '';
+    document.getElementById('ajf-daysOff').value = j.daysOff || '';
+    document.getElementById('ajf-overtime').value = j.overtime || '';
+    document.getElementById('ajf-raise').value = j.raise || '';
+    document.getElementById('ajf-bonus').value = j.bonus || '';
+    document.getElementById('ajf-housing').value = j.housing || '';
+    document.getElementById('ajf-desc').value = j.desc || '';
+    document.getElementById('ajf-status').value = j.status || 'active';
+    document.getElementById('adminJobFormTitle').textContent = 'Chỉnh sửa việc làm';
+  } else {
+    adminResetJobForm();
+  }
+}
+
+function adminResetJobForm() {
+  adminJobEditId = null;
+  ['ajf-title','ajf-city','ajf-salary','ajf-japanese','ajf-count','ajf-workHours','ajf-daysOff','ajf-overtime','ajf-raise','ajf-bonus','ajf-housing','ajf-desc'].forEach(i => document.getElementById(i).value = '');
+  document.getElementById('ajf-gender').value = '';
+  document.getElementById('ajf-status').value = 'active';
+  adminPickType('viet');
+  document.getElementById('adminJobFormTitle').textContent = 'Thêm việc làm mới';
+}
+
+function adminEditJob(id) { adminNav('jobs-form', id); }
+
+function adminDeleteJob(id) {
+  if(!confirm('Xoá tin tuyển dụng này?')) return;
+  saveJobs(getJobs().filter(j => j.id !== id));
+  renderAdminJobs();
+  renderAdminSideStats();
+  updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs();
+}
+
+function adminSaveJob() {
+  const title = document.getElementById('ajf-title').value.trim();
+  const type  = document.getElementById('ajf-type').value;
+  const category = document.getElementById('ajf-cat').value;
+  if(!title) { alert('Vui lòng nhập Tên công việc.'); return; }
+  const job = {
+    type, category, title,
+    city:      document.getElementById('ajf-city').value.trim(),
+    salary:    document.getElementById('ajf-salary').value.trim(),
+    japanese:  document.getElementById('ajf-japanese').value.trim(),
+    count:     document.getElementById('ajf-count').value.trim(),
+    gender:    document.getElementById('ajf-gender').value,
+    workHours: document.getElementById('ajf-workHours').value.trim(),
+    daysOff:   document.getElementById('ajf-daysOff').value.trim(),
+    overtime:  document.getElementById('ajf-overtime').value.trim(),
+    raise:     document.getElementById('ajf-raise').value.trim(),
+    bonus:     document.getElementById('ajf-bonus').value.trim(),
+    housing:   document.getElementById('ajf-housing').value.trim(),
+    desc:      document.getElementById('ajf-desc').value.trim(),
+    status:    document.getElementById('ajf-status').value,
+  };
+  const jobs = getJobs();
+  if(adminJobEditId) {
+    const idx = jobs.findIndex(j => j.id === adminJobEditId);
+    if(idx >= 0) jobs[idx] = {...jobs[idx], ...job};
+  } else {
+    jobs.unshift({id: 'job_' + Date.now(), ...job});
+  }
+  saveJobs(jobs);
+  renderAdminSideStats();
+  updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs();
+  adminNav('jobs-list');
+}
+
+function renderDeployStats() {
+  const jobs = getJobs(), arts = getArticles();
+  const el = document.getElementById('adminDeployStats');
+  if(!el) return;
+  el.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">${[
+    ['Tổng việc làm', jobs.length, 'var(--primary)'],
+    ['Đang tuyển', jobs.filter(j=>j.status==='active').length, '#22a85a'],
+    ['Hết hạn', jobs.filter(j=>j.status==='expired').length, 'var(--text-3)'],
+    ['Tổng bài viết', arts.length, 'var(--accent)'],
+    ['Đã đăng', arts.filter(a=>a.status==='published').length, '#22a85a'],
+  ].map(([l,v,c])=>`<div style="background:var(--surface-alt);border-radius:12px;padding:16px"><div style="font-size:26px;font-weight:800;color:${c}">${v}</div><div style="font-size:12px;color:var(--text-3);margin-top:3px">${l}</div></div>`).join('')}</div>`;
+}
+
+function adminExportJobs() {
+  const b = new Blob([JSON.stringify(getJobs(),null,2)],{type:'application/json'});
+  const u = URL.createObjectURL(b), a = document.createElement('a');
+  a.href=u; a.download='tokutei-jobs.json'; a.click(); URL.revokeObjectURL(u);
+}
+function adminExportArticles() {
+  const b = new Blob([JSON.stringify(getArticles(),null,2)],{type:'application/json'});
+  const u = URL.createObjectURL(b), a = document.createElement('a');
+  a.href=u; a.download='tokutei-articles.json'; a.click(); URL.revokeObjectURL(u);
+}
+function renderAdminPanel() {
+  const arts=getArticles().sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));
+  const cnt=document.getElementById('adminArtCount');
+  if(cnt) cnt.textContent=arts.length+' bài viết';
+  const sl=s=>s==='published'?'<span style="color:#22a85a;font-weight:700">● Đã đăng</span>':'<span style="color:var(--text-3)">○ Nháp</span>';
+  document.getElementById('adminArtList').innerHTML=arts.length
+    ?arts.map(a=>`<div class="admin-art-row">
+        <div class="admin-art-info">
+          <div class="admin-art-title">${a.title}</div>
+          <div class="admin-art-meta"><span>${ART_CATS[a.category]||a.category}</span><span>${formatDate(a.publishedAt)}</span><span>${sl(a.status)}</span></div>
+        </div>
+        <div class="admin-art-actions">
+          <button class="admin-btn-edit" onclick="adminEdit('${a.id}')">Sửa</button>
+          <button class="admin-btn-del" onclick="adminDelete('${a.id}')">Xoá</button>
+        </div>
+      </div>`).join('')
+    :'<p style="color:var(--text-3);text-align:center;padding:32px">Chưa có bài viết nào.</p>';
+  document.getElementById('adminForm').style.display='none';
+  adminEditId=null;
+}
+function adminShowForm(id) {
+  const form=document.getElementById('adminForm');
+  form.style.display='block';
+  if(id) {
+    const a=getArticles().find(x=>x.id===id);
+    if(!a) return;
+    adminEditId=id;
+    document.getElementById('af-art-title').value=a.title;
+    document.getElementById('af-art-cat').value=a.category;
+    document.getElementById('af-art-thumb').value=a.thumbnail||'';
+    document.getElementById('af-art-excerpt').value=a.excerpt;
+    document.getElementById('af-art-content').value=a.content;
+    document.getElementById('af-art-status').value=a.status;
+    document.getElementById('adminFormTitle').textContent='Sửa bài viết';
+  } else {
+    adminEditId=null;
+    ['af-art-title','af-art-thumb','af-art-excerpt','af-art-content'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('af-art-cat').value='tokutei';
+    document.getElementById('af-art-status').value='published';
+    document.getElementById('adminFormTitle').textContent='Thêm bài viết mới';
+  }
+}
+function adminEdit(id){adminShowForm(id);}
+function adminDelete(id) {
+  if(!confirm('Xoá bài viết này?')) return;
+  saveArticles(getArticles().filter(a=>a.id!==id));
+  renderAdminPanel();
+  renderArticlePreview();
+  if(document.getElementById('artsOverlay').classList.contains('open')) renderArticlesPanel();
+}
+function adminSaveArticle() {
+  const title=document.getElementById('af-art-title').value.trim();
+  const category=document.getElementById('af-art-cat').value;
+  const thumbnail=document.getElementById('af-art-thumb').value.trim();
+  const excerpt=document.getElementById('af-art-excerpt').value.trim();
+  const content=document.getElementById('af-art-content').value.trim();
+  const status=document.getElementById('af-art-status').value;
+  if(!title||!excerpt||!content){alert('Vui lòng điền đủ Tiêu đề, Mô tả ngắn và Nội dung.');return;}
+  const arts=getArticles();
+  if(adminEditId) {
+    const idx=arts.findIndex(a=>a.id===adminEditId);
+    if(idx>=0) arts[idx]={...arts[idx],title,category,thumbnail,excerpt,content,status};
+  } else {
+    arts.unshift({id:'art_'+Date.now(),title,category,thumbnail,excerpt,content,publishedAt:new Date().toISOString().slice(0,10),status});
+  }
+  saveArticles(arts);
+  renderAdminPanel();
+  renderArticlePreview();
+  if(document.getElementById('artsOverlay').classList.contains('open')) renderArticlesPanel();
+}
+
+// Init Facebook SDK
+window.fbAsyncInit = function() {
+  FB.init({ appId: FB_APP_ID, cookie:true, xfbml:true, version:'v19.0' });
+};
+
+// Init
+(function loadSite() {
+  updateStats();
+  updateGroupCounts();
+  renderHeroJobs();
+  renderJobs();
+  updateCatCounts();
+  // Restore login state
+  const savedUser = getCurrentUser();
+  if(savedUser) { renderNavUser(savedUser); updateSavedCount(); }
+  // Articles module
+  initSampleArticles();
+  renderArticlePreview();
+})();
+</script>
+
+<!-- ZALO QR MODAL -->
+<div id="zaloQRModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center" onclick="if(event.target===this)closeZaloQR()">
+  <div style="background:#fff;border-radius:20px;padding:32px 28px;max-width:320px;width:90%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.25)">
+    <button onclick="closeZaloQR()" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:#A1A1AA;line-height:1">✕</button>
+    <p style="font-size:13px;color:#52525B;margin-bottom:16px;font-weight:600">Quét mã để kết bạn Zalo</p>
+    <img src="anh-zalo.jpg" alt="Zalo QR" style="width:100%;border-radius:12px;display:block">
+  </div>
+</div>
+
+<script>
+function openZaloQR() {
+  const m = document.getElementById('zaloQRModal');
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeZaloQR() {
+  document.getElementById('zaloQRModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeZaloQR(); });
+</script>
+</body>
+</html>

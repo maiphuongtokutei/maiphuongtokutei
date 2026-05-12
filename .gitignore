@@ -1,0 +1,9 @@
+node_modules/
+screenshots/
+screenshotsactual/
+screenshotsreference/
+visitors.now__ref=godly.png
+CLAUDE.md
+screenshot.mjs
+package.json
+package-lock.json

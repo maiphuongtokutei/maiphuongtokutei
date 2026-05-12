@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Trung Phạm Tokutei</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F4F4F6;--surface:#fff;--border:#E5E5EA;
+  --primary:#2D2CDB;--primary-soft:#EEEEFF;
+  --viet:#22a85a;--viet-soft:#e8f8ef;
+  --nhat:#2D2CDB;--nhat-soft:#EEEEFF;
+  --danger:#E8305A;--danger-soft:#FFEEF2;
+  --text-1:#111118;--text-2:#52525B;--text-3:#A1A1AA;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.06);
+  --r:10px
+}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text-1);line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* ── LOGIN SCREEN ── */
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#5B4FE8,#E8305A);display:flex;align-items:center;justify-content:center;z-index:1000}
+#login-screen.hidden{display:none}
+.login-box{background:#fff;border-radius:16px;padding:40px;width:340px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.login-logo{font-size:32px;margin-bottom:4px}
+.login-title{font-size:20px;font-weight:800;margin-bottom:4px}
+.login-sub{font-size:13px;color:var(--text-3);margin-bottom:28px}
+.login-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;outline:none;margin-bottom:12px;transition:border .2s}
+.login-input:focus{border-color:var(--primary)}
+.login-btn{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
+.login-btn:hover{background:#2420c8}
+.login-err{font-size:13px;color:var(--danger);margin-top:8px;display:none}
+.login-err.show{display:block}
+
+/* ── LAYOUT ── */
+#app{display:flex;min-height:100vh}
+.sidebar{width:220px;background:var(--text-1);padding:20px 0;flex-shrink:0;display:flex;flex-direction:column}
+.sb-logo{display:flex;align-items:center;gap:8px;padding:0 20px 24px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:16px}
+.sb-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#5B4FE8,#E8305A);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:800}
+.sb-logo-text{font-size:13px;font-weight:700;color:#fff;line-height:1.3}
+.sb-logo-sub{font-size:10px;color:rgba(255,255,255,.4)}
+.sb-nav{list-style:none;padding:0 12px;flex:1}
+.sb-nav li a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:rgba(255,255,255,.6);text-decoration:none;font-size:13px;font-weight:500;transition:all .15s;margin-bottom:2px}
+.sb-nav li a:hover,.sb-nav li a.on{background:rgba(255,255,255,.1);color:#fff}
+.sb-nav li a .icon{font-size:16px;width:20px;text-align:center}
+.sb-stats{padding:16px 20px;border-top:1px solid rgba(255,255,255,.1);margin-top:auto}
+.sb-stat{font-size:11px;color:rgba(255,255,255,.4);margin-bottom:6px}
+.sb-stat strong{color:rgba(255,255,255,.8)}
+.sb-logout{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;color:rgba(255,255,255,.4);font-size:12px;cursor:pointer;transition:all .15s;background:none;border:none;width:100%;margin:8px 0 0 0}
+.sb-logout:hover{background:rgba(255,255,255,.1);color:#fff}
+
+.main{flex:1;padding:32px;overflow-y:auto}
+.page-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.page-title{font-size:24px;font-weight:800}
+.page-sub{font-size:14px;color:var(--text-3);margin-top:2px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer;text-decoration:none;transition:all .2s}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#2420c8}
+.btn-ghost{background:var(--bg);color:var(--text-2);border:1px solid var(--border)}.btn-ghost:hover{border-color:var(--primary);color:var(--primary)}
+.btn-danger{background:var(--danger-soft);color:var(--danger)}.btn-danger:hover{background:var(--danger);color:#fff}
+.btn-sm{padding:6px 11px;font-size:12px;border-radius:6px}
+.btn-viet{background:var(--viet-soft);color:var(--viet)}.btn-viet:hover{background:var(--viet);color:#fff}
+.btn-nhat{background:var(--nhat-soft);color:var(--nhat)}.btn-nhat:hover{background:var(--nhat);color:#fff}
+
+/* ── STATS CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px}
+.sc-num{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:2px}
+.sc-label{font-size:12px;color:var(--text-3)}
+
+/* ── FORM PANEL ── */
+.panel{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
+.panel-hd{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-hd h3{font-size:16px;font-weight:700}
+.panel-body{padding:24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group.full{grid-column:1/-1}
+label{font-size:12px;font-weight:600;color:var(--text-2);letter-spacing:.02em;text-transform:uppercase}
+.form-control{padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;color:var(--text-1);outline:none;background:#fff;transition:border .2s;width:100%}
+.form-control:focus{border-color:var(--primary)}
+select.form-control{cursor:pointer}
+textarea.form-control{resize:vertical;min-height:80px;line-height:1.5}
+.type-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:640px){.type-btns{grid-template-columns:repeat(2,1fr)}}
+.type-btn{padding:10px 8px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;line-height:1.4}
+.type-btn small{font-size:10px;font-weight:400;color:var(--text-3);display:block;margin-top:3px}
+.type-btn:hover{border-color:var(--primary)}
+.type-btn.sel-viet{border-color:var(--viet);background:var(--viet-soft);color:var(--viet)}
+.type-btn.sel-viet small{color:var(--viet);opacity:.7}
+.type-btn.sel-nhat{border-color:var(--nhat);background:var(--nhat-soft);color:var(--nhat)}
+.type-btn.sel-nhat small{color:var(--nhat);opacity:.7}
+.type-btn.sel-both{border-color:#7c3aed;background:#f3e8ff;color:#7c3aed}
+.type-btn.sel-both small{color:#7c3aed;opacity:.7}
+.type-btn.sel-kysis{border-color:#0891b2;background:#e0f2fe;color:#0891b2}
+.type-btn.sel-kysis small{color:#0891b2;opacity:.7}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)}
+
+/* ── JOB TABLE ── */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.search-input{flex:1;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;font-family:inherit;transition:border .2s}
+.search-input:focus{border-color:var(--primary)}
+.filter-sel{padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;font-family:inherit;background:#fff;cursor:pointer}
+table{width:100%;border-collapse:collapse}
+th{background:var(--bg);padding:10px 14px;text-align:left;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border)}
+td{padding:12px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#FAFAFA}
+.td-title{font-weight:600;color:var(--text-1)}
+.td-meta{font-size:11px;color:var(--text-3);margin-top:2px}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px}
+.bv{background:var(--viet-soft);color:var(--viet)}
+.bn{background:var(--nhat-soft);color:var(--nhat)}
+.bl{background:#FEF3C7;color:#D97706}
+.ba{background:#DCFCE7;color:#16A34A}
+.td-actions{display:flex;gap:6px;justify-content:flex-end}
+.empty-state{text-align:center;padding:48px 24px;color:var(--text-3)}
+.empty-ico{font-size:40px;margin-bottom:12px}
+.empty-txt{font-size:15px;font-weight:600;margin-bottom:4px;color:var(--text-2)}
+.empty-sub{font-size:13px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text-1);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;font-weight:500;transform:translateY(80px);opacity:0;transition:all .3s cubic-bezier(.22,1,.36,1);z-index:999;max-width:320px}
+.toast.show{transform:none;opacity:1}
+.toast.success{background:#16A34A}
+.toast.error{background:var(--danger)}
+
+/* ── EXPORT PANEL ── */
+.export-note{font-size:13px;color:var(--text-2);line-height:1.7;margin-bottom:16px;padding:14px 16px;background:var(--bg);border-radius:8px;border-left:3px solid var(--primary)}
+
+/* ── ARTICLE BADGES ── */
+.acat-pill{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px}
+.acat-tokutei{background:#EEEEFF;color:#2D2CDB}
+.acat-japan-life{background:#DCFCE7;color:#16A34A}
+.acat-experience{background:#FEF3C7;color:#D97706}
+.acat-news{background:#FFE4E6;color:#E8305A}
+.art-status-pub{background:#DCFCE7;color:#16A34A}
+.art-status-draft{background:#F4F4F6;color:#A1A1AA}
+.art-content-preview{font-family:monospace;font-size:13px;line-height:1.7;white-space:pre-wrap}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">特</div>
+    <div class="login-title">Trung Phạm Tokutei</div>
+    <div class="login-sub">Đăng nhập để quản lý việc làm</div>
+    <input class="login-input" type="password" id="pwInput" placeholder="Mật khẩu admin..." onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Đăng nhập →</button>
+    <div class="login-err" id="loginErr">Mật khẩu không đúng. Thử lại.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">特</div>
+      <div>
+        <div class="sb-logo-text">Trung Phạm Tokutei</div>
+        <div class="sb-logo-sub">Admin Dashboard</div>
+      </div>
+    </div>
+    <ul class="sb-nav">
+      <li><a href="#" class="on" data-page="jobs" onclick="showPage('jobs')"><span class="icon">💼</span> Quản lý việc làm</a></li>
+      <li><a href="#" data-page="add" onclick="showPage('add')"><span class="icon">➕</span> Thêm việc làm mới</a></li>
+      <li><a href="#" data-page="articles" onclick="showPage('articles')"><span class="icon">📝</span> Quản lý bài viết</a></li>
+      <li><a href="#" data-page="export" onclick="showPage('export')"><span class="icon">📤</span> Xuất &amp; Deploy</a></li>
+      <li><a href="index.html" target="_blank"><span class="icon">🌐</span> Xem website</a></li>
+    </ul>
+    <div class="sb-stats">
+      <div class="sb-stat">Tổng việc làm: <strong id="sb-total">0</strong></div>
+      <div class="sb-stat">🇻🇳 Đầu Việt: <strong id="sb-viet">0</strong></div>
+      <div class="sb-stat">🇯🇵 Đầu Nhật: <strong id="sb-nhat">0</strong></div>
+      <div class="sb-stat">🇻🇳+🇯🇵 2 đầu: <strong id="sb-both">0</strong></div>
+      <div class="sb-stat">🎓 Kỹ sư: <strong id="sb-kysis">0</strong></div>
+      <div class="sb-stat">📝 Bài viết: <strong id="sb-arts">0</strong></div>
+    </div>
+    <button class="sb-logout" onclick="doLogout()">🚪 Đăng xuất</button>
+  </aside>
+
+  <main class="main">
+
+    <!-- PAGE: JOBS LIST -->
+    <div id="page-jobs">
+      <div class="page-hd">
+        <div>
+          <div class="page-title">Danh sách việc làm</div>
+          <div class="page-sub">Quản lý, chỉnh sửa và ẩn/hiện các tin tuyển dụng</div>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('add')">➕ Thêm việc làm</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="sc-num" id="st-total">0</div><div class="sc-label">Tổng việc làm</div></div>
+        <div class="stat-card"><div class="sc-num" style="color:var(--viet)" id="st-viet">0</div><div class="sc-label">🇻🇳 Đầu Việt</div></div>
+        <div class="stat-card"><div class="sc-num" style="color:var(--nhat)" id="st-nhat">0</div><div class="sc-label">🇯🇵 Đầu Nhật</div></div>
+        <div class="stat-card"><div class="sc-num" style="color:#22c55e" id="st-active">0</div><div class="sc-label">✅ Đang hiển thị</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd">
+          <h3>Tất cả việc làm</h3>
+        </div>
+        <div class="panel-body" style="padding:16px 20px 0">
+          <div class="toolbar">
+            <input class="search-input" type="text" placeholder="🔍 Tìm kiếm tên job, tỉnh thành..." oninput="renderTable(this.value)">
+            <select class="filter-sel" onchange="renderTable(document.querySelector('.search-input').value, this.value)" id="typeFilter">
+              <option value="all">Tất cả loại</option>
+              <option value="viet">🇻🇳 Đầu Việt</option>
+              <option value="nhat">🇯🇵 Đầu Nhật</option>
+              <option value="both">🇻🇳+🇯🇵 2 đầu Việt-Nhật</option>
+              <option value="kysis">🎓 Kỹ sư</option>
+            </select>
+            <select class="filter-sel" onchange="renderTable(document.querySelector('.search-input').value, document.getElementById('typeFilter').value, this.value)" id="statusFilter">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="active">✅ Đang hiển thị</option>
+              <option value="hidden">🙈 Đã ẩn</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Tên công việc</th>
+                <th>Loại</th>
+                <th>Ngành</th>
+                <th>Địa điểm</th>
+                <th>Lương (¥/月)</th>
+                <th>Trạng thái</th>
+                <th style="text-align:right">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="jobTableBody"></tbody>
+          </table>
+          <div id="emptyState" class="empty-state" style="display:none">
+            <div class="empty-ico">💼</div>
+            <div class="empty-txt">Chưa có việc làm nào</div>
+            <div class="empty-sub">Nhấn "Thêm việc làm" để đăng tin đầu tiên</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: ADD / EDIT FORM -->
+    <div id="page-add" style="display:none">
+      <div class="page-hd">
+        <div>
+          <div class="page-title" id="form-page-title">Thêm việc làm mới</div>
+          <div class="page-sub">Điền đầy đủ thông tin để đăng tin tuyển dụng</div>
+        </div>
+        <button class="btn btn-ghost" onclick="showPage('jobs')">← Quay lại</button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd"><h3>Thông tin việc làm</h3></div>
+        <div class="panel-body">
+          <input type="hidden" id="editId">
+          <div class="form-grid">
+
+            <div class="form-group full">
+              <label>Loại Tokutei *</label>
+              <div class="type-btns">
+                <button type="button" class="type-btn sel-viet" id="btn-viet" onclick="selectType('viet')">🇻🇳 Tokutei đầu Việt<small>Phí dịch vụ · Từ Việt Nam</small></button>
+                <button type="button" class="type-btn" id="btn-nhat" onclick="selectType('nhat')">🇯🇵 Tokutei đầu Nhật<small>0 đồng · Đang ở Nhật</small></button>
+                <button type="button" class="type-btn" id="btn-both" onclick="selectType('both')">🇻🇳+🇯🇵 Tokutei 2 đầu<small>Tuyển cả hai đầu</small></button>
+                <button type="button" class="type-btn" id="btn-kysis" onclick="selectType('kysis')">🎓 Kỹ sư<small>IT · Cơ khí · Xây dựng</small></button>
+              </div>
+              <input type="hidden" id="jobType" value="viet">
+            </div>
+
+            <div class="form-group full">
+              <label>Tên công việc *</label>
+              <input class="form-control" type="text" id="jobTitle" placeholder="VD: Kỹ thuật viên chế biến thực phẩm">
+            </div>
+
+            <div class="form-group">
+              <label>Ngành nghề *</label>
+              <select class="form-control" id="jobCategory"></select>
+            </div>
+
+            <div class="form-group">
+              <label>Địa điểm làm việc *</label>
+              <input class="form-control" type="text" id="jobCity" placeholder="VD: Aichi 愛知  hoặc  Osaka — Nhà máy Yodogawa">
+            </div>
+
+            <div class="form-group full">
+              <label>Lương *</label>
+              <input class="form-control" type="text" id="jobSalary" placeholder="VD: ¥185,000–¥210,000/月  hoặc  ¥1,050/時  hoặc  Thỏa thuận">
+            </div>
+
+            <div class="form-group">
+              <label>Số lượng tuyển (người)</label>
+              <input class="form-control" type="number" id="jobCount" placeholder="VD: 3">
+            </div>
+
+            <div class="form-group">
+              <label>Giới tính</label>
+              <select class="form-control" id="jobGender">
+                <option value="">Không yêu cầu</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Nam/Nữ">Nam/Nữ</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Trình độ tiếng Nhật yêu cầu</label>
+              <select class="form-control" id="jobJapanese">
+                <option value="N5以上">N5 trở lên (cơ bản)</option>
+                <option value="N4以上">N4 trở lên (sơ trung)</option>
+                <option value="N3以上">N3 trở lên (trung cấp)</option>
+                <option value="N2以上">N2 trở lên (cao cấp)</option>
+                <option value="Không yêu cầu">Không yêu cầu</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Giờ làm việc</label>
+              <input class="form-control" type="text" id="jobWorkHours" placeholder="VD: 8h/ngày, 40h/tuần">
+            </div>
+
+            <div class="form-group">
+              <label>Ngày nghỉ</label>
+              <input class="form-control" type="text" id="jobDaysOff" placeholder="VD: Thứ 7 &amp; Chủ nhật">
+            </div>
+
+            <div class="form-group">
+              <label>Số giờ tăng ca</label>
+              <input class="form-control" type="text" id="jobOvertime" placeholder="VD: 20–30h/tháng">
+            </div>
+
+            <div class="form-group">
+              <label>Tăng lương</label>
+              <input class="form-control" type="text" id="jobRaise" placeholder="VD: 1 lần/năm, ~3%">
+            </div>
+
+            <div class="form-group">
+              <label>Thưởng</label>
+              <input class="form-control" type="text" id="jobBonus" placeholder="VD: 2 lần/năm (T6 &amp; T12)">
+            </div>
+
+
+            <div class="form-group full">
+              <label>Nhà ở (Tiền nhà)</label>
+              <input class="form-control" type="text" id="jobHousing" placeholder="VD: Ký túc xá ¥15,000/tháng  hoặc  Bao nhà ở miễn phí">
+            </div>
+
+            <div class="form-group full">
+              <label>Mô tả công việc</label>
+              <textarea class="form-control" id="jobDesc" rows="4" placeholder="Công việc cụ thể, điều kiện làm việc, quyền lợi..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Trạng thái hiển thị</label>
+              <select class="form-control" id="jobStatus">
+                <option value="active">✅ Đang hiển thị trên website</option>
+                <option value="hidden">🙈 Ẩn (chưa hiển thị)</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-ghost" onclick="resetForm()">🗑️ Làm mới form</button>
+            <button class="btn btn-primary" onclick="saveJob()">💾 Lưu việc làm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: ARTICLES LIST -->
+    <div id="page-articles" style="display:none">
+      <div class="page-hd">
+        <div>
+          <div class="page-title">Quản lý bài viết</div>
+          <div class="page-sub">Tạo, chỉnh sửa và xóa các bài viết Blog-Kiến thức</div>
+        </div>
+        <button class="btn btn-primary" onclick="openArticleForm()">✍️ Viết bài mới</button>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card"><div class="sc-num" id="ast-total">0</div><div class="sc-label">Tổng bài viết</div></div>
+        <div class="stat-card"><div class="sc-num" style="color:#16A34A" id="ast-pub">0</div><div class="sc-label">✅ Đã xuất bản</div></div>
+        <div class="stat-card"><div class="sc-num" style="color:#A1A1AA" id="ast-draft">0</div><div class="sc-label">📝 Bản nháp</div></div>
+        <div class="stat-card"><div class="sc-num" style="color:var(--primary)" id="ast-tokutei">0</div><div class="sc-label">📋 Tokutei</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd"><h3>Tất cả bài viết</h3></div>
+        <div class="panel-body" style="padding:16px 20px 0">
+          <div class="toolbar">
+            <input class="search-input" id="artSearch" type="text" placeholder="🔍 Tìm kiếm tiêu đề bài viết..." oninput="renderArticleTable(this.value)">
+            <select class="filter-sel" id="artCatFilter" onchange="renderArticleTable(document.getElementById('artSearch').value,this.value)">
+              <option value="all">Tất cả chuyên mục</option>
+              <option value="tokutei">📋 Tokutei</option>
+              <option value="japan-life">🗾 Cuộc sống Nhật</option>
+              <option value="experience">💡 Kinh nghiệm</option>
+              <option value="news">📰 Tin tức</option>
+            </select>
+            <select class="filter-sel" id="artStatusFilter" onchange="renderArticleTable(document.getElementById('artSearch').value,document.getElementById('artCatFilter').value,this.value)">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="published">✅ Đã xuất bản</option>
+              <option value="draft">📝 Bản nháp</option>
+            </select>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr>
+                <th>Tiêu đề</th>
+                <th>Chuyên mục</th>
+                <th>Trạng thái</th>
+                <th>Ngày đăng</th>
+                <th style="text-align:right">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="artTableBody"></tbody>
+          </table>
+          <div id="artEmptyState" class="empty-state" style="display:none">
+            <div class="empty-ico">📝</div>
+            <div class="empty-txt">Chưa có bài viết nào</div>
+            <div class="empty-sub">Nhấn "Viết bài mới" để tạo bài đầu tiên</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: ARTICLE FORM -->
+    <div id="page-article-form" style="display:none">
+      <div class="page-hd">
+        <div>
+          <div class="page-title" id="art-form-title">Viết bài mới</div>
+          <div class="page-sub">Tạo nội dung cho Blog-Kiến thức</div>
+        </div>
+        <button class="btn btn-ghost" onclick="showPage('articles')">← Quay lại</button>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd"><h3>Thông tin bài viết</h3></div>
+        <div class="panel-body">
+          <input type="hidden" id="artEditId">
+          <div class="form-grid">
+
+            <div class="form-group full">
+              <label>Tiêu đề bài viết *</label>
+              <input class="form-control" type="text" id="artTitle" placeholder="VD: Tokutei là gì? Toàn bộ thông tin bạn cần biết...">
+            </div>
+
+            <div class="form-group">
+              <label>Chuyên mục *</label>
+              <select class="form-control" id="artCategory">
+                <option value="">— Chọn chuyên mục —</option>
+                <option value="tokutei">📋 Tokutei</option>
+                <option value="japan-life">🗾 Cuộc sống Nhật</option>
+                <option value="experience">💡 Kinh nghiệm</option>
+                <option value="news">📰 Tin tức</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Trạng thái</label>
+              <select class="form-control" id="artStatus">
+                <option value="published">✅ Xuất bản ngay</option>
+                <option value="draft">📝 Lưu nháp</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Ngày đăng</label>
+              <input class="form-control" type="date" id="artDate">
+            </div>
+
+            <div class="form-group">
+              <label>Thumbnail (URL ảnh — để trống nếu không có)</label>
+              <input class="form-control" type="text" id="artThumbnail" placeholder="https://...">
+            </div>
+
+            <div class="form-group full">
+              <label>Tóm tắt * (hiển thị ở card bài viết)</label>
+              <textarea class="form-control" id="artExcerpt" rows="3" placeholder="Mô tả ngắn gọn 1–2 câu — hiển thị dưới tiêu đề ở trang blog..."></textarea>
+            </div>
+
+            <div class="form-group full">
+              <label>Nội dung bài viết *</label>
+              <textarea class="form-control art-content-preview" id="artContent" rows="18" placeholder="Nhập nội dung đầy đủ ở đây.&#10;&#10;Xuống 2 dòng trống để tạo đoạn văn mới.&#10;&#10;Dùng dấu • để liệt kê."></textarea>
+              <div style="font-size:11px;color:var(--text-3);margin-top:5px">Tip: Nhấn Enter 2 lần để xuống đoạn mới. Dùng dấu • để liệt kê điểm.</div>
+            </div>
+
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-ghost" onclick="resetArticleForm()">🗑️ Làm mới</button>
+            <button class="btn btn-primary" onclick="saveArticle()">💾 Lưu bài viết</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: EXPORT -->
+    <div id="page-export" style="display:none">
+      <div class="page-hd">
+        <div>
+          <div class="page-title">Xuất &amp; Deploy</div>
+          <div class="page-sub">Tải về jobs.json để upload lên hosting của bạn</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd"><h3>📤 Xuất dữ liệu việc làm</h3></div>
+        <div class="panel-body">
+          <div class="export-note">
+            <strong>Hướng dẫn deploy:</strong><br>
+            1. Nhấn <strong>"Tải về jobs.json"</strong> bên dưới<br>
+            2. Upload file <code>jobs.json</code> lên cùng thư mục với <code>index.html</code> trên hosting của bạn<br>
+            3. Website sẽ tự động cập nhật danh sách việc làm mới
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="exportJSON()">⬇️ Tải về jobs.json</button>
+            <button class="btn btn-ghost" onclick="copyJSON()">📋 Sao chép JSON</button>
+          </div>
+          <div style="margin-top:20px">
+            <label style="font-size:12px;font-weight:600;color:var(--text-2);letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:8px">Preview JSON</label>
+            <pre id="jsonPreview" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;font-size:12px;overflow:auto;max-height:400px;line-height:1.6;color:var(--text-2)"></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hd"><h3>📥 Nhập dữ liệu từ JSON</h3></div>
+        <div class="panel-body">
+          <div class="export-note">Dán nội dung file <code>jobs.json</code> vào đây để khôi phục dữ liệu.</div>
+          <textarea class="form-control" id="importInput" rows="6" placeholder='[{"id":"...","title":"..."}]'></textarea>
+          <div style="margin-top:12px">
+            <button class="btn btn-ghost" onclick="importJSON()">📥 Nhập dữ liệu</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PASS = 'trungpham2026';
+const STORE_KEY = 'tp_tokutei_jobs';
+
+// ── AUTH ──
+function doLogin() {
+  const pw = document.getElementById('pwInput').value;
+  if(pw === PASS) {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app').style.display = 'flex';
+    init();
+  } else {
+    document.getElementById('loginErr').classList.add('show');
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+function doLogout() {
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('pwInput').value = '';
+}
+document.getElementById('pwInput').focus();
+
+// ── DATA ──
+function getJobs() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+  catch { return []; }
+}
+function saveJobs(jobs) {
+  localStorage.setItem(STORE_KEY, JSON.stringify(jobs));
+  updateSidebar();
+}
+function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+// ── PAGES ──
+function showPage(name) {
+  ['jobs','add','articles','article-form','export'].forEach(p => {
+    const el = document.getElementById('page-'+p);
+    if(el) el.style.display = p===name ? '' : 'none';
+  });
+  const activeNav = name === 'article-form' ? 'articles' : name;
+  document.querySelectorAll('.sb-nav a[data-page]').forEach(a => a.classList.toggle('on', a.dataset.page === activeNav));
+  if(name === 'jobs') renderTable();
+  if(name === 'export') renderExport();
+  if(name === 'articles') renderArticleTable();
+}
+
+// ── INIT ──
+function init() {
+  // Load sample jobs if empty
+  if(getJobs().length === 0) {
+    saveJobs([
+      {id:genId(),type:'viet',title:'Kỹ thuật viên chế biến thực phẩm',category:'🍱 Chế biến thực phẩm',city:'Aichi 愛知',salMin:185000,salMax:210000,japanese:'N3以上',company:'Toyota Foods Co., Ltd.',desc:'Làm việc tại dây chuyền chế biến thực phẩm đông lạnh. Bao ký túc xá, 2 bữa/ngày.',status:'active'},
+      {id:genId(),type:'viet',title:'Công nhân xây dựng (型枠工)',category:'🏗️ Xây dựng',city:'Osaka 大阪',salMin:200000,salMax:240000,japanese:'N4以上',company:'Osaka Build Corp.',desc:'Gia công cốp pha, lắp dựng khung bê tông. OT được trả 125%.',status:'active'},
+      {id:genId(),type:'nhat',title:'Điều dưỡng viên tại cơ sở chăm sóc người già',category:'💊 Điều dưỡng / Hộ lý',city:'Hokkaido 北海道',salMin:210000,salMax:250000,japanese:'N3以上',company:'Sapporo Care Center',desc:'Chăm sóc người cao tuổi, hỗ trợ sinh hoạt hàng ngày. Không cần kinh nghiệm.',status:'active'},
+      {id:genId(),type:'nhat',title:'Thợ hàn công nghiệp (溶接)',category:'🏗️ Xây dựng',city:'Kanagawa 神奈川',salMin:230000,salMax:280000,japanese:'N4以上',company:'Kawasaki Steel Works',desc:'Hàn kết cấu thép tại xưởng. Có chứng chỉ hàn được ưu tiên.',status:'active'},
+    ]);
+  }
+  selectType('viet');
+  document.getElementById('artDate').value = new Date().toISOString().slice(0,10);
+  renderTable();
+  updateSidebar();
+}
+
+// ── TABLE ──
+function renderTable(search='', typeF='all', statusF='all') {
+  const jobs = getJobs().filter(j => {
+    const s = search.toLowerCase();
+    const matchSearch = !s || j.title.toLowerCase().includes(s) || (j.city||'').toLowerCase().includes(s) || (j.company||'').toLowerCase().includes(s);
+    const matchType = typeF === 'all' || j.type === typeF;
+    const matchStatus = statusF === 'all' || j.status === statusF;
+    return matchSearch && matchType && matchStatus;
+  });
+
+  const tbody = document.getElementById('jobTableBody');
+  const empty = document.getElementById('emptyState');
+
+  // Update stat cards
+  const all = getJobs();
+  document.getElementById('st-total').textContent = all.length;
+  document.getElementById('st-viet').textContent = all.filter(j=>j.type==='viet').length;
+  document.getElementById('st-nhat').textContent = all.filter(j=>j.type==='nhat').length;
+  document.getElementById('st-active').textContent = all.filter(j=>j.status==='active').length;
+
+  if(!jobs.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = jobs.map(j => `
+    <tr>
+      <td>
+        <div class="td-title">${j.title}</div>
+      </td>
+      <td>${typeBadge(j.type)}</td>
+      <td style="font-size:12px">${j.category || '—'}</td>
+      <td style="font-size:12px">${j.city || '—'}</td>
+      <td style="font-size:12px;font-weight:600">${j.salary || '—'}</td>
+      <td>${j.status==='active'
+        ? '<span class="badge ba">● Đang tuyển</span>'
+        : '<span class="badge bl">● Hết hạn</span>'}</td>
+      <td>
+        <div class="td-actions">
+          <button class="btn btn-sm ${j.status==='active'?'btn-danger':'btn-viet'}" onclick="toggleStatus('${j.id}')">${j.status==='active'?'Hết hạn':'Đang tuyển'}</button>
+          <button class="btn btn-ghost btn-sm" onclick="editJob('${j.id}')">✏️ Sửa</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteJob('${j.id}')">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── CATEGORIES ──
+const CAT_TOKUTEI = ['🌾 Nông nghiệp','🐟 Ngư nghiệp','🏗️ Xây dựng','🚢 Đóng tàu & Cơ khí tàu','🍱 Chế biến thực phẩm','🍽️ Dịch vụ ăn uống','🚗 Ô tô','✈️ Hàng không','🏨 Lưu trú / Khách sạn','🧹 Vệ sinh tòa nhà','⚙️ Máy móc công nghiệp','🔌 Điện tử & Thông tin','🏭 Sản phẩm công nghiệp','💊 Điều dưỡng / Hộ lý'];
+const CAT_KYSIS = ['💻 IT / Phần mềm','📊 Kinh tế / Tài chính','⚙️ Cơ khí','🏗️ Xây dựng / Kiến trúc','⚡ Điện / Điện tử','🧪 Hóa chất / Môi trường','🔧 Cơ điện tử','🚗 Ô tô / Giao thông'];
+
+// ── FORM ──
+let selectedType = 'viet';
+const TYPE_CLS = {viet:'sel-viet', nhat:'sel-nhat', both:'sel-both', kysis:'sel-kysis'};
+
+function selectType(t) {
+  selectedType = t;
+  document.getElementById('jobType').value = t;
+  ['viet','nhat','both','kysis'].forEach(type => {
+    const btn = document.getElementById('btn-' + type);
+    if(btn) btn.className = 'type-btn' + (t === type ? ' ' + TYPE_CLS[type] : '');
+  });
+  const cats = t === 'kysis' ? CAT_KYSIS : CAT_TOKUTEI;
+  const sel = document.getElementById('jobCategory');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Chọn ngành —</option>' + cats.map(c => `<option${c===cur?' selected':''}>${c}</option>`).join('');
+}
+
+function resetForm() {
+  document.getElementById('editId').value = '';
+  document.getElementById('form-page-title').textContent = 'Thêm việc làm mới';
+  ['jobTitle','jobDesc','jobHousing','jobWorkHours','jobDaysOff','jobOvertime','jobRaise','jobBonus'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('jobCategory').value = '';
+  document.getElementById('jobCity').value = '';
+  document.getElementById('jobSalary').value = '';
+  document.getElementById('jobCount').value = '';
+  document.getElementById('jobGender').value = '';
+  document.getElementById('jobJapanese').value = 'N4以上';
+  document.getElementById('jobStatus').value = 'active';
+  selectType('viet');
+}
+
+function editJob(id) {
+  const j = getJobs().find(x => x.id === id);
+  if(!j) return;
+  document.getElementById('editId').value = j.id;
+  document.getElementById('form-page-title').textContent = 'Chỉnh sửa việc làm';
+  document.getElementById('jobTitle').value = j.title || '';
+  document.getElementById('jobCategory').value = j.category || '';
+  document.getElementById('jobCity').value = j.city || '';
+  document.getElementById('jobSalary').value = j.salary || '';
+  document.getElementById('jobCount').value = j.count || '';
+  document.getElementById('jobGender').value = j.gender || '';
+  document.getElementById('jobJapanese').value = j.japanese || 'N4以上';
+  document.getElementById('jobWorkHours').value = j.workHours || '';
+  document.getElementById('jobDaysOff').value = j.daysOff || '';
+  document.getElementById('jobOvertime').value = j.overtime || '';
+  document.getElementById('jobRaise').value = j.raise || '';
+  document.getElementById('jobBonus').value = j.bonus || '';
+  document.getElementById('jobHousing').value = j.housing || '';
+  document.getElementById('jobDesc').value = j.desc || '';
+  document.getElementById('jobStatus').value = j.status || 'active';
+  selectType(j.type || 'viet');
+  showPage('add');
+}
+
+function saveJob() {
+  const title = document.getElementById('jobTitle').value.trim();
+  const category = document.getElementById('jobCategory').value;
+  const city = document.getElementById('jobCity').value;
+  if(!title) { toast('Vui lòng nhập tên công việc', 'error'); return; }
+  if(!category) { toast('Vui lòng chọn ngành nghề', 'error'); return; }
+  if(!city) { toast('Vui lòng chọn tỉnh thành', 'error'); return; }
+
+  const job = {
+    id: document.getElementById('editId').value || genId(),
+    type: selectedType,
+    title,
+    category,
+    city,
+    salary: document.getElementById('jobSalary').value.trim(),
+    count: parseInt(document.getElementById('jobCount').value) || 0,
+    gender: document.getElementById('jobGender').value,
+    japanese: document.getElementById('jobJapanese').value,
+    workHours: document.getElementById('jobWorkHours').value.trim(),
+    daysOff: document.getElementById('jobDaysOff').value.trim(),
+    overtime: document.getElementById('jobOvertime').value.trim(),
+    raise: document.getElementById('jobRaise').value.trim(),
+    bonus: document.getElementById('jobBonus').value.trim(),
+    housing: document.getElementById('jobHousing').value.trim(),
+    desc: document.getElementById('jobDesc').value.trim(),
+    status: document.getElementById('jobStatus').value,
+    updatedAt: new Date().toISOString()
+  };
+
+  const jobs = getJobs();
+  const idx = jobs.findIndex(j => j.id === job.id);
+  if(idx >= 0) jobs[idx] = job; else jobs.unshift(job);
+  saveJobs(jobs);
+  toast('✅ Đã lưu việc làm thành công!', 'success');
+  resetForm();
+  showPage('jobs');
+}
+
+function deleteJob(id) {
+  if(!confirm('Xóa việc làm này?')) return;
+  saveJobs(getJobs().filter(j => j.id !== id));
+  renderTable();
+  toast('Đã xóa việc làm', '');
+}
+
+function toggleStatus(id) {
+  const jobs = getJobs();
+  const j = jobs.find(x => x.id === id);
+  if(!j) return;
+  j.status = j.status === 'active' ? 'expired' : 'active';
+  saveJobs(jobs);
+  renderTable(document.querySelector('.search-input').value);
+  toast(j.status === 'active' ? '✅ Đã chuyển sang Đang tuyển' : '⏹ Đã chuyển sang Hết hạn', 'success');
+}
+
+// ── EXPORT ──
+function renderExport() {
+  const jobs = getJobs();
+  document.getElementById('jsonPreview').textContent = JSON.stringify(jobs, null, 2);
+}
+
+function exportJSON() {
+  const jobs = getJobs();
+  const blob = new Blob([JSON.stringify(jobs, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'jobs.json';
+  a.click();
+  toast('✅ Đã tải về jobs.json', 'success');
+}
+
+function copyJSON() {
+  navigator.clipboard.writeText(JSON.stringify(getJobs(), null, 2))
+    .then(() => toast('✅ Đã sao chép JSON', 'success'))
+    .catch(() => toast('Không thể sao chép', 'error'));
+}
+
+function importJSON() {
+  try {
+    const data = JSON.parse(document.getElementById('importInput').value.trim());
+    if(!Array.isArray(data)) throw new Error('Không phải mảng');
+    saveJobs(data);
+    document.getElementById('importInput').value = '';
+    renderExport();
+    toast('✅ Đã nhập ' + data.length + ' việc làm', 'success');
+  } catch(e) {
+    toast('JSON không hợp lệ: ' + e.message, 'error');
+  }
+}
+
+function typeBadge(t) {
+  if(t==='viet') return '<span class="badge bv">🇻🇳 Đầu Việt</span>';
+  if(t==='nhat') return '<span class="badge bn">🇯🇵 Đầu Nhật</span>';
+  if(t==='both') return '<span class="badge" style="background:#f3e8ff;color:#7c3aed">🇻🇳+🇯🇵 2 đầu</span>';
+  if(t==='kysis') return '<span class="badge" style="background:#e0f2fe;color:#0891b2">🎓 Kỹ sư</span>';
+  return '<span class="badge">—</span>';
+}
+
+// ── SIDEBAR STATS ──
+function updateSidebar() {
+  const jobs = getJobs();
+  document.getElementById('sb-total').textContent = jobs.length;
+  document.getElementById('sb-viet').textContent = jobs.filter(j=>j.type==='viet').length;
+  document.getElementById('sb-nhat').textContent = jobs.filter(j=>j.type==='nhat').length;
+  document.getElementById('sb-both').textContent = jobs.filter(j=>j.type==='both').length;
+  document.getElementById('sb-kysis').textContent = jobs.filter(j=>j.type==='kysis').length;
+  document.getElementById('sb-arts').textContent = getArticles().length;
+}
+
+// ── ARTICLES ──
+const ART_KEY = 'tp_articles';
+const ART_CATS = {tokutei:'📋 Tokutei', 'japan-life':'🗾 Cuộc sống Nhật', experience:'💡 Kinh nghiệm', news:'📰 Tin tức'};
+
+function getArticles() { try{return JSON.parse(localStorage.getItem(ART_KEY)||'[]');}catch{return[];} }
+function saveArticlesData(arts) { localStorage.setItem(ART_KEY, JSON.stringify(arts)); updateSidebar(); }
+
+function artCatPill(cat) {
+  return `<span class="acat-pill acat-${cat}">${ART_CATS[cat]||cat}</span>`;
+}
+function artStatusBadge(status) {
+  return status === 'published'
+    ? '<span class="badge art-status-pub">✅ Xuất bản</span>'
+    : '<span class="badge art-status-draft">📝 Nháp</span>';
+}
+
+function renderArticleTable(search='', catF='all', statusF='all') {
+  let arts = getArticles().filter(a => {
+    const s = search.toLowerCase();
+    const matchSearch = !s || (a.title||'').toLowerCase().includes(s) || (a.excerpt||'').toLowerCase().includes(s);
+    const matchCat = catF === 'all' || a.category === catF;
+    const matchStatus = statusF === 'all' || a.status === statusF;
+    return matchSearch && matchCat && matchStatus;
+  }).sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||''));
+
+  const all = getArticles();
+  document.getElementById('ast-total').textContent = all.length;
+  document.getElementById('ast-pub').textContent = all.filter(a=>a.status==='published').length;
+  document.getElementById('ast-draft').textContent = all.filter(a=>a.status==='draft').length;
+  document.getElementById('ast-tokutei').textContent = all.filter(a=>a.category==='tokutei').length;
+
+  const tbody = document.getElementById('artTableBody');
+  const empty = document.getElementById('artEmptyState');
+  if(!arts.length) { tbody.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = arts.map(a => `
+    <tr>
+      <td>
+        <div class="td-title">${a.title}</div>
+        <div class="td-meta">${(a.excerpt||'').slice(0,72)}${(a.excerpt||'').length>72?'…':''}</div>
+      </td>
+      <td>${artCatPill(a.category)}</td>
+      <td>${artStatusBadge(a.status)}</td>
+      <td style="font-size:12px;white-space:nowrap">${a.publishedAt||'—'}</td>
+      <td>
+        <div class="td-actions">
+          <button class="btn btn-ghost btn-sm" onclick="editArticle('${a.id}')">✏️ Sửa</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteArticle('${a.id}')">🗑️</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openArticleForm(id) {
+  resetArticleForm();
+  if(id) {
+    const a = getArticles().find(x => x.id === id);
+    if(!a) return;
+    document.getElementById('artEditId').value = a.id;
+    document.getElementById('art-form-title').textContent = 'Chỉnh sửa bài viết';
+    document.getElementById('artTitle').value = a.title || '';
+    document.getElementById('artCategory').value = a.category || '';
+    document.getElementById('artExcerpt').value = a.excerpt || '';
+    document.getElementById('artContent').value = a.content || '';
+    document.getElementById('artThumbnail').value = a.thumbnail || '';
+    document.getElementById('artDate').value = a.publishedAt || '';
+    document.getElementById('artStatus').value = a.status || 'published';
+  }
+  showPage('article-form');
+}
+function editArticle(id) { openArticleForm(id); }
+
+function resetArticleForm() {
+  document.getElementById('artEditId').value = '';
+  document.getElementById('art-form-title').textContent = 'Viết bài mới';
+  ['artTitle','artExcerpt','artContent','artThumbnail'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('artCategory').value = '';
+  document.getElementById('artStatus').value = 'published';
+  document.getElementById('artDate').value = new Date().toISOString().slice(0,10);
+}
+
+function saveArticle() {
+  const title    = document.getElementById('artTitle').value.trim();
+  const category = document.getElementById('artCategory').value;
+  const excerpt  = document.getElementById('artExcerpt').value.trim();
+  const content  = document.getElementById('artContent').value.trim();
+  if(!title)    { toast('Vui lòng nhập tiêu đề bài viết', 'error'); return; }
+  if(!category) { toast('Vui lòng chọn chuyên mục', 'error'); return; }
+  if(!excerpt)  { toast('Vui lòng nhập tóm tắt bài viết', 'error'); return; }
+  if(!content)  { toast('Vui lòng nhập nội dung bài viết', 'error'); return; }
+
+  const art = {
+    id: document.getElementById('artEditId').value || 'art_' + Date.now().toString(36),
+    title, category, excerpt, content,
+    thumbnail: document.getElementById('artThumbnail').value.trim(),
+    publishedAt: document.getElementById('artDate').value || new Date().toISOString().slice(0,10),
+    status: document.getElementById('artStatus').value,
+  };
+
+  const arts = getArticles();
+  const idx = arts.findIndex(a => a.id === art.id);
+  if(idx >= 0) arts[idx] = art; else arts.unshift(art);
+  saveArticlesData(arts);
+  toast('✅ Đã lưu bài viết thành công!', 'success');
+  showPage('articles');
+}
+
+function deleteArticle(id) {
+  if(!confirm('Xóa bài viết này? Hành động không thể hoàn tác.')) return;
+  saveArticlesData(getArticles().filter(a => a.id !== id));
+  renderArticleTable(
+    document.getElementById('artSearch').value,
+    document.getElementById('artCatFilter').value,
+    document.getElementById('artStatusFilter').value
+  );
+  toast('Đã xóa bài viết', '');
+}
+
+// ── TOAST ──
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type ? ' '+type : '');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
