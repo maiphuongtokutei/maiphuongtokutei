@@ -346,7 +346,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .mtt.on.nhat .mtt-name{color:var(--nhat)}
 .mtt.on.kysis .mtt-flag{color:var(--kysis)}
 .mtt.on.kysis .mtt-name{color:var(--kysis)}
-.mock-jobs-wrap{position:relative;max-height:240px;overflow-y:scroll;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.mock-jobs-wrap{position:relative}
 .mock-jobs-wrap::-webkit-scrollbar{width:4px}
 .mock-jobs-wrap::-webkit-scrollbar-track{background:transparent}
 .mock-jobs-wrap::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
@@ -1819,7 +1819,7 @@ function renderHeroJobs() {
       return `<div class="mjob" onclick="scrollToJob('${j.id}')" title="Xem trong danh sách việc làm">
         <div class="minfo">
           <div class="mtitle">${j.title}</div>
-          <div class="mmeta">${[j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
+          <div class="mmeta">${[j.city, j.japanese, sal, j.gender?(j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender):null].filter(Boolean).join(' · ')}</div>
         </div>
         ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
       </div>`;
