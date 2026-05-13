@@ -1520,17 +1520,28 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 
       <div class="apply-section">
         <div class="asec-title">Giấy tờ - Gửi ảnh qua Facebook hoặc Zalo sau</div>
-        <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;line-height:1.65">Chụp ảnh <strong>rõ nét, ngay ngắn, đủ sáng</strong> (Sơ yếu lý lịch gốc và Giấy kết thúc TTS 3 năm chưa có thì để sau)</p>
-        <ul class="docs-list">
-          <li>Thẻ ngoại kiều <strong>2 mặt</strong></li>
-          <li>Sơ yếu lý lịch gốc</li>
-          <li>Giấy kết thúc TTS 3 năm</li>
-          <li>Bằng senmonkyu hoặc giấy đánh giá kỹ năng</li>
-          <li>Ảnh hồ sơ (ảnh thẻ) — mặt tươi tỉnh, đủ sáng</li>
-          <li>Bằng tiếng Nhật, chứng chỉ Tokutei… (nếu có)</li>
-          <li>Ảnh hộ chiếu trang có thông tin và trang có Visa, tem xuất nhập cảnh</li>
-          <li>Tất cả các tờ shiteisho (nếu có)</li>
-        </ul>
+        <div id="docsListTokutei">
+          <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;line-height:1.65">Chụp ảnh <strong>rõ nét, ngay ngắn, đủ sáng</strong> (Sơ yếu lý lịch gốc và Giấy kết thúc TTS 3 năm chưa có thì để sau)</p>
+          <ul class="docs-list">
+            <li>Thẻ ngoại kiều <strong>2 mặt</strong></li>
+            <li>Sơ yếu lý lịch gốc</li>
+            <li>Giấy kết thúc TTS 3 năm</li>
+            <li>Bằng senmonkyu hoặc giấy đánh giá kỹ năng</li>
+            <li>Ảnh hồ sơ (ảnh thẻ) — mặt tươi tỉnh, đủ sáng</li>
+            <li>Bằng tiếng Nhật, chứng chỉ Tokutei… (nếu có)</li>
+            <li>Ảnh hộ chiếu trang có thông tin và trang có Visa, tem xuất nhập cảnh</li>
+            <li>Tất cả các tờ shiteisho (nếu có)</li>
+          </ul>
+        </div>
+        <div id="docsListKysis" style="display:none">
+          <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;line-height:1.65">Chụp ảnh <strong>rõ nét, ngay ngắn, đủ sáng</strong></p>
+          <ul class="docs-list">
+            <li>Bằng và bảng điểm</li>
+            <li>Thẻ ngoại kiều <strong>2 mặt</strong></li>
+            <li>CV</li>
+            <li>Ảnh hộ chiếu trang có thông tin và trang visa</li>
+          </ul>
+        </div>
       </div>
 
     </div>
@@ -2001,6 +2012,9 @@ function openApplyForm(jobId) {
   const j = getJobs().find(x => x.id === jobId);
   document.getElementById('applyJobTitle').textContent = j ? j.title : 'Điền đầy đủ thông tin';
   document.getElementById('applyJobCity').textContent = j && j.city ? '📍 ' + j.city : '';
+  const isKysis = j && j.type === 'kysis';
+  document.getElementById('docsListTokutei').style.display = isKysis ? 'none' : '';
+  document.getElementById('docsListKysis').style.display = isKysis ? '' : 'none';
   document.getElementById('applyScroll').style.display = '';
   document.getElementById('applyFt').style.display = '';
   document.getElementById('applyDone').classList.remove('show');
