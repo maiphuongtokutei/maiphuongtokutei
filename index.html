@@ -119,6 +119,15 @@ nav.scrolled{box-shadow:var(--sh)}
 .mock-field input{border:none;outline:none;flex:1;font-size:13px;color:var(--text-2);background:transparent;font-family:inherit;min-width:0}
 .mock-field input::placeholder{color:var(--text-3)}
 .mock-btn{background:var(--primary);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer}
+.hero-filter{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.hf-row{display:flex;align-items:center;gap:8px;opacity:0;transform:translateY(6px);transition:opacity .28s,transform .28s;pointer-events:none;height:0;overflow:hidden}
+.hf-row.show{opacity:1;transform:none;pointer-events:auto;height:auto;overflow:visible}
+.hf-num{font-size:11px;font-weight:800;color:var(--primary);background:var(--primary-soft);border-radius:50%;width:20px;height:20px;min-width:20px;display:flex;align-items:center;justify-content:center}
+.hf-select{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text-3);background:#fff;outline:none;font-family:inherit;transition:border-color .2s,color .2s;cursor:pointer;min-width:0}
+.hf-select:focus{border-color:var(--primary)}
+.hf-select.filled{border-color:var(--primary);color:var(--text-1);font-weight:600}
+.hf-btn{width:100%;opacity:0;transform:translateY(6px);transition:opacity .28s,transform .28s;pointer-events:none;height:0;overflow:hidden;padding:0;border:none}
+.hf-btn.show{opacity:1;transform:none;pointer-events:auto;height:auto;overflow:visible;padding:10px 20px}
 .mock-tags{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .tag{font-size:11px;font-weight:500;padding:4px 10px;border-radius:100px;border:1px solid var(--border);background:#fff;color:var(--text-2)}
 .tag.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
@@ -851,9 +860,69 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
             <span class="mtt-sub">Không cọc không phí</span>
           </button>
         </div>
-        <div class="mock-search">
-          <div class="mock-field"><span class="ic">🔍</span><input id="searchInput" type="search" placeholder="Ngành nghề, tỉnh thành..." oninput="doSearch(this.value)" autocomplete="off"></div>
-          <button class="mock-btn" onclick="document.getElementById('categories').scrollIntoView({behavior:'smooth'})">Tìm kiếm</button>
+        <div class="hero-filter">
+          <div class="hf-row show" id="hfRow1">
+            <span class="hf-num">1</span>
+            <select id="filterNganh" class="hf-select" onchange="hfNext(1)">
+              <option value="">Ngành nghề</option>
+              <option value="🌾 Nông nghiệp">Nông nghiệp</option>
+              <option value="🐟 Ngư nghiệp">Ngư nghiệp</option>
+              <option value="🏗️ Xây dựng">Xây dựng</option>
+              <option value="🚢 Đóng tàu &amp; Cơ khí tàu">Đóng tàu</option>
+              <option value="🍱 Chế biến thực phẩm">Chế biến thực phẩm</option>
+              <option value="🍽️ Dịch vụ ăn uống">Dịch vụ ăn uống</option>
+              <option value="🚗 Ô tô">Ô tô</option>
+              <option value="✈️ Hàng không">Hàng không</option>
+              <option value="🏨 Lưu trú / Khách sạn">Lưu trú / Khách sạn</option>
+              <option value="🧹 Vệ sinh tòa nhà">Vệ sinh tòa nhà</option>
+              <option value="⚙️ Nhóm ngành 1 (Cơ khí)">Cơ khí / Nhóm ngành 1</option>
+              <option value="🔌 Nhóm ngành 2 (Điện tử)">Điện tử / Nhóm ngành 2</option>
+              <option value="💊 Điều dưỡng / Hộ lý">Điều dưỡng / Hộ lý</option>
+              <option value="💻 IT / Phần mềm">IT / Phần mềm</option>
+              <option value="⚙️ Cơ khí">Kỹ sư Cơ khí</option>
+              <option value="🏗️ Xây dựng / Kiến trúc">Kỹ sư Xây dựng</option>
+              <option value="⚡ Điện / Điện tử">Kỹ sư Điện - Điện tử</option>
+            </select>
+          </div>
+          <div class="hf-row" id="hfRow2">
+            <span class="hf-num">2</span>
+            <select id="filterTinh" class="hf-select" onchange="hfNext(2)">
+              <option value="">Tỉnh / Thành phố</option>
+              <option>Tokyo</option>
+              <option>Osaka</option>
+              <option>Aichi</option>
+              <option>Kanagawa</option>
+              <option>Saitama</option>
+              <option>Chiba</option>
+              <option>Hyogo</option>
+              <option>Hokkaido</option>
+              <option>Fukuoka</option>
+              <option>Shizuoka</option>
+              <option>Ibaraki</option>
+              <option>Hiroshima</option>
+              <option>Kyoto</option>
+              <option>Miyagi</option>
+              <option>Niigata</option>
+              <option>Mie</option>
+              <option>Nagano</option>
+              <option>Tochigi</option>
+              <option>Gunma</option>
+              <option>Okayama</option>
+            </select>
+          </div>
+          <div class="hf-row" id="hfRow3">
+            <span class="hf-num">3</span>
+            <select id="filterJapanese" class="hf-select" onchange="hfNext(3)">
+              <option value="">Trình độ tiếng Nhật yêu cầu</option>
+              <option value="N5">N5 (cơ bản)</option>
+              <option value="N4">N4</option>
+              <option value="N3">N3</option>
+              <option value="N2">N2</option>
+              <option value="N1">N1</option>
+              <option value="không yêu cầu">Không yêu cầu</option>
+            </select>
+          </div>
+          <button class="mock-btn hf-btn" id="hfSearchBtn" onclick="doHeroSearch()">🔍 Tìm kiếm việc làm phù hợp</button>
         </div>
         <div class="mock-jobs-wrap">
           <div class="jobs-panel on" id="panel-viet">
@@ -1553,6 +1622,8 @@ let currentGroup = null; // null | 'tokutei' | 'kysis'
 let currentType = 'all';
 let currentCat = null;
 let currentSearch = '';
+let currentPref = null;
+let currentJapanese = null;
 
 function scrollToSearch() {
   const inp = document.getElementById('searchInput');
@@ -1566,6 +1637,28 @@ function doSearch(val) {
   renderJobs();
 }
 
+function hfNext(step) {
+  if(step === 1 && document.getElementById('filterNganh').value) {
+    document.getElementById('filterNganh').classList.add('filled');
+    document.getElementById('hfRow2').classList.add('show');
+  }
+  if(step === 2 && document.getElementById('filterTinh').value) {
+    document.getElementById('filterTinh').classList.add('filled');
+    document.getElementById('hfRow3').classList.add('show');
+  }
+  if(step === 3 && document.getElementById('filterJapanese').value) {
+    document.getElementById('filterJapanese').classList.add('filled');
+    document.getElementById('hfSearchBtn').classList.add('show');
+  }
+}
+function doHeroSearch() {
+  currentCat     = document.getElementById('filterNganh').value || null;
+  currentPref    = document.getElementById('filterTinh').value || null;
+  currentJapanese= document.getElementById('filterJapanese').value || null;
+  currentSearch  = '';
+  document.getElementById('categories').scrollIntoView({behavior:'smooth', block:'start'});
+  setTimeout(renderJobs, 350);
+}
 function clearSearch() {
   currentSearch = '';
   const inp = document.getElementById('searchInput');
@@ -1635,6 +1728,8 @@ function renderJobs() {
   if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
   else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type !== 'kysis');
   if(currentCat) jobs = jobs.filter(j => j.category === currentCat);
+  if(currentPref) jobs = jobs.filter(j => (j.city||'').toLowerCase().includes(currentPref.toLowerCase()));
+  if(currentJapanese) jobs = jobs.filter(j => (j.japanese||'').toLowerCase().includes(currentJapanese.toLowerCase()));
   if(currentSearch) {
     const q = currentSearch;
     jobs = jobs.filter(j =>
