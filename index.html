@@ -1905,6 +1905,7 @@ function renderJobs() {
           <div class="jcard-meta">
             ${j.city?`<span>📍 ${j.city}</span>`:''}
             ${j.japanese?`<span>🗣️ ${j.japanese}</span>`:''}
+            ${j.gender?`<span>${j.gender==='Nam'?'👨':j.gender==='Nữ ưu tiên'||j.gender==='Nữ'?'👩':'👥'} ${j.gender}</span>`:''}
           </div>
           <div class="jcard-sal">${sal}</div>
           ${desc?`<div class="jcard-desc">${desc}</div>`:''}
