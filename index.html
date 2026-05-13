@@ -1761,10 +1761,11 @@ function updateStats() {
 }
 
 function updateCatCounts() {
-  const jobs = getJobs().filter(j => j.status === 'active');
+  let jobs = getJobs().filter(j => j.status === 'active');
+  if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
+  else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type !== 'kysis');
   document.querySelectorAll('.ccat[data-cat]').forEach(el => {
-    const base = currentType === 'all' ? jobs : jobs.filter(j => j.type === currentType);
-    const count = base.filter(j => j.category === el.dataset.cat).length;
+    const count = jobs.filter(j => (j.category||'').toLowerCase().includes(el.dataset.cat.toLowerCase())).length;
     const countEl = el.querySelector('.ccat-c');
     if(countEl) countEl.textContent = count + ' việc';
   });
@@ -1930,6 +1931,7 @@ function filterCat(cat) {
   currentCat = (currentCat === cat) ? null : cat;
   document.querySelectorAll('.ccat').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCat));
   renderJobs();
+  if(currentCat) setTimeout(() => document.getElementById('jobsList').scrollIntoView({behavior:'smooth', block:'start'}), 80);
 }
 
 // ── MODAL ──
