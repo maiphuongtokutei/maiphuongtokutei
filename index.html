@@ -968,7 +968,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
       <button class="group-card" onclick="selectGroup('kysis')">
         <div class="group-ico">💻</div>
         <div class="group-name">Kỹ sư</div>
-        <div class="group-sub">IT · Cơ khí · Điện tử · 12 ngành</div>
+        <div class="group-sub">IT · Cơ khí · Điện tử · 13 ngành</div>
         <div class="group-count" id="gc-kysis">0 việc</div>
       </button>
     </div>
@@ -998,12 +998,13 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
         <a href="#" class="ccat" data-cat="Lâm nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🌲</span><div class="ccat-n">Lâm nghiệp</div><div class="ccat-c">0 việc</div></a>
         <a href="#" class="ccat" data-cat="May" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🧵</span><div class="ccat-n">May</div><div class="ccat-c">0 việc</div></a>
       </div>
-      <!-- Kỹ sư: 12 ngành / 4 nhóm -->
+      <!-- Kỹ sư: 13 ngành / 4 nhóm -->
       <div class="cat-grid stag" id="catGridKysis" style="display:none">
         <a href="#" class="ccat" data-cat="Cơ khí" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚙️</span><div class="ccat-n">Cơ khí</div><div class="ccat-c">0 việc</div></a>
         <a href="#" class="ccat" data-cat="Điện - Điện tử" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚡</span><div class="ccat-n">Điện - Điện tử</div><div class="ccat-c">0 việc</div></a>
         <a href="#" class="ccat" data-cat="Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🏗️</span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
         <a href="#" class="ccat" data-cat="Hóa học & Vật liệu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🧪</span><div class="ccat-n">Hóa học & Vật liệu</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚗</span><div class="ccat-n">Ô tô</div><div class="ccat-c">0 việc</div></a>
         <a href="#" class="ccat" data-cat="Lập trình viên" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">💻</span><div class="ccat-n">Lập trình viên</div><div class="ccat-c">0 việc</div></a>
         <a href="#" class="ccat" data-cat="Kỹ sư hệ thống / Mạng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🖧</span><div class="ccat-n">Hệ thống / Mạng</div><div class="ccat-c">0 việc</div></a>
         <a href="#" class="ccat" data-cat="AI & Data Science" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🤖</span><div class="ccat-n">AI & Data Science</div><div class="ccat-c">0 việc</div></a>
@@ -1577,7 +1578,7 @@ const NGANH_TOKUTEI = [
   ['May','May'],
 ];
 const NGANH_KYSIS_GROUPS = [
-  {g:'⚙️ Kỹ thuật & Sản xuất', items:['Cơ khí','Điện - Điện tử','Xây dựng','Hóa học & Vật liệu']},
+  {g:'⚙️ Kỹ thuật & Sản xuất', items:['Cơ khí','Điện - Điện tử','Xây dựng','Hóa học & Vật liệu','Ô tô']},
   {g:'💻 Công nghệ thông tin (IT)', items:['Lập trình viên','Kỹ sư hệ thống / Mạng','AI & Data Science']},
   {g:'🌾 Thực phẩm & Nông nghiệp', items:['Chế biến thực phẩm','Nông nghiệp']},
   {g:'📊 Kinh tế & Ngôn ngữ', items:['Phiên dịch / Thông dịch','Xuất nhập khẩu','Quản trị kinh doanh / Marketing']},
