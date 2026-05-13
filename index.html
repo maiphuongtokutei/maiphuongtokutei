@@ -2566,6 +2566,7 @@ function openAdmin() {
   if(!isAdmin()){alert('Bạn không có quyền truy cập.');return;}
   document.getElementById('adminOverlay').classList.add('open');
   document.body.style.overflow='hidden';
+  document.querySelector('nav').style.display='none';
   adminNav(currentAdminNav);
   renderAdminSideStats();
 }
@@ -2574,6 +2575,7 @@ function closeAdmin() {
   ov.classList.remove('open');
   ov.classList.remove('mob-content');
   document.body.style.overflow='';
+  document.querySelector('nav').style.display='';
 }
 
 function renderAdminSideStats() {
