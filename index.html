@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -223,7 +224,10 @@ nav.scrolled{box-shadow:var(--sh)}
 .cat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:0}
 .ccat{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 10px;text-align:center;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;display:block}
 .ccat:hover{border-color:var(--primary);background:var(--primary-soft);transform:translateY(-2px);box-shadow:var(--sh)}
-.ccat .e{font-size:26px;margin-bottom:6px;display:block}
+.ccat .e{display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:var(--text-3);transition:color .2s}
+.ccat .e svg{width:28px;height:28px;stroke-width:1.75}
+.ccat:hover .e{color:var(--primary)}
+.ccat.active .e{color:var(--primary)}
 .ccat-n{font-size:11px;font-weight:600;color:var(--text-2);line-height:1.3}
 .ccat-c{font-size:10px;color:var(--text-3);margin-top:2px}
 
@@ -467,7 +471,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 @media(max-width:480px){
   .cat-grid{grid-template-columns:repeat(3,1fr)}
   .ccat{padding:14px 6px}
-  .ccat .e{font-size:22px;margin-bottom:4px}
+  .ccat .e svg{width:24px;height:24px}
   .ccat-n{font-size:10px}
   .mock-tags{display:none}
   .mock-field:nth-child(2){display:none}
@@ -1008,39 +1012,39 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
       </div>
       <!-- Tokutei: 17 ngành -->
       <div class="cat-grid stag" id="catGridTokutei" style="display:none">
-        <a href="#" class="ccat" data-cat="Chế biến thực phẩm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🍱</span><div class="ccat-n">Chế biến thực phẩm</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nhóm ngành 1 (Cơ khí)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚙️</span><div class="ccat-n">Nhóm ngành 1 (Cơ khí)</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nhóm ngành 2 (Điện tử)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🔌</span><div class="ccat-n">Nhóm ngành 2 (Điện tử)</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🏗️</span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Điều dưỡng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">💊</span><div class="ccat-n">Điều dưỡng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nhà hàng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🍽️</span><div class="ccat-n">Nhà hàng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Vệ sinh tòa nhà" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🧹</span><div class="ccat-n">Vệ sinh tòa nhà</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Bảo dưỡng ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚗</span><div class="ccat-n">Bảo dưỡng ô tô</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nông nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🌾</span><div class="ccat-n">Nông nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Lưu trú / Khách sạn" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🏨</span><div class="ccat-n">Lưu trú / Khách sạn</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Ngư nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🐟</span><div class="ccat-n">Ngư nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Đóng tàu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚢</span><div class="ccat-n">Đóng tàu</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Hàng không" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">✈️</span><div class="ccat-n">Hàng không</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Vận tải" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚛</span><div class="ccat-n">Vận tải</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Lâm nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🌲</span><div class="ccat-n">Lâm nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="May" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🧵</span><div class="ccat-n">May</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="In ấn" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🖨️</span><div class="ccat-n">In ấn</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Chế biến thực phẩm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="utensils"></i></span><div class="ccat-n">Chế biến thực phẩm</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Nhóm ngành 1 (Cơ khí)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="cog"></i></span><div class="ccat-n">Nhóm ngành 1 (Cơ khí)</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Nhóm ngành 2 (Điện tử)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="cpu"></i></span><div class="ccat-n">Nhóm ngành 2 (Điện tử)</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="hard-hat"></i></span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Điều dưỡng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="heart-pulse"></i></span><div class="ccat-n">Điều dưỡng</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Nhà hàng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="chef-hat"></i></span><div class="ccat-n">Nhà hàng</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Vệ sinh tòa nhà" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="sparkles"></i></span><div class="ccat-n">Vệ sinh tòa nhà</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Bảo dưỡng ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="car"></i></span><div class="ccat-n">Bảo dưỡng ô tô</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Nông nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="sprout"></i></span><div class="ccat-n">Nông nghiệp</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Lưu trú / Khách sạn" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="building-2"></i></span><div class="ccat-n">Lưu trú / Khách sạn</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Ngư nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="fish"></i></span><div class="ccat-n">Ngư nghiệp</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Đóng tàu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="anchor"></i></span><div class="ccat-n">Đóng tàu</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Hàng không" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="plane"></i></span><div class="ccat-n">Hàng không</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Vận tải" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="truck"></i></span><div class="ccat-n">Vận tải</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Lâm nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="tree-pine"></i></span><div class="ccat-n">Lâm nghiệp</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="May" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="scissors"></i></span><div class="ccat-n">May</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="In ấn" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="printer"></i></span><div class="ccat-n">In ấn</div><div class="ccat-c">0 việc</div></a>
       </div>
       <!-- Kỹ sư: 13 ngành / 4 nhóm -->
       <div class="cat-grid stag" id="catGridKysis" style="display:none">
-        <a href="#" class="ccat" data-cat="Cơ khí" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚙️</span><div class="ccat-n">Cơ khí</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Điện - Điện tử" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">⚡</span><div class="ccat-n">Điện - Điện tử</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🏗️</span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Hóa học & Vật liệu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🧪</span><div class="ccat-n">Hóa học & Vật liệu</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🚗</span><div class="ccat-n">Ô tô</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Lập trình viên" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">💻</span><div class="ccat-n">Lập trình viên</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Kỹ sư hệ thống / Mạng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🖧</span><div class="ccat-n">Hệ thống / Mạng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="AI & Data Science" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🤖</span><div class="ccat-n">AI & Data Science</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Chế biến thực phẩm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🍱</span><div class="ccat-n">Chế biến thực phẩm</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nông nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🌾</span><div class="ccat-n">Nông nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Phiên dịch / Thông dịch" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">🗣️</span><div class="ccat-n">Phiên dịch</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Xuất nhập khẩu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">📦</span><div class="ccat-n">Xuất nhập khẩu</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Quản trị kinh doanh / Marketing" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e">📊</span><div class="ccat-n">Kinh doanh / Marketing</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Cơ khí" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="cog"></i></span><div class="ccat-n">Cơ khí</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Điện - Điện tử" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="zap"></i></span><div class="ccat-n">Điện - Điện tử</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="hard-hat"></i></span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Hóa học & Vật liệu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="flask-conical"></i></span><div class="ccat-n">Hóa học & Vật liệu</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="car"></i></span><div class="ccat-n">Ô tô</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Lập trình viên" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="code-2"></i></span><div class="ccat-n">Lập trình viên</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Kỹ sư hệ thống / Mạng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="server"></i></span><div class="ccat-n">Hệ thống / Mạng</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="AI & Data Science" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="brain"></i></span><div class="ccat-n">AI & Data Science</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Chế biến thực phẩm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="utensils"></i></span><div class="ccat-n">Chế biến thực phẩm</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Nông nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="sprout"></i></span><div class="ccat-n">Nông nghiệp</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Phiên dịch / Thông dịch" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="languages"></i></span><div class="ccat-n">Phiên dịch</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Xuất nhập khẩu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="package"></i></span><div class="ccat-n">Xuất nhập khẩu</div><div class="ccat-c">0 việc</div></a>
+        <a href="#" class="ccat" data-cat="Quản trị kinh doanh / Marketing" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="trending-up"></i></span><div class="ccat-n">Kinh doanh / Marketing</div><div class="ccat-c">0 việc</div></a>
       </div>
     </div>
     <div class="jobs-section">
@@ -3080,6 +3084,7 @@ function closeChatFloat() {
 document.addEventListener('click', function(e) {
   if(!document.getElementById('chatFloatWrap').contains(e.target)) closeChatFloat();
 });
+lucide.createIcons();
 </script>
 </body>
 </html>
