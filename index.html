@@ -483,9 +483,9 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .jobs-list{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media(max-width:1024px){.jobs-list{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:600px){.jobs-list{grid-template-columns:1fr}}
-.jcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:11px;transition:transform .2s,box-shadow .2s}
+.jcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:11px;transition:transform .2s,box-shadow .2s;position:relative}
 .jcard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-.jcard-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.jcard-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-right:36px}
 .jcard-cat{font-size:11px;color:var(--text-3);background:var(--surface-alt);padding:3px 9px;border-radius:100px;white-space:nowrap}
 .jcard-title{font-size:15px;font-weight:700;color:var(--text-1);line-height:1.35}
 .jcard-meta{display:flex;flex-wrap:wrap;gap:6px}
@@ -572,7 +572,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .modal-cta:hover{background:#0054cc}
 
 /* ── SAVE BUTTON ── */
-.save-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--text-3);flex-shrink:0;font-family:inherit}
+.save-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--text-3);flex-shrink:0;font-family:inherit;position:absolute;top:14px;right:14px}
 .save-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
 .save-btn.saved{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
 
@@ -1852,15 +1852,11 @@ function renderJobs() {
     return `<div class="jcard ${j.type}${isActive?'':' expired'}" onclick="openJob('${j.id}')" style="cursor:pointer">
       <div style="display:flex;flex-direction:column;gap:10px">
           <div class="jcard-top">
-            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-              ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
-              <span class="jcard-cat">${j.category||''}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px">
-              <span class="status-badge ${isActive?'active':'expired'}">${isActive?'Đang tuyển':'Hết hạn'}</span>
-              <button class="save-btn${saved?' saved':''}" data-id="${j.id}" onclick="event.stopPropagation();toggleSave('${j.id}')" title="${saved?'Bỏ lưu':'Lưu việc làm'}">${saved?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
-            </div>
+            ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+            <span class="jcard-cat">${j.category||''}</span>
+            <span class="status-badge ${isActive?'active':'expired'}">${isActive?'Đang tuyển':'Hết hạn'}</span>
           </div>
+          <button class="save-btn${saved?' saved':''}" data-id="${j.id}" onclick="event.stopPropagation();toggleSave('${j.id}')" title="${saved?'Bỏ lưu':'Lưu việc làm'}">${saved?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
           <div class="jcard-title">${j.title}</div>
           <div class="jcard-meta">
             ${j.city?`<span>📍 ${j.city}</span>`:''}
