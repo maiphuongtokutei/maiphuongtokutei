@@ -694,7 +694,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .admin-overlay.open{display:flex}
 .admin-sidebar{width:220px;min-width:220px;background:#12132A;display:flex;flex-direction:column;height:100%;overflow-y:auto;flex-shrink:0}
 .admin-sb-top{padding:20px 16px 18px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.07)}
-.admin-avatar{width:40px;height:40px;min-width:40px;border-radius:10px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.admin-avatar{width:44px;height:44px;min-width:44px;border-radius:12px;background:linear-gradient(135deg,#7C3AED 0%,#E8305A 100%);color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;flex-shrink:0}
 .admin-user-name{font-size:13px;font-weight:700;color:#fff;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .admin-user-role{font-size:11px;color:rgba(255,255,255,.38)}
 .admin-sb-nav{padding:10px 8px;flex:1}
@@ -753,39 +753,19 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .admin-save-btn{display:inline-flex;align-items:center;gap:6px;padding:11px 24px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
 .admin-save-btn:hover{background:#2420c8}
 .admin-cancel-btn{padding:11px 20px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--text-2)}
+.admin-logout-btn{display:flex;align-items:center;gap:10px;width:100%;padding:12px 20px;border:none;border-top:1px solid rgba(255,255,255,.07);background:transparent;color:rgba(255,255,255,.4);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .18s;text-align:left}
+.admin-logout-btn:hover{color:#E8305A;background:rgba(232,48,90,.08)}
+.admin-mob-back{display:none;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);color:var(--text-2);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;padding:8px 14px;border-radius:9px;margin:14px 14px 0;}
 @media(max-width:960px){
-  .admin-overlay{flex-direction:column!important}
-  .admin-sidebar{
-    width:100%!important;min-width:0!important;max-width:100%!important;
-    height:auto!important;flex-direction:column!important;
-    overflow:visible!important;
-    flex-shrink:0!important;
-  }
-  .admin-sb-top{display:none!important}
-  .admin-sb-stats{display:none!important}
-  .admin-nav-sep{display:none!important}
-  .admin-sb-nav{
-    display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
-    width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;
-    gap:0!important;padding:0!important;
-    border-bottom:1px solid rgba(255,255,255,.1);
-    -webkit-overflow-scrolling:touch;
-  }
-  .admin-nav-item{
-    display:flex!important;flex-direction:column!important;
-    align-items:center!important;justify-content:center!important;
-    padding:8px 14px!important;gap:3px!important;
-    flex-shrink:0!important;min-width:56px!important;
-    border-radius:0!important;white-space:nowrap!important;
-    font-size:10px!important;width:auto!important;margin-bottom:0!important;
-  }
-  .admin-nav-label{font-size:10px!important;display:block!important}
-  .admin-view{padding:12px 10px}
-  .admin-overlay .admin-main{
-    flex:1!important;min-height:0!important;
-    overflow-y:auto!important;overflow-x:hidden!important;
-    min-width:0!important;width:100%!important;
-  }
+  /* Mobile: sidebar full-screen by default, main content hidden */
+  .admin-sidebar{width:100%!important;min-width:0!important;max-width:100%!important}
+  .admin-overlay .admin-main{display:none!important;width:100%!important}
+  /* When nav item clicked: hide sidebar, show content */
+  .admin-overlay.mob-content .admin-sidebar{display:none!important}
+  .admin-overlay.mob-content .admin-main{display:block!important}
+  /* Show back button inside content views */
+  .admin-mob-back{display:flex!important}
+  .admin-view{padding:16px 14px}
 }
 </style>
 </head>
@@ -1187,7 +1167,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   <!-- Sidebar -->
   <aside class="admin-sidebar">
     <div class="admin-sb-top">
-      <div class="admin-avatar">TP</div>
+      <div class="admin-avatar">特</div>
       <div style="min-width:0">
         <div class="admin-user-name">Trung Phạm Tokutei</div>
         <div class="admin-user-role">Admin Dashboard</div>
@@ -1217,10 +1197,18 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
       </button>
     </nav>
     <div class="admin-sb-stats" id="adminSbStats"></div>
+    <button class="admin-logout-btn" onclick="adminLogout()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Đăng xuất
+    </button>
   </aside>
 
   <!-- Main Content -->
   <main class="admin-main">
+    <button class="admin-mob-back" onclick="adminMobBack()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      ← Menu
+    </button>
 
     <!-- VIEW: Quản lý việc làm -->
     <div class="admin-view on" id="adminViewJobsList">
@@ -2420,6 +2408,14 @@ function adminNav(view, jobId) {
   else if(view === 'deploy') renderDeployStats();
   const main = document.querySelector('.admin-main');
   if(main) main.scrollTop = 0;
+  if(window.innerWidth <= 960) document.getElementById('adminOverlay').classList.add('mob-content');
+}
+function adminMobBack() {
+  document.getElementById('adminOverlay').classList.remove('mob-content');
+}
+function adminLogout() {
+  closeAdmin();
+  logout();
 }
 
 function openAdmin() {
@@ -2430,19 +2426,24 @@ function openAdmin() {
   renderAdminSideStats();
 }
 function closeAdmin() {
-  document.getElementById('adminOverlay').classList.remove('open');
+  const ov = document.getElementById('adminOverlay');
+  ov.classList.remove('open');
+  ov.classList.remove('mob-content');
   document.body.style.overflow='';
 }
 
 function renderAdminSideStats() {
   const jobs = getJobs();
+  const arts = getArticles();
   const el = document.getElementById('adminSbStats');
   if(!el) return;
   el.innerHTML = [
     ['Tổng việc làm', jobs.length],
-    ['🇻🇳 Đầu Việt', jobs.filter(j=>j.type==='viet'||j.type==='both').length],
-    ['🇯🇵 Đầu Nhật', jobs.filter(j=>j.type==='nhat'||j.type==='both').length],
+    ['VN Đầu Việt', jobs.filter(j=>j.type==='viet').length],
+    ['JP Đầu Nhật', jobs.filter(j=>j.type==='nhat').length],
+    ['VN+JP 2 đầu', jobs.filter(j=>j.type==='both').length],
     ['🎓 Kỹ sư', jobs.filter(j=>j.type==='kysis').length],
+    ['📄 Bài viết', arts.length],
   ].map(([l,v])=>`<div class="admin-sb-stat"><span class="admin-sb-stat-lbl">${l}</span><span class="admin-sb-stat-val">${v}</span></div>`).join('');
 }
 
