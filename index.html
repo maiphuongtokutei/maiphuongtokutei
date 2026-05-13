@@ -865,23 +865,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
             <span class="hf-num">1</span>
             <select id="filterNganh" class="hf-select" onchange="hfNext(1)">
               <option value="">Ngành nghề</option>
-              <option value="🌾 Nông nghiệp">Nông nghiệp</option>
-              <option value="🐟 Ngư nghiệp">Ngư nghiệp</option>
-              <option value="🏗️ Xây dựng">Xây dựng</option>
-              <option value="🚢 Đóng tàu &amp; Cơ khí tàu">Đóng tàu</option>
-              <option value="🍱 Chế biến thực phẩm">Chế biến thực phẩm</option>
-              <option value="🍽️ Dịch vụ ăn uống">Dịch vụ ăn uống</option>
-              <option value="🚗 Ô tô">Ô tô</option>
-              <option value="✈️ Hàng không">Hàng không</option>
-              <option value="🏨 Lưu trú / Khách sạn">Lưu trú / Khách sạn</option>
-              <option value="🧹 Vệ sinh tòa nhà">Vệ sinh tòa nhà</option>
-              <option value="⚙️ Nhóm ngành 1 (Cơ khí)">Cơ khí / Nhóm ngành 1</option>
-              <option value="🔌 Nhóm ngành 2 (Điện tử)">Điện tử / Nhóm ngành 2</option>
-              <option value="💊 Điều dưỡng / Hộ lý">Điều dưỡng / Hộ lý</option>
-              <option value="💻 IT / Phần mềm">IT / Phần mềm</option>
-              <option value="⚙️ Cơ khí">Kỹ sư Cơ khí</option>
-              <option value="🏗️ Xây dựng / Kiến trúc">Kỹ sư Xây dựng</option>
-              <option value="⚡ Điện / Điện tử">Kỹ sư Điện - Điện tử</option>
             </select>
           </div>
           <div class="hf-row show" id="hfRow2">
@@ -1573,12 +1556,46 @@ document.querySelectorAll('.anim,.stag').forEach(el => io.observe(el));
 
 
 // Hero mockup tab switcher
+const NGANH_TOKUTEI = [
+  ['🌾 Nông nghiệp','Nông nghiệp'],
+  ['🐟 Ngư nghiệp','Ngư nghiệp'],
+  ['🏗️ Xây dựng','Xây dựng'],
+  ['🚢 Đóng tàu & Cơ khí tàu','Đóng tàu & Cơ khí tàu'],
+  ['🍱 Chế biến thực phẩm','Chế biến thực phẩm'],
+  ['🍽️ Dịch vụ ăn uống','Dịch vụ ăn uống'],
+  ['🚗 Ô tô','Ô tô'],
+  ['✈️ Hàng không','Hàng không'],
+  ['🏨 Lưu trú / Khách sạn','Lưu trú / Khách sạn'],
+  ['🧹 Vệ sinh tòa nhà','Vệ sinh tòa nhà'],
+  ['⚙️ Nhóm ngành 1 (Cơ khí)','Nhóm ngành 1 (Cơ khí)'],
+  ['🔌 Nhóm ngành 2 (Điện tử)','Nhóm ngành 2 (Điện tử)'],
+  ['💊 Điều dưỡng / Hộ lý','Điều dưỡng / Hộ lý'],
+];
+const NGANH_KYSIS = [
+  ['💻 IT / Phần mềm','IT / Phần mềm'],
+  ['📊 Kinh tế / Tài chính','Kinh tế / Tài chính'],
+  ['⚙️ Cơ khí','Cơ khí'],
+  ['🏗️ Xây dựng / Kiến trúc','Xây dựng / Kiến trúc'],
+  ['⚡ Điện / Điện tử','Điện / Điện tử'],
+  ['🧪 Hóa chất / Môi trường','Hóa chất / Môi trường'],
+  ['🔧 Cơ điện tử','Cơ điện tử'],
+  ['🚗 Ô tô / Giao thông','Ô tô / Giao thông'],
+];
+function updateNganhOptions(type) {
+  const sel = document.getElementById('filterNganh');
+  if(!sel) return;
+  const list = type === 'kysis' ? NGANH_KYSIS : NGANH_TOKUTEI;
+  sel.innerHTML = '<option value="">Ngành nghề</option>' +
+    list.map(([val,label]) => `<option value="${val}">${label}</option>`).join('');
+}
 function switchTab(type) {
   document.querySelectorAll('.mtt').forEach(b => b.classList.remove('on'));
   document.querySelector(`.mtt.${type}`).classList.add('on');
   document.querySelectorAll('.jobs-panel').forEach(p => p.classList.remove('on'));
   document.getElementById('panel-' + type).classList.add('on');
+  updateNganhOptions(type);
 }
+updateNganhOptions('viet');
 
 // ── JOB DATA ──
 const STORE_KEY  = 'tp_tokutei_jobs';
