@@ -1758,13 +1758,10 @@ function hfNext(step) {
   }
 }
 function doHeroSearch() {
-  currentCat     = document.getElementById('filterNganh').value || null;
-  currentPref    = document.getElementById('filterTinh').value || null;
-  currentJapanese= document.getElementById('filterJapanese').value || null;
-  currentSearch  = '';
-  currentPage = 1;
-  document.getElementById('categories').scrollIntoView({behavior:'smooth', block:'start'});
-  setTimeout(renderJobs, 350);
+  const cat      = document.getElementById('filterNganh').value || null;
+  const pref     = document.getElementById('filterTinh').value || null;
+  const japanese = document.getElementById('filterJapanese').value || null;
+  renderHeroJobs({cat, pref, japanese});
 }
 function clearSearch() {
   currentSearch = '';
@@ -1810,26 +1807,43 @@ function getHeroFlagHTML(type) {
   return `<div style="width:36px;height:36px;flex-shrink:0;background:#EEEEFF;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(45,44,219,.15)">🎓</div>`;
 }
 
-function renderHeroJobs() {
-  const jobs = getJobs().filter(j => j.status === 'active');
+function renderHeroJobs(filters) {
+  let jobs = getJobs().filter(j => j.status === 'active');
+  if(filters) {
+    const {cat, pref, japanese} = filters;
+    if(cat) jobs = jobs.filter(j => (j.category||'').toLowerCase().includes(cat.toLowerCase()));
+    if(pref) {
+      const R={'Hokkaido':['Hokkaido'],'Tohoku':['Aomori','Iwate','Miyagi','Akita','Yamagata','Fukushima'],'Kanto':['Ibaraki','Tochigi','Gunma','Saitama','Chiba','Tokyo','Kanagawa'],'Chubu':['Niigata','Toyama','Ishikawa','Fukui','Yamanashi','Nagano','Shizuoka','Aichi','Mie'],'Kansai':['Shiga','Kyoto','Osaka','Hyogo','Nara','Wakayama'],'Chugoku':['Tottori','Shimane','Okayama','Hiroshima','Yamaguchi'],'Shikoku':['Tokushima','Kagawa','Ehime','Kochi'],'Kyushu':['Fukuoka','Saga','Nagasaki','Kumamoto','Oita','Miyazaki','Kagoshima'],'Okinawa':['Okinawa']};
+      const list = R[pref];
+      if(list) jobs = jobs.filter(j => list.some(p => (j.city||'').toLowerCase().includes(p.toLowerCase())));
+      else jobs = jobs.filter(j => (j.city||'').toLowerCase().includes(pref.toLowerCase()));
+    }
+    if(japanese) {
+      const rank={n1:1,n2:2,n3:3,n4:4,n5:5};
+      const jpR=s=>{const t=(s||'').toLowerCase();if(t.includes('n1'))return 1;if(t.includes('n2'))return 2;if(t.includes('n3'))return 3;if(t.includes('n4'))return 4;if(t.includes('n5'))return 5;return 6;};
+      const ur=rank[japanese.toLowerCase()]||6;
+      jobs=jobs.filter(j=>jpR(j.japanese)>=ur);
+    }
+  }
   ['viet','nhat','kysis'].forEach(type => {
     const panel = document.getElementById('panel-' + type);
     if(!panel) return;
     const typeJobs = jobs.filter(j => j.type === type || (j.type === 'both' && (type === 'viet' || type === 'nhat')));
-    if(!typeJobs.length) return;
-    panel.innerHTML = typeJobs.map(j => {
-      const sal = j.salary || '';
-      return `<div class="mjob" onclick="scrollToJob('${j.id}')" title="Xem trong danh sách việc làm">
-        <div class="minfo">
-          <div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">
-            <div class="mtitle">${j.title}</div>
-            ${j.gender?`<span style="font-size:11px;font-weight:700;color:var(--text-2);white-space:nowrap">${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
-          </div>
-          <div class="mmeta">${[j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
-        </div>
-        ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
-      </div>`;
-    }).join('');
+    panel.innerHTML = typeJobs.length
+      ? typeJobs.map(j => {
+          const sal = j.salary || '';
+          return `<div class="mjob" onclick="scrollToJob('${j.id}')" title="Xem trong danh sách việc làm">
+            <div class="minfo">
+              <div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">
+                <div class="mtitle">${j.title}</div>
+                ${j.gender?`<span style="font-size:11px;font-weight:700;color:var(--text-2);white-space:nowrap">${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
+              </div>
+              <div class="mmeta">${[j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
+            </div>
+            ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+          </div>`;
+        }).join('')
+      : `<p style="text-align:center;color:var(--text-3);padding:20px 14px;font-size:13px;font-weight:500">Không có kết quả phù hợp</p>`;
   });
 }
 
