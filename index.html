@@ -497,7 +497,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .jcard-cat{font-size:11px;color:var(--text-3);background:var(--surface-alt);padding:3px 9px;border-radius:100px;white-space:nowrap}
 .jcard-title{font-size:15px;font-weight:700;color:var(--text-1);line-height:1.35}
 .jcard-meta{display:flex;flex-wrap:wrap;gap:6px}
-.jcard-meta span{font-size:12px;color:var(--text-2)}
+.jcard-meta span{font-size:12px;color:var(--text-2);display:inline-flex;align-items:center;gap:4px}
 .jcard-sal{font-size:15px;font-weight:800;letter-spacing:-.01em}
 .jcard.viet .jcard-sal{color:var(--viet)}
 .jcard.nhat .jcard-sal{color:var(--nhat)}
@@ -518,7 +518,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .pg-btn.pg-on{background:var(--primary);color:#fff;border-color:var(--primary)}
 .pg-btn:disabled{opacity:.4;cursor:default}
 .jobs-empty{text-align:center;padding:48px 24px;color:var(--text-3);grid-column:1/-1}
-.jobs-empty .ej{font-size:40px;margin-bottom:12px}
+.jobs-empty .ej{margin-bottom:12px}
 .jobs-empty p{font-size:15px;font-weight:600;color:var(--text-2);margin-bottom:8px}
 .jobs-empty a{font-size:14px;color:var(--primary);text-decoration:none;font-weight:600}
 .ccat.active{border-color:var(--primary);background:var(--primary-soft)}
@@ -912,7 +912,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
               <option value="không yêu cầu">Không yêu cầu</option>
             </select>
           </div>
-          <button class="mock-btn hf-btn show" id="hfSearchBtn" onclick="doHeroSearch()">🔍 Tìm kiếm việc làm phù hợp</button>
+          <button class="mock-btn hf-btn show" id="hfSearchBtn" onclick="doHeroSearch()" style="display:inline-flex;align-items:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg> Tìm kiếm việc làm phù hợp</button>
         </div>
         <div class="mock-jobs-wrap">
           <div class="jobs-panel on" id="panel-viet">
@@ -1728,6 +1728,23 @@ const ZALO_URL   = 'https://zalo.me/0386887691';
 const FB_URL     = 'https://www.facebook.com/trungphamtokutei';
 const SVG_BOOKMARK_OUT = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
 const SVG_BOOKMARK_FILL = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+
+const ICONS = {
+  pin:     `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  lang:    `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>`,
+  money:   `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>`,
+  users:   `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  user:    `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  clock:   `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  cal:     `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
+  zap:     `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+  raise:   `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+  gift:    `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>`,
+  home:    `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  file:    `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>`,
+  search:  `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>`,
+  briefcase:`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
+};
 let currentGroup = null; // null | 'tokutei' | 'kysis'
 let currentType = 'all';
 let currentCat = null;
@@ -1893,7 +1910,7 @@ function renderJobs() {
 
   if(!jobs.length) {
     container.innerHTML = `<div class="jobs-empty">
-      <div class="ej">💼</div>
+      <div class="ej" style="display:flex;align-items:center;justify-content:center;color:var(--text-3)">${ICONS.briefcase}</div>
       <p>Không tìm thấy việc làm${currentSearch ? ` cho "<strong>${currentSearch}</strong>"` : currentCat ? ' trong ngành này' : ''}</p>
       <a href="https://zalo.me/0386887691" target="_blank">Nhắn Zalo để hỏi thêm →</a>
     </div>`;
@@ -1930,11 +1947,11 @@ function renderJobs() {
           <button class="save-btn${saved?' saved':''}" data-id="${j.id}" onclick="event.stopPropagation();toggleSave('${j.id}')" title="${saved?'Bỏ lưu':'Lưu việc làm'}">${saved?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
           <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
             <div class="jcard-title">${j.title}</div>
-            ${j.gender?`<span style="font-size:11px;font-weight:600;color:var(--text-3);white-space:nowrap;flex-shrink:0">${j.gender==='Nam'?'👨 Nam':j.gender==='Nữ'||j.gender==='Nữ ưu tiên'?`👩 ${j.gender}`:j.gender==='Không yêu cầu'?'👥 Nam và Nữ':`👥 ${j.gender}`}</span>`:''}
+            ${j.gender?`<span style="font-size:11px;font-weight:600;color:var(--text-3);white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:3px">${ICONS.user}${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
           </div>
           <div class="jcard-meta">
-            ${j.city?`<span>📍 ${j.city}</span>`:''}
-            ${j.japanese?`<span>🗣️ ${j.japanese}</span>`:''}
+            ${j.city?`<span>${ICONS.pin}${j.city}</span>`:''}
+            ${j.japanese?`<span>${ICONS.lang}${j.japanese}</span>`:''}
           </div>
           <div class="jcard-sal">${sal}</div>
           ${desc?`<div class="jcard-desc">${desc}</div>`:''}
@@ -2058,7 +2075,7 @@ function openJob(id) {
   function row(icon, label, value) {
     if(!value) return '';
     return `<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
-      <span style="font-size:16px;flex-shrink:0;width:22px;text-align:center">${icon}</span>
+      <span style="flex-shrink:0;width:22px;display:flex;align-items:center;justify-content:center;color:var(--text-3);margin-top:3px">${icon}</span>
       <div style="flex:1">
         <div style="font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-3);margin-bottom:2px">${label}</div>
         <div style="font-size:14px;color:var(--text-1);font-weight:500">${value}</div>
@@ -2071,7 +2088,7 @@ function openJob(id) {
     <div class="modal-hd">
       <div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-          ${j.type==='both'?`<span class="jbadge jbadge-viet">🇻🇳 Tokutei đầu Việt</span><span class="jbadge jbadge-nhat">🇯🇵 Tokutei đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'🇻🇳 Tokutei đầu Việt':j.type==='kysis'?'💼 Kỹ sư đầu Nhật':'🇯🇵 Tokutei đầu Nhật'}</span>`}
+          ${j.type==='both'?`<span class="jbadge jbadge-viet">Tokutei đầu Việt</span><span class="jbadge jbadge-nhat">Tokutei đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Tokutei đầu Việt':j.type==='kysis'?'Kỹ sư đầu Nhật':'Tokutei đầu Nhật'}</span>`}
           ${j.category?`<span style="font-size:12px;color:var(--text-3)">${j.category}</span>`:''}
         </div>
         <div class="modal-title">${j.title}</div>
@@ -2083,20 +2100,20 @@ function openJob(id) {
     </div>
     <div class="modal-body">
       <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px">
-        ${salDisplay?`<span class="mchip ${sc}">💰 ${salDisplay}</span>`:''}
-        ${j.city?`<span class="mchip">📍 ${j.city}</span>`:''}
-        ${j.count?`<span class="mchip">👥 ${j.count} người</span>`:''}
-        ${j.gender?`<span class="mchip">${j.gender==='Nam'?'👨':j.gender==='Nữ'?'👩':'👥'} ${j.gender}</span>`:''}
+        ${salDisplay?`<span class="mchip ${sc}" style="display:inline-flex;align-items:center;gap:5px">${ICONS.money}${salDisplay}</span>`:''}
+        ${j.city?`<span class="mchip" style="display:inline-flex;align-items:center;gap:5px">${ICONS.pin}${j.city}</span>`:''}
+        ${j.count?`<span class="mchip" style="display:inline-flex;align-items:center;gap:5px">${ICONS.users}${j.count} người</span>`:''}
+        ${j.gender?`<span class="mchip" style="display:inline-flex;align-items:center;gap:5px">${ICONS.user}${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
       </div>
 
       <div style="background:var(--surface-alt);border-radius:10px;padding:4px 14px;margin-bottom:16px">
-        ${row('🗣️','Tiếng Nhật yêu cầu', j.japanese)}
-        ${row('🕐','Giờ làm việc', j.workHours)}
-        ${row('📅','Ngày nghỉ', j.daysOff)}
-        ${row('⏰','Tăng ca', j.overtime)}
-        ${row('📈','Tăng lương', j.raise)}
-        ${row('🎁','Thưởng', j.bonus)}
-        ${row('🏠','Nhà ở / Ký túc xá', j.housing)}
+        ${row(ICONS.lang,'Tiếng Nhật yêu cầu', j.japanese)}
+        ${row(ICONS.clock,'Giờ làm việc', j.workHours)}
+        ${row(ICONS.cal,'Ngày nghỉ', j.daysOff)}
+        ${row(ICONS.zap,'Tăng ca', j.overtime)}
+        ${row(ICONS.raise,'Tăng lương', j.raise)}
+        ${row(ICONS.gift,'Thưởng', j.bonus)}
+        ${row(ICONS.home,'Nhà ở / Ký túc xá', j.housing)}
       </div>
 
       ${j.desc?`
@@ -2104,8 +2121,8 @@ function openJob(id) {
         <div class="modal-desc" style="margin-bottom:16px">${j.desc}</div>
       `:''}
 
-      <button onclick="openApplyForm('${j.id}')" class="modal-cta" style="border:none;cursor:pointer;font-family:inherit;font-size:15px;width:100%;margin-bottom:0">
-        📝 Điền đơn ứng tuyển
+      <button onclick="openApplyForm('${j.id}')" class="modal-cta" style="border:none;cursor:pointer;font-family:inherit;font-size:15px;width:100%;margin-bottom:0;display:flex;align-items:center;justify-content:center;gap:8px">
+        ${ICONS.file} Điền đơn ứng tuyển
       </button>
     </div>
   `;
@@ -2129,7 +2146,7 @@ function openApplyForm(jobId) {
   applyJobId = jobId;
   const j = getJobs().find(x => x.id === jobId);
   document.getElementById('applyJobTitle').textContent = j ? j.title : 'Điền đầy đủ thông tin';
-  document.getElementById('applyJobCity').textContent = j && j.city ? '📍 ' + j.city : '';
+  document.getElementById('applyJobCity').innerHTML = j && j.city ? `<span style="display:inline-flex;align-items:center;gap:4px">${ICONS.pin}${j.city}</span>` : '';
   const isKysis = j && j.type === 'kysis';
   document.getElementById('docsListTokutei').style.display = isKysis ? 'none' : '';
   document.getElementById('docsListKysis').style.display = isKysis ? '' : 'none';
