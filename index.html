@@ -757,28 +757,35 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .admin-overlay{flex-direction:column!important}
   .admin-sidebar{
     width:100%!important;min-width:0!important;max-width:100%!important;
-    height:auto!important;flex-direction:row!important;
-    overflow-x:auto!important;overflow-y:hidden!important;
+    height:auto!important;flex-direction:column!important;
+    overflow:visible!important;
     flex-shrink:0!important;
   }
   .admin-sb-top{display:none!important}
   .admin-sb-stats{display:none!important}
-  .admin-sb-nav{display:flex!important;flex-direction:row!important;width:100%;overflow-x:auto;gap:0;padding:0}
   .admin-nav-sep{display:none!important}
+  .admin-sb-nav{
+    display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+    width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;
+    gap:0!important;padding:0!important;
+    border-bottom:1px solid rgba(255,255,255,.1);
+    -webkit-overflow-scrolling:touch;
+  }
   .admin-nav-item{
-    flex-direction:column!important;
-    padding:10px 14px!important;
-    gap:4px!important;
-    flex-shrink:0!important;
-    white-space:nowrap!important;
-    border-radius:0!important;
-    min-width:64px!important;
-    justify-content:center!important;
-    align-items:center!important;
+    display:flex!important;flex-direction:column!important;
+    align-items:center!important;justify-content:center!important;
+    padding:8px 14px!important;gap:3px!important;
+    flex-shrink:0!important;min-width:56px!important;
+    border-radius:0!important;white-space:nowrap!important;
+    font-size:10px!important;width:auto!important;margin-bottom:0!important;
   }
   .admin-nav-label{font-size:10px!important;display:block!important}
-  .admin-view{padding:14px 12px}
-  .admin-overlay .admin-main{flex:1!important;overflow-x:hidden!important;min-width:0!important;width:100%!important}
+  .admin-view{padding:12px 10px}
+  .admin-overlay .admin-main{
+    flex:1!important;min-height:0!important;
+    overflow-y:auto!important;overflow-x:hidden!important;
+    min-width:0!important;width:100%!important;
+  }
 }
 </style>
 </head>
