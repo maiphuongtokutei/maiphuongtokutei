@@ -887,53 +887,16 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
           <div class="hf-row show" id="hfRow2">
             <span class="hf-num">2</span>
             <select id="filterTinh" class="hf-select" onchange="hfNext(2)">
-              <option value="">Tỉnh / Thành phố</option>
-              <option value="Hokkaido">1. Hokkaido</option>
-              <option value="Aomori">2. Aomori</option>
-              <option value="Iwate">3. Iwate</option>
-              <option value="Miyagi">4. Miyagi</option>
-              <option value="Akita">5. Akita</option>
-              <option value="Yamagata">6. Yamagata</option>
-              <option value="Fukushima">7. Fukushima</option>
-              <option value="Ibaraki">8. Ibaraki</option>
-              <option value="Tochigi">9. Tochigi</option>
-              <option value="Gunma">10. Gunma</option>
-              <option value="Saitama">11. Saitama</option>
-              <option value="Chiba">12. Chiba</option>
-              <option value="Tokyo">13. Tokyo</option>
-              <option value="Kanagawa">14. Kanagawa</option>
-              <option value="Niigata">15. Niigata</option>
-              <option value="Toyama">16. Toyama</option>
-              <option value="Ishikawa">17. Ishikawa</option>
-              <option value="Fukui">18. Fukui</option>
-              <option value="Yamanashi">19. Yamanashi</option>
-              <option value="Nagano">20. Nagano</option>
-              <option value="Shizuoka">21. Shizuoka</option>
-              <option value="Aichi">22. Aichi</option>
-              <option value="Mie">23. Mie</option>
-              <option value="Shiga">24. Shiga</option>
-              <option value="Kyoto">25. Kyoto</option>
-              <option value="Osaka">26. Osaka</option>
-              <option value="Hyogo">27. Hyogo</option>
-              <option value="Nara">28. Nara</option>
-              <option value="Wakayama">29. Wakayama</option>
-              <option value="Tottori">30. Tottori</option>
-              <option value="Shimane">31. Shimane</option>
-              <option value="Okayama">32. Okayama</option>
-              <option value="Hiroshima">33. Hiroshima</option>
-              <option value="Yamaguchi">34. Yamaguchi</option>
-              <option value="Tokushima">35. Tokushima</option>
-              <option value="Kagawa">36. Kagawa</option>
-              <option value="Ehime">37. Ehime</option>
-              <option value="Kochi">38. Kochi</option>
-              <option value="Fukuoka">39. Fukuoka</option>
-              <option value="Saga">40. Saga</option>
-              <option value="Nagasaki">41. Nagasaki</option>
-              <option value="Kumamoto">42. Kumamoto</option>
-              <option value="Oita">43. Oita</option>
-              <option value="Miyazaki">44. Miyazaki</option>
-              <option value="Kagoshima">45. Kagoshima</option>
-              <option value="Okinawa">46. Okinawa</option>
+              <option value="">Khu vực</option>
+              <option value="Hokkaido">1. Hokkaido (北海道)</option>
+              <option value="Tohoku">2. Tohoku (東北) — Aomori, Iwate, Miyagi, Akita, Yamagata, Fukushima</option>
+              <option value="Kanto">3. Kanto (関東) — Tokyo, Kanagawa, Saitama, Chiba, Ibaraki, Tochigi, Gunma</option>
+              <option value="Chubu">4. Chubu (中部) — Aichi, Shizuoka, Niigata, Nagano, Toyama, Ishikawa, Fukui, Yamanashi, Mie</option>
+              <option value="Kansai">5. Kansai (関西) — Osaka, Hyogo, Kyoto, Shiga, Nara, Wakayama</option>
+              <option value="Chugoku">6. Chugoku (中国) — Hiroshima, Okayama, Yamaguchi, Tottori, Shimane</option>
+              <option value="Shikoku">7. Shikoku (四国) — Ehime, Kagawa, Tokushima, Kochi</option>
+              <option value="Kyushu">8. Kyushu (九州) — Fukuoka, Kumamoto, Nagasaki, Kagoshima, Oita, Miyazaki, Saga</option>
+              <option value="Okinawa">9. Okinawa (沖縄)</option>
             </select>
           </div>
           <div class="hf-row show" id="hfRow3">
@@ -1754,7 +1717,12 @@ function renderJobs() {
   if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
   else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type !== 'kysis');
   if(currentCat) jobs = jobs.filter(j => j.category === currentCat);
-  if(currentPref) jobs = jobs.filter(j => (j.city||'').toLowerCase().includes(currentPref.toLowerCase()));
+  if(currentPref) {
+    const REGIONS={'Hokkaido':['Hokkaido'],'Tohoku':['Aomori','Iwate','Miyagi','Akita','Yamagata','Fukushima'],'Kanto':['Ibaraki','Tochigi','Gunma','Saitama','Chiba','Tokyo','Kanagawa'],'Chubu':['Niigata','Toyama','Ishikawa','Fukui','Yamanashi','Nagano','Shizuoka','Aichi','Mie'],'Kansai':['Shiga','Kyoto','Osaka','Hyogo','Nara','Wakayama'],'Chugoku':['Tottori','Shimane','Okayama','Hiroshima','Yamaguchi'],'Shikoku':['Tokushima','Kagawa','Ehime','Kochi'],'Kyushu':['Fukuoka','Saga','Nagasaki','Kumamoto','Oita','Miyazaki','Kagoshima'],'Okinawa':['Okinawa']};
+    const prefList = REGIONS[currentPref];
+    if(prefList) jobs = jobs.filter(j => prefList.some(p => (j.city||'').toLowerCase().includes(p.toLowerCase())));
+    else jobs = jobs.filter(j => (j.city||'').toLowerCase().includes(currentPref.toLowerCase()));
+  }
   if(currentJapanese) {
     const JP_RANK = {n1:1,n2:2,n3:3,n4:4,n5:5};
     function jpRank(s){const t=(s||'').toLowerCase();if(t.includes('n1'))return 1;if(t.includes('n2'))return 2;if(t.includes('n3'))return 3;if(t.includes('n4'))return 4;if(t.includes('n5'))return 5;return 6;}
