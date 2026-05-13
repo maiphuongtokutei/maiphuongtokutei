@@ -1827,7 +1827,7 @@ function selectGroup(group) {
   document.getElementById('subcatLevel').style.display = 'block';
   document.getElementById('catGridTokutei').style.display = group === 'tokutei' ? 'grid' : 'none';
   document.getElementById('catGridKysis').style.display = group === 'kysis' ? 'grid' : 'none';
-  document.getElementById('subcatTitle').textContent = group === 'tokutei' ? 'Tokutei — 14 ngành' : 'Kỹ sư';
+  document.getElementById('subcatTitle').textContent = group === 'tokutei' ? 'Tokutei' : 'Kỹ sư';
   updateCatCounts();
   renderJobs();
 }
