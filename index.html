@@ -766,6 +766,10 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .admin-job-table-row{display:flex;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border);gap:12px;transition:background .12s}
 .admin-job-table-row:last-child{border-bottom:none}
 .admin-job-table-row:hover{background:#FAFAFD}
+.ajtc-cb{width:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.bulk-bar{display:none;align-items:center;gap:10px;padding:10px 20px;background:#FFF7ED;border-bottom:1px solid #FED7AA;flex-wrap:wrap}
+.bulk-bar.show{display:flex}
+.bulk-bar-count{font-size:13px;font-weight:700;color:#EA580C;flex:1}
 .ajtc-title{flex:3;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ajtc-type{flex:1.2;min-width:0}
 .ajtc-cat{flex:1.5;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1231,7 +1235,13 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
             <option value="expired">Hết hạn</option>
           </select>
         </div>
+        <div class="bulk-bar" id="adminBulkBar">
+          <span class="bulk-bar-count" id="adminBulkCount">Đã chọn 0 job</span>
+          <button onclick="adminBulkDelete()" style="padding:6px 14px;background:#E8305A;color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🗑 Xóa đã chọn</button>
+          <button onclick="adminClearSelection()" style="padding:6px 14px;background:transparent;color:var(--text-2);border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Bỏ chọn</button>
+        </div>
         <div class="admin-job-table-head">
+          <div class="ajtc-cb"><input type="checkbox" id="adminSelectAll" onchange="adminToggleSelectAll(this.checked)" style="cursor:pointer;width:16px;height:16px;accent-color:var(--primary)"></div>
           <div class="ajtc-title">TÊN CÔNG VIỆC</div>
           <div class="ajtc-type">LOẠI</div>
           <div class="ajtc-cat">NGÀNH</div>
@@ -2579,7 +2589,8 @@ function adminNav(view, jobId) {
   const viewMap = {'jobs-list':'adminViewJobsList','jobs-form':'adminViewJobsForm','articles':'adminViewArticles','deploy':'adminViewDeploy'};
   if(viewMap[view]) document.getElementById(viewMap[view]).classList.add('on');
   if(view === 'jobs-list') renderAdminJobs();
-  else if(view === 'jobs-form') adminShowJobForm(jobId || null);
+  else { adminSelectedIds.clear(); adminUpdateBulkBar(); }
+  if(view === 'jobs-form') adminShowJobForm(jobId || null);
   else if(view === 'articles') renderAdminPanel();
   else if(view === 'deploy') renderDeployStats();
   const main = document.querySelector('.admin-main');
@@ -2665,6 +2676,7 @@ function renderAdminJobs() {
   };
   document.getElementById('adminJobList').innerHTML = jobs.length
     ? jobs.map(j => `<div class="admin-job-table-row">
+        <div class="ajtc-cb"><input type="checkbox" class="admin-job-cb" data-id="${j.id}" ${adminSelectedIds.has(j.id)?'checked':''} onchange="adminToggleSelectJob('${j.id}',this.checked)" onclick="event.stopPropagation()" style="cursor:pointer;width:16px;height:16px;accent-color:var(--primary)"></div>
         <div class="ajtc-title"><span style="font-size:14px;font-weight:700;color:var(--text-1)">${j.title}</span></div>
         <div class="ajtc-type">${typeBadge(j.type)}</div>
         <div class="ajtc-cat" style="font-size:13px;color:var(--text-2)">${catIcon(j.category)}</div>
@@ -2678,6 +2690,61 @@ function renderAdminJobs() {
         </div>
       </div>`).join('')
     : '<p style="color:var(--text-3);text-align:center;padding:32px">Không có tin nào phù hợp.</p>';
+  // sync select-all checkbox state
+  const allCbs = document.querySelectorAll('.admin-job-cb');
+  const selAll = document.getElementById('adminSelectAll');
+  if(selAll) selAll.checked = allCbs.length > 0 && [...allCbs].every(cb => cb.checked);
+  adminUpdateBulkBar();
+}
+
+let adminSelectedIds = new Set();
+
+function adminToggleSelectAll(checked) {
+  document.querySelectorAll('.admin-job-cb').forEach(cb => {
+    cb.checked = checked;
+    if(checked) adminSelectedIds.add(cb.dataset.id);
+    else adminSelectedIds.delete(cb.dataset.id);
+  });
+  adminUpdateBulkBar();
+}
+
+function adminToggleSelectJob(id, checked) {
+  if(checked) adminSelectedIds.add(id);
+  else adminSelectedIds.delete(id);
+  const allCbs = document.querySelectorAll('.admin-job-cb');
+  const selAll = document.getElementById('adminSelectAll');
+  if(selAll) selAll.checked = allCbs.length > 0 && [...allCbs].every(cb => cb.checked);
+  adminUpdateBulkBar();
+}
+
+function adminUpdateBulkBar() {
+  const n = adminSelectedIds.size;
+  const bar = document.getElementById('adminBulkBar');
+  const count = document.getElementById('adminBulkCount');
+  if(bar) bar.classList.toggle('show', n > 0);
+  if(count) count.textContent = `Đã chọn ${n} job`;
+}
+
+function adminClearSelection() {
+  adminSelectedIds.clear();
+  document.querySelectorAll('.admin-job-cb').forEach(cb => cb.checked = false);
+  const selAll = document.getElementById('adminSelectAll');
+  if(selAll) selAll.checked = false;
+  adminUpdateBulkBar();
+}
+
+async function adminBulkDelete() {
+  const n = adminSelectedIds.size;
+  if(!n) return;
+  if(!confirm(`Xóa ${n} job đã chọn?\nHành động này không thể hoàn tác.`)) return;
+  const ids = [...adminSelectedIds];
+  const { error } = await sb.from('jobs').delete().in('id', ids);
+  if(error) { alert('Lỗi xóa: ' + error.message); return; }
+  saveJobs(getJobs().filter(j => !ids.includes(j.id)));
+  adminSelectedIds.clear();
+  renderAdminJobs();
+  renderAdminSideStats();
+  updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs();
 }
 
 async function adminToggleJobStatus(id) {
