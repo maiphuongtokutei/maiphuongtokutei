@@ -1359,6 +1359,41 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
         <div class="admin-view-sub">Xuất dữ liệu và xem thống kê tổng quan</div>
       </div>
       <div class="admin-card">
+        <div class="admin-card-title">🔄 Đồng bộ từ Google Sheets</div>
+        <p style="font-size:13px;color:var(--text-2);margin-bottom:16px">Paste link Google Sheet vào đây. Sheet phải được <strong>chia sẻ công khai</strong> (Anyone with the link → Viewer).</p>
+        <div class="af2" style="margin-bottom:12px">
+          <label>URL Google Sheet</label>
+          <input id="gsheetUrl" type="url" placeholder="https://docs.google.com/spreadsheets/d/...">
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+          <button class="admin-add-btn" onclick="saveGSheetUrl()">💾 Lưu URL</button>
+          <button class="admin-add-btn" style="background:#22a85a" onclick="syncFromGSheet()">🔄 Đồng bộ ngay</button>
+        </div>
+        <div id="gsheetStatus" style="font-size:13px;color:var(--text-2);min-height:20px"></div>
+        <details style="margin-top:16px">
+          <summary style="font-size:12px;color:var(--text-3);cursor:pointer;user-select:none">📋 Xem hướng dẫn các cột trong Google Sheet</summary>
+          <div style="margin-top:10px;font-size:12px;color:var(--text-2);line-height:2;background:var(--surface-alt);padding:12px;border-radius:8px">
+            <strong>Hàng 1: tiêu đề cột (bỏ qua khi đồng bộ)</strong><br>
+            A: <code>type</code> — viet / nhat / both / kysis<br>
+            B: <code>category</code> — Ngành nghề<br>
+            C: <code>title</code> — Tên vị trí ⭐ <em>bắt buộc</em><br>
+            D: <code>city</code> — Tỉnh / Khu vực<br>
+            E: <code>salary</code> — Mức lương<br>
+            F: <code>japanese</code> — N1 / N2 / N3 / N4 / N5 / không yêu cầu<br>
+            G: <code>count</code> — Số lượng tuyển<br>
+            H: <code>gender</code> — Nam / Nữ / Không yêu cầu<br>
+            I: <code>workHours</code> — Giờ làm việc<br>
+            J: <code>daysOff</code> — Ngày nghỉ<br>
+            K: <code>overtime</code> — Tăng ca<br>
+            L: <code>raise</code> — Tăng lương<br>
+            M: <code>bonus</code> — Thưởng<br>
+            N: <code>housing</code> — Nhà ở<br>
+            O: <code>desc</code> — Mô tả công việc<br>
+            P: <code>status</code> — active / expired (mặc định: active)
+          </div>
+        </details>
+      </div>
+      <div class="admin-card">
         <div class="admin-card-title">Xuất dữ liệu (JSON)</div>
         <p style="font-size:14px;color:var(--text-2);margin-bottom:16px">Tải xuống dữ liệu việc làm và bài viết dưới dạng JSON để backup.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -2343,6 +2378,70 @@ function openArticle(id) {
 }
 function closeArticle() { document.getElementById('artdOverlay').classList.remove('open'); }
 
+// ── GOOGLE SHEETS SYNC ──
+const GSHEET_URL_KEY = 'tp_gsheet_url';
+
+function saveGSheetUrl() {
+  const url = document.getElementById('gsheetUrl').value.trim();
+  if(!url) return;
+  localStorage.setItem(GSHEET_URL_KEY, url);
+  document.getElementById('gsheetStatus').textContent = '✅ Đã lưu URL';
+}
+
+function getGSheetExportUrl(url) {
+  const m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
+  if(!m) return null;
+  const gid = (url.match(/gid=(\d+)/) || [])[1] || '0';
+  return `https://docs.google.com/spreadsheets/d/${m[1]}/export?format=csv&gid=${gid}`;
+}
+
+function parseCSV(text) {
+  const rows = []; let row = [], field = '', inQ = false;
+  for(let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if(inQ) { if(c==='"'){ if(text[i+1]==='"'){field+='"';i++;}else inQ=false; } else field+=c; }
+    else if(c==='"') inQ=true;
+    else if(c===','){row.push(field);field='';}
+    else if(c==='\n'){row.push(field);rows.push(row);row=[];field='';}
+    else if(c!=='\r') field+=c;
+  }
+  if(field||row.length){row.push(field);rows.push(row);}
+  return rows;
+}
+
+async function syncFromGSheet() {
+  const url = document.getElementById('gsheetUrl').value.trim() || localStorage.getItem(GSHEET_URL_KEY);
+  const statusEl = document.getElementById('gsheetStatus');
+  if(!url){statusEl.textContent='⚠️ Chưa có URL Google Sheet';return;}
+  const exportUrl = getGSheetExportUrl(url);
+  if(!exportUrl){statusEl.textContent='❌ URL không hợp lệ';return;}
+  statusEl.textContent='⏳ Đang đồng bộ...';
+  try {
+    const resp = await fetch(exportUrl);
+    if(!resp.ok) throw new Error('HTTP '+resp.status);
+    const csv = await resp.text();
+    const rows = parseCSV(csv);
+    if(rows.length < 2){statusEl.textContent='⚠️ Sheet trống';return;}
+    const g = r => (r||'').trim();
+    const newJobs = rows.slice(1).filter(r=>r.some(c=>c.trim())).map((r,i)=>({
+      id:'gs_'+Date.now()+'_'+i,
+      type:g(r[0])||'viet', category:g(r[1]), title:g(r[2]),
+      city:g(r[3]), salary:g(r[4]), japanese:g(r[5]),
+      count:g(r[6]), gender:g(r[7]), workHours:g(r[8]),
+      daysOff:g(r[9]), overtime:g(r[10]), raise:g(r[11]),
+      bonus:g(r[12]), housing:g(r[13]), desc:g(r[14]),
+      status:g(r[15])||'active'
+    })).filter(j=>j.title);
+    if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột C - title bị trống?)';return;}
+    const manual = getJobs().filter(j=>!j.id.startsWith('gs_'));
+    saveJobs([...manual,...newJobs]);
+    renderAdminJobs(); renderAdminSideStats(); updateCatCounts(); renderJobs();
+    statusEl.textContent=`✅ Đã đồng bộ ${newJobs.length} việc làm`;
+  } catch(e) {
+    statusEl.textContent='❌ Lỗi: '+e.message+'. Kiểm tra sheet có chia sẻ công khai không.';
+  }
+}
+
 // ── ADMIN ──
 function saveJobs(jobs) { localStorage.setItem(STORE_KEY, JSON.stringify(jobs)); }
 
@@ -2530,6 +2629,8 @@ async function adminSaveJob() {
 }
 
 function renderDeployStats() {
+  const saved = localStorage.getItem(GSHEET_URL_KEY);
+  if(saved){ const el=document.getElementById('gsheetUrl'); if(el) el.value=saved; }
   const jobs = getJobs(), arts = getArticles();
   const el = document.getElementById('adminDeployStats');
   if(!el) return;
