@@ -138,9 +138,9 @@ nav.scrolled{box-shadow:var(--sh)}
 .mlogo{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;font-family:'Noto Sans JP',sans-serif}
 .mjob-ico{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .mjob-ico svg{width:17px;height:17px;stroke-width:1.75}
-.minfo{flex:1}
-.mtitle{font-size:12px;font-weight:600;color:var(--text-1)}
-.mmeta{font-size:11px;color:var(--text-3)}
+.minfo{flex:1;min-width:0}
+.mtitle{font-size:12px;font-weight:600;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mmeta{font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .msal{font-size:12px;font-weight:700;color:var(--primary);white-space:nowrap}
 
 /* ── STATS ── */
@@ -1879,16 +1879,16 @@ function renderHeroJobs(filters) {
     panel.innerHTML = typeJobs.length
       ? typeJobs.map(j => {
           const sal = j.salary || '';
+          const gender = j.gender && j.gender !== 'Không yêu cầu' ? j.gender : '';
           return `<div class="mjob" onclick="scrollToJob('${j.id}')" title="Xem trong danh sách việc làm">
             <div class="mjob-ico" style="${icoStyle}"><i data-lucide="${CAT_ICON[j.category]||'briefcase'}"></i></div>
             <div class="minfo">
-              <div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">
-                <div class="mtitle">${j.title}</div>
-                ${j.gender?`<span style="font-size:11px;font-weight:700;color:var(--text-1);white-space:nowrap">${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
-              </div>
-              <div class="mmeta">${[j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
+              <div class="mtitle">${j.title}</div>
+              <div class="mmeta">${[gender, j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
             </div>
-            ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+            ${j.type==='both'
+              ? `<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;align-items:flex-end"><span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span></div>`
+              : `<span class="jbadge jbadge-${j.type}" style="flex-shrink:0">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
           </div>`;
         }).join('')
       : `<p style="text-align:center;color:var(--text-3);padding:20px 14px;font-size:13px;font-weight:500">Không có kết quả phù hợp</p>`;
