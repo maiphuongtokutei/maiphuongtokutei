@@ -172,6 +172,7 @@ function onOpen() {
     .addItem('🚀 Sync tất cả lên web',               'syncToSupabase')
     .addSeparator()
     .addItem('👁️ Hiện / Ẩn cột nội bộ',            'toggleInternalColumns')
+    .addItem('↕️ Sắp xếp theo Ngành nghề',           'sortByCategory')
     .addSeparator()
     .addItem('⚙️ Thiết lập sheet (chạy 1 lần)',     'setupSourceSheet')
     .addItem('🌐 Tạo Sheet Công Khai (chạy 1 lần)', 'setupPublicSheet')
@@ -326,6 +327,19 @@ function saveJob(data) {
   } catch (e) {
     Logger.log('Public sheet chưa setup: ' + e.message);
   }
+}
+
+function sortByCategory() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  if (!sheet) { SpreadsheetApp.getUi().alert('Không tìm thấy tab: ' + SHEET_NAME); return; }
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 3) { SpreadsheetApp.getUi().alert('Chưa có dữ liệu để sắp xếp.'); return; }
+  sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn())
+    .sort([
+      { column: 3, ascending: true },  // C: ngành nghề
+      { column: 2, ascending: true },  // B: tên công việc
+    ]);
+  SpreadsheetApp.getActiveSpreadsheet().toast('Đã sắp xếp theo ngành nghề ✅', 'TokuteiJob', 3);
 }
 
 // ── SUPABASE ─────────────────────────────────────────────────
