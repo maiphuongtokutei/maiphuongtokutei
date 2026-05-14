@@ -552,6 +552,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .pg-btn:disabled{opacity:.35;cursor:default}
 .pg-btn.pg-nav{min-width:72px;font-size:13px;gap:4px}
 .pg-dots{width:36px;height:40px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);font-size:15px;letter-spacing:.1em;user-select:none}
+.pg-info{font-size:14px;font-weight:600;color:var(--text-2);padding:0 12px;white-space:nowrap}
 .jobs-empty{text-align:center;padding:48px 24px;color:var(--text-3);grid-column:1/-1}
 .jobs-empty .ej{margin-bottom:12px}
 .jobs-empty p{font-size:15px;font-weight:600;color:var(--text-2);margin-bottom:8px}
@@ -1977,20 +1978,26 @@ function renderJobs() {
   if(pgEl) {
     if(totalPages <= 1) { pgEl.innerHTML = ''; }
     else {
-      const delta = 2;
-      const pages = [];
-      for(let i=1; i<=totalPages; i++) {
-        if(i===1 || i===totalPages || (i>=currentPage-delta && i<=currentPage+delta)) pages.push(i);
-      }
+      const isMobile = window.innerWidth <= 600;
+      const prevDis = currentPage===1 ? 'disabled' : '';
+      const nextDis = currentPage===totalPages ? 'disabled' : '';
       let p = '<div class="pg">';
-      p += `<button class="pg-btn pg-nav" onclick="goToPage(${currentPage-1})" ${currentPage===1?'disabled':''}>← Trước</button>`;
-      let prev = 0;
-      for(const i of pages) {
-        if(prev && i - prev > 1) p += `<span class="pg-dots">…</span>`;
-        p += `<button class="pg-btn${i===currentPage?' pg-on':''}" onclick="goToPage(${i})">${i}</button>`;
-        prev = i;
+      p += `<button class="pg-btn pg-nav" onclick="goToPage(${currentPage-1})" ${prevDis}>← Trước</button>`;
+      if(isMobile) {
+        p += `<span class="pg-info">Trang ${currentPage} / ${totalPages}</span>`;
+      } else {
+        const delta = 2, pages = [];
+        for(let i=1; i<=totalPages; i++) {
+          if(i===1 || i===totalPages || (i>=currentPage-delta && i<=currentPage+delta)) pages.push(i);
+        }
+        let prev = 0;
+        for(const i of pages) {
+          if(prev && i - prev > 1) p += `<span class="pg-dots">…</span>`;
+          p += `<button class="pg-btn${i===currentPage?' pg-on':''}" onclick="goToPage(${i})">${i}</button>`;
+          prev = i;
+        }
       }
-      p += `<button class="pg-btn pg-nav" onclick="goToPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>Tiếp →</button>`;
+      p += `<button class="pg-btn pg-nav" onclick="goToPage(${currentPage+1})" ${nextDis}>Tiếp →</button>`;
       p += '</div>';
       pgEl.innerHTML = p;
     }
