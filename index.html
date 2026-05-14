@@ -1313,10 +1313,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
             <input id="ajf-salary" type="text" placeholder="VD: ¥185,000~¥210,000/月 hoặc ¥1,050/時 hoặc Thỏa thuận">
           </div>
           <div class="af2">
-            <label>Số lượng tuyển (người)</label>
-            <input id="ajf-count" type="text" placeholder="VD: 3">
-          </div>
-          <div class="af2">
             <label>Giới tính</label>
             <select id="ajf-gender">
               <option value="">Không yêu cầu</option>
@@ -1447,16 +1443,15 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
             D: <code>city</code> — Tỉnh / Khu vực<br>
             E: <code>salary</code> — Mức lương<br>
             F: <code>japanese</code> — N1 / N2 / N3 / N4 / N5 / không yêu cầu<br>
-            G: <code>count</code> — Số lượng tuyển<br>
-            H: <code>gender</code> — Nam / Nữ / Không yêu cầu<br>
-            I: <code>workHours</code> — Giờ làm việc<br>
-            J: <code>daysOff</code> — Ngày nghỉ<br>
-            K: <code>overtime</code> — Tăng ca<br>
-            L: <code>raise</code> — Tăng lương<br>
-            M: <code>bonus</code> — Thưởng<br>
-            N: <code>housing</code> — Nhà ở<br>
-            O: <code>desc</code> — Mô tả công việc<br>
-            P: <code>status</code> — active / expired (mặc định: active)
+            G: <code>gender</code> — Nam / Nữ / Không yêu cầu<br>
+            H: <code>workHours</code> — Giờ làm việc<br>
+            I: <code>daysOff</code> — Ngày nghỉ<br>
+            J: <code>overtime</code> — Tăng ca<br>
+            K: <code>raise</code> — Tăng lương<br>
+            L: <code>bonus</code> — Thưởng<br>
+            M: <code>housing</code> — Nhà ở<br>
+            N: <code>desc</code> — Mô tả công việc<br>
+            O: <code>status</code> — active / expired (mặc định: active)
           </div>
         </details>
       </div>
@@ -1723,7 +1718,7 @@ async function syncFromSupabase() {
     }
   } catch(e) { /* offline — dùng cache localStorage */ }
 }
-const SEED_JOBS = [{"id":"mp2vkfxjxguo","type":"both","title":"Làm bánh mỳ","category":"🍱 Chế biến thực phẩm","city":"Osaka","salary":"20man","count":5,"gender":"Nam","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:58:42.727Z"},{"id":"mp2u5ouc4568","type":"kysis","title":"Kỹ sư xây dựng","category":"🏗️ Xây dựng / Kiến trúc","city":"Mie - Komono","salary":"1300 Y/H","count":2,"gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"10-45h","raise":"Có","bonus":"Không","housing":"2man/tháng","desc":"Vệ sinh sửa chữa giàn giáo","status":"active","updatedAt":"2026-05-12T16:19:14.820Z"},{"id":"mp2tj8y8rzpt","type":"viet","title":"Làm bánh mochi","category":"🍱 Chế biến thực phẩm","city":"Tokyo","salary":"","count":6,"gender":"Nam","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:01:47.792Z"},{"id":"mp2ka8qloryz","type":"nhat","title":"gdfgd","category":"🏗️ Xây dựng","city":"fdgdf","salary":"","count":0,"gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:51.069Z"},{"id":"mp2ka4rqtwwx","type":"nhat","title":"retgfd","category":"🏗️ Xây dựng","city":"AAA","salary":"","count":0,"gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:45.926Z"},{"id":"mp2k9ym4mnxs","type":"nhat","title":"122","category":"🌾 Nông nghiệp","city":"AA","salary":"","count":0,"gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:37.948Z"},{"id":"mp2k9ih0679v","type":"viet","title":"1111","category":"🌾 Nông nghiệp","city":"Aichi","salary":"","count":0,"gender":"","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:17.028Z"},{"id":"mp2bgskkpbj1","type":"nhat","title":"Làm bánh Pizza","category":"🍱 Chế biến thực phẩm","city":"Yamagata - Yonezawa","salary":"1100y/h","count":5,"gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"40h/tháng","raise":"Có","bonus":"~10man","company":"","housing":"2man","desc":"Làm việc tại dây chuyền chế biến thực phẩm đông lạnh. Bao ký túc xá, 2 bữa/ngày.","status":"active","updatedAt":"2026-05-12T08:07:16.258Z"},{"id":"mp2bgsklo2sk","type":"viet","title":"Công nhân xây dựng (型枠工)","category":"🏗️ Xây dựng","city":"Osaka 大阪","salMin":200000,"salMax":240000,"japanese":"N4以上","company":"Osaka Build Corp.","desc":"Gia công cốp pha, lắp dựng khung bê tông. OT được trả 125%.","status":"active"},{"id":"mp2bgskl9otm","type":"nhat","title":"Điều dưỡng viên tại cơ sở chăm sóc người già","category":"💊 Điều dưỡng / Hộ lý","city":"Hokkaido 北海道","salMin":210000,"salMax":250000,"japanese":"N3以上","company":"Sapporo Care Center","desc":"Chăm sóc người cao tuổi, hỗ trợ sinh hoạt hàng ngày. Không cần kinh nghiệm.","status":"active"},{"id":"mp2bgsklr9ql","type":"nhat","title":"Thợ hàn công nghiệp (溶接)","category":"🏗️ Xây dựng","city":"Kanagawa 神奈川","salMin":230000,"salMax":280000,"japanese":"N4以上","company":"Kawasaki Steel Works","desc":"Hàn kết cấu thép tại xưởng. Có chứng chỉ hàn được ưu tiên.","status":"active"}];
+const SEED_JOBS = [{"id":"mp2vkfxjxguo","type":"both","title":"Làm bánh mỳ","category":"🍱 Chế biến thực phẩm","city":"Osaka","salary":"20man","gender":"Nam","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:58:42.727Z"},{"id":"mp2u5ouc4568","type":"kysis","title":"Kỹ sư xây dựng","category":"🏗️ Xây dựng / Kiến trúc","city":"Mie - Komono","salary":"1300 Y/H","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"10-45h","raise":"Có","bonus":"Không","housing":"2man/tháng","desc":"Vệ sinh sửa chữa giàn giáo","status":"active","updatedAt":"2026-05-12T16:19:14.820Z"},{"id":"mp2tj8y8rzpt","type":"viet","title":"Làm bánh mochi","category":"🍱 Chế biến thực phẩm","city":"Tokyo","salary":"","gender":"Nam","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:01:47.792Z"},{"id":"mp2ka8qloryz","type":"nhat","title":"gdfgd","category":"🏗️ Xây dựng","city":"fdgdf","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:51.069Z"},{"id":"mp2ka4rqtwwx","type":"nhat","title":"retgfd","category":"🏗️ Xây dựng","city":"AAA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:45.926Z"},{"id":"mp2k9ym4mnxs","type":"nhat","title":"122","category":"🌾 Nông nghiệp","city":"AA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:37.948Z"},{"id":"mp2k9ih0679v","type":"viet","title":"1111","category":"🌾 Nông nghiệp","city":"Aichi","salary":"","gender":"","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:17.028Z"},{"id":"mp2bgskkpbj1","type":"nhat","title":"Làm bánh Pizza","category":"🍱 Chế biến thực phẩm","city":"Yamagata - Yonezawa","salary":"1100y/h","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"40h/tháng","raise":"Có","bonus":"~10man","company":"","housing":"2man","desc":"Làm việc tại dây chuyền chế biến thực phẩm đông lạnh. Bao ký túc xá, 2 bữa/ngày.","status":"active","updatedAt":"2026-05-12T08:07:16.258Z"},{"id":"mp2bgsklo2sk","type":"viet","title":"Công nhân xây dựng (型枠工)","category":"🏗️ Xây dựng","city":"Osaka 大阪","salMin":200000,"salMax":240000,"japanese":"N4以上","company":"Osaka Build Corp.","desc":"Gia công cốp pha, lắp dựng khung bê tông. OT được trả 125%.","status":"active"},{"id":"mp2bgskl9otm","type":"nhat","title":"Điều dưỡng viên tại cơ sở chăm sóc người già","category":"💊 Điều dưỡng / Hộ lý","city":"Hokkaido 北海道","salMin":210000,"salMax":250000,"japanese":"N3以上","company":"Sapporo Care Center","desc":"Chăm sóc người cao tuổi, hỗ trợ sinh hoạt hàng ngày. Không cần kinh nghiệm.","status":"active"},{"id":"mp2bgsklr9ql","type":"nhat","title":"Thợ hàn công nghiệp (溶接)","category":"🏗️ Xây dựng","city":"Kanagawa 神奈川","salMin":230000,"salMax":280000,"japanese":"N4以上","company":"Kawasaki Steel Works","desc":"Hàn kết cấu thép tại xưởng. Có chứng chỉ hàn được ưu tiên.","status":"active"}];
 if (!localStorage.getItem(STORE_KEY)) { localStorage.setItem(STORE_KEY, JSON.stringify(SEED_JOBS)); }
 const SAVED_KEY  = 'tp_saved_jobs';
 const ZALO_URL   = 'https://zalo.me/0386887691';
@@ -2122,7 +2117,6 @@ function openJob(id) {
       <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px">
         ${salDisplay?`<span class="mchip ${sc}" style="display:inline-flex;align-items:center;gap:5px">${ICONS.money}${salDisplay}</span>`:''}
         ${j.city?`<span class="mchip" style="display:inline-flex;align-items:center;gap:5px">${ICONS.pin}${j.city}</span>`:''}
-        ${j.count?`<span class="mchip" style="display:inline-flex;align-items:center;gap:5px">${ICONS.users}${j.count} người</span>`:''}
         ${j.gender?`<span class="mchip" style="display:inline-flex;align-items:center;gap:5px">${ICONS.user}${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
       </div>
 
@@ -2642,10 +2636,10 @@ async function syncFromGSheet() {
       id:'gs_'+Date.now()+'_'+i,
       type:g(r[0])||'viet', category:g(r[1]), title:g(r[2]),
       city:g(r[3]), salary:g(r[4]), japanese:g(r[5]),
-      count:g(r[6]), gender:g(r[7]), workHours:g(r[8]),
-      daysOff:g(r[9]), overtime:g(r[10]), raise:g(r[11]),
-      bonus:g(r[12]), housing:g(r[13]), desc:g(r[14]),
-      status:g(r[15])||'active'
+      gender:g(r[6]), workHours:g(r[7]),
+      daysOff:g(r[8]), overtime:g(r[9]), raise:g(r[10]),
+      bonus:g(r[11]), housing:g(r[12]), desc:g(r[13]),
+      status:g(r[14])||'active'
     })).filter(j=>j.title);
     if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột C - title bị trống?)';return;}
     // Push lên Supabase để mọi người dùng đều thấy
@@ -2877,7 +2871,6 @@ function adminShowJobForm(id) {
     document.getElementById('ajf-city').value = j.city || '';
     document.getElementById('ajf-salary').value = j.salary || '';
     document.getElementById('ajf-japanese').value = j.japanese || '';
-    document.getElementById('ajf-count').value = j.count || '';
     document.getElementById('ajf-gender').value = j.gender || '';
     document.getElementById('ajf-workHours').value = j.workHours || '';
     document.getElementById('ajf-daysOff').value = j.daysOff || '';
@@ -2895,7 +2888,7 @@ function adminShowJobForm(id) {
 
 function adminResetJobForm() {
   adminJobEditId = null;
-  ['ajf-title','ajf-city','ajf-salary','ajf-japanese','ajf-count','ajf-workHours','ajf-daysOff','ajf-overtime','ajf-raise','ajf-bonus','ajf-housing','ajf-desc'].forEach(i => document.getElementById(i).value = '');
+  ['ajf-title','ajf-city','ajf-salary','ajf-japanese','ajf-workHours','ajf-daysOff','ajf-overtime','ajf-raise','ajf-bonus','ajf-housing','ajf-desc'].forEach(i => document.getElementById(i).value = '');
   document.getElementById('ajf-gender').value = '';
   document.getElementById('ajf-status').value = 'active';
   adminPickType('viet');
@@ -2924,7 +2917,6 @@ async function adminSaveJob() {
     city:      document.getElementById('ajf-city').value.trim(),
     salary:    document.getElementById('ajf-salary').value.trim(),
     japanese:  document.getElementById('ajf-japanese').value.trim(),
-    count:     parseInt(document.getElementById('ajf-count').value)||0,
     gender:    document.getElementById('ajf-gender').value,
     workHours: document.getElementById('ajf-workHours').value.trim(),
     daysOff:   document.getElementById('ajf-daysOff').value.trim(),

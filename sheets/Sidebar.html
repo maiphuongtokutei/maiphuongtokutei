@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Google Sans', Arial, sans-serif;
+      font-size: 13px;
+      color: #202124;
+      background: #f8f9fa;
+    }
+
+    .header {
+      background: #1a3c5e;
+      color: white;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .form-body { padding: 12px 16px 80px; }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1a3c5e;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin: 16px 0 8px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #e8f0fe;
+    }
+    .mgmt-label {
+      color: #4a3580;
+      border-bottom-color: #ede7ff;
+    }
+
+    .field { margin-bottom: 10px; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #5f6368;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    label .req { color: #e8305a; margin-left: 2px; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 13px;
+      color: #202124;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #2D2CDB;
+      box-shadow: 0 0 0 2px rgba(45,44,219,0.12);
+    }
+    textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 16px;
+      background: #fff;
+      border-top: 1px solid #e8eaed;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-save {
+      flex: 1;
+      background: #2D2CDB;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-save:hover  { background: #1e1db8; }
+    .btn-save:disabled { background: #9aa0a6; cursor: not-allowed; }
+
+    .btn-clear {
+      background: transparent;
+      color: #5f6368;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-clear:hover { background: #f1f3f4; }
+
+    .toast {
+      position: fixed;
+      bottom: 68px;
+      left: 16px;
+      right: 16px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      display: none;
+      z-index: 100;
+      text-align: center;
+    }
+    .toast.success { background: #e6f4ea; color: #137333; border: 1px solid #b7dfbf; }
+    .toast.error   { background: #fce8e6; color: #c5221f; border: 1px solid #f5c6c4; }
+
+    .hint { font-size: 11px; color: #9aa0a6; margin-top: 3px; }
+  </style>
+</head>
+<body>
+
+<div class="header">+ Thêm job mới</div>
+
+<div class="form-body">
+
+  <div class="section-label">Thông tin cơ bản</div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Loại việc <span class="req">*</span></label>
+      <select id="type" onchange="onTypeChange()">
+        <option value="">-- Chọn --</option>
+        <option value="viet">Tokutei Đầu Việt (VN → JP)</option>
+        <option value="nhat">Tokutei Đầu Nhật (đang ở JP)</option>
+        <option value="kysis">Kỹ sư IT</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Trạng thái</label>
+      <select id="status">
+        <option value="active">active</option>
+        <option value="inactive">inactive</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Ngành nghề <span class="req">*</span></label>
+    <select id="category">
+      <option value="">-- Chọn loại việc trước --</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Tên công việc <span class="req">*</span></label>
+    <input type="text" id="title" placeholder="VD: Công nhân chế biến thực phẩm">
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Tỉnh / TP</label>
+      <input type="text" id="city" placeholder="VD: Aichi">
+    </div>
+    <div class="field">
+      <label>Tiếng Nhật</label>
+      <select id="japanese">
+        <option value="Không yêu cầu">Không yêu cầu</option>
+        <option value="N5">N5</option>
+        <option value="N4">N4</option>
+        <option value="N3">N3</option>
+        <option value="N2">N2</option>
+        <option value="N1">N1</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Giới tính</label>
+    <select id="gender">
+      <option value="Không yêu cầu">Không yêu cầu</option>
+      <option value="Nam">Nam</option>
+      <option value="Nữ">Nữ</option>
+      <option value="Nam ưu tiên">Nam ưu tiên</option>
+      <option value="Nữ ưu tiên">Nữ ưu tiên</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Lương</label>
+    <input type="text" id="salary" placeholder="VD: 180.000 - 220.000 yên/tháng">
+  </div>
+
+  <div class="section-label">Điều kiện làm việc</div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Giờ làm</label>
+      <input type="text" id="workHours" placeholder="VD: 8:00 - 17:00">
+    </div>
+    <div class="field">
+      <label>Ngày nghỉ</label>
+      <input type="text" id="daysOff" placeholder="VD: Thứ 7 & CN">
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Tăng ca</label>
+      <input type="text" id="overtime" placeholder="VD: 20h/tháng">
+    </div>
+    <div class="field">
+      <label>Tăng lương</label>
+      <input type="text" id="raise" placeholder="VD: 6 tháng/lần">
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Thưởng</label>
+      <input type="text" id="bonus" placeholder="VD: Thưởng cuối năm">
+    </div>
+    <div class="field">
+      <label>Nhà ở</label>
+      <input type="text" id="housing" placeholder="VD: Có (miễn phí)">
+    </div>
+  </div>
+
+  <div class="section-label">Mô tả</div>
+
+  <div class="field">
+    <textarea id="desc" placeholder="Chi tiết công việc, yêu cầu, phúc lợi..."></textarea>
+  </div>
+
+  <div id="mgmt-section" style="display:none">
+    <div class="section-label mgmt-label">Quản lý nội bộ</div>
+
+    <div class="field">
+      <label>Nguồn</label>
+      <input type="text" id="nguon" placeholder="VD: Đối tác ABC, Referral anh Minh...">
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Hoa hồng</label>
+        <input type="text" id="hoaHong" placeholder="VD: 500.000đ">
+      </div>
+      <div class="field">
+        <label>Phí net</label>
+        <input type="text" id="phiNet" placeholder="VD: 300.000đ">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="footer">
+  <button class="btn-clear" onclick="clearForm()" title="Xóa form">↺</button>
+  <button class="btn-save" id="btnSave" onclick="saveJob()">Lưu vào sheet</button>
+</div>
+
+<script>
+  const TOKUTEI_CATS = [
+    'Chế biến thực phẩm','Nhóm ngành 1 (Cơ khí)','Nhóm ngành 2 (Điện tử)',
+    'Xây dựng','Điều dưỡng','Nhà hàng','Vệ sinh tòa nhà','Bảo dưỡng ô tô',
+    'Nông nghiệp','Lưu trú / Khách sạn','Ngư nghiệp','Đóng tàu','Hàng không',
+    'Vận tải','Lâm nghiệp','May','In ấn',
+  ];
+  const KYSIS_CATS = [
+    'Lập trình viên','Kỹ sư hệ thống / Mạng','AI & Data Science',
+    'Cơ khí','Điện - Điện tử','Hóa học & Vật liệu','Ô tô',
+    'Phiên dịch / Thông dịch','Xuất nhập khẩu','Quản trị kinh doanh / Marketing',
+  ];
+
+  function onTypeChange() {
+    const type = document.getElementById('type').value;
+    const sel  = document.getElementById('category');
+    sel.innerHTML = '';
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = '-- Chọn ngành --';
+    sel.appendChild(placeholder);
+
+    const list = type === 'kysis' ? KYSIS_CATS : (type ? TOKUTEI_CATS : []);
+    list.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = opt.textContent = c;
+      sel.appendChild(opt);
+    });
+  }
+
+  function saveJob() {
+    const get = id => document.getElementById(id).value.trim();
+
+    if (!get('type'))     { showToast('Vui lòng chọn loại việc', 'error'); return; }
+    if (!get('category')) { showToast('Vui lòng chọn ngành nghề', 'error'); return; }
+    if (!get('title'))    { showToast('Vui lòng nhập tên công việc', 'error'); return; }
+
+    const data = {
+      type:      get('type'),      category:  get('category'),
+      title:     get('title'),     city:      get('city'),
+      salary:    get('salary'),    japanese:  get('japanese'),
+      gender:    get('gender'),
+      workHours: get('workHours'), daysOff:   get('daysOff'),
+      overtime:  get('overtime'),  raise:     get('raise'),
+      bonus:     get('bonus'),     housing:   get('housing'),
+      desc:      get('desc'),      status:    get('status'),
+      nguon:     get('nguon'),
+      hoaHong:   get('hoaHong'),
+      phiNet:    get('phiNet'),
+    };
+
+    const btn = document.getElementById('btnSave');
+    btn.disabled = true;
+    btn.textContent = 'Đang lưu...';
+
+    google.script.run
+      .withSuccessHandler(() => {
+        showToast('✅ Đã lưu!', 'success');
+        clearForm();
+        btn.disabled = false;
+        btn.textContent = 'Lưu vào sheet';
+      })
+      .withFailureHandler(err => {
+        showToast('❌ ' + err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = 'Lưu vào sheet';
+      })
+      .saveJob(data);
+  }
+
+  function clearForm() {
+    const textFields = ['title','city','salary','workHours','daysOff','overtime','raise','bonus','housing','desc','nguon','hoaHong','phiNet'];
+    textFields.forEach(id => document.getElementById(id).value = '');
+    document.getElementById('type').value     = '';
+    document.getElementById('status').value   = 'active';
+    document.getElementById('japanese').value = 'Không yêu cầu';
+    document.getElementById('gender').value   = 'Không yêu cầu';
+    onTypeChange();
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type;
+    t.style.display = 'block';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.style.display = 'none', 3000);
+  }
+
+  google.script.run
+    .withSuccessHandler(function(owner) {
+      if (owner) document.getElementById('mgmt-section').style.display = 'block';
+    })
+    .isOwner();
+</script>
+</body>
+</html>

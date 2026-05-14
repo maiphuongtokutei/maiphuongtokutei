@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; font-size: 13px; background: #f9f9f9; }
+
+    .header {
+      background: #1a3c5e;
+      color: #fff;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .header span { font-size: 11px; font-weight: normal; opacity: .8; display: block; margin-top: 2px; }
+
+    form { padding: 12px 14px; }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: bold;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin: 14px 0 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .section-label:first-of-type { margin-top: 4px; }
+
+    label { display: block; margin-bottom: 4px; color: #333; font-size: 12px; }
+    label .req { color: #e53935; }
+
+    input[type=text],
+    input[type=date],
+    input[type=number],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+      background: #fff;
+      margin-bottom: 8px;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #1a3c5e;
+    }
+    textarea { height: 64px; resize: vertical; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    .finance-box {
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+    }
+    .finance-box .hoa-hong-label {
+      font-size: 12px;
+      color: #2e7d32;
+      font-weight: bold;
+      margin-top: 4px;
+    }
+    #hoaHongPreview {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1b5e20;
+      margin-top: 2px;
+    }
+
+    .btn-save {
+      width: 100%;
+      padding: 10px;
+      background: #1a3c5e;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-save:hover { background: #14304d; }
+    .btn-save:disabled { background: #aaa; cursor: not-allowed; }
+
+    #toast {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin: 10px 0 4px;
+      text-align: center;
+    }
+    #toast.success { background: #c8e6c9; color: #1b5e20; display: block; }
+    #toast.error   { background: #ffcdd2; color: #b71c1c; display: block; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  ➕ Thêm ứng viên đăng ký PV
+  <span>Điền đầy đủ → Lưu vào sheet</span>
+</div>
+
+<form id="frm">
+
+  <!-- THÔNG TIN ỨNG VIÊN -->
+  <div class="section-label">👤 Thông tin ứng viên</div>
+
+  <label>Họ và tên <span class="req">*</span></label>
+  <input type="text" id="hoTen" placeholder="VD: Nguyễn Văn A" required>
+
+  <div class="row2">
+    <div>
+      <label>Tiếng Nhật</label>
+      <select id="tiengNhat">
+        <option value="">-- Chọn --</option>
+        <option>Không có</option>
+        <option>Đang học</option>
+        <option>N5</option>
+        <option>N4</option>
+        <option>N3</option>
+        <option>N2</option>
+        <option>N1</option>
+      </select>
+    </div>
+    <div>
+      <label>Chứng chỉ</label>
+      <select id="chungChi">
+        <option value="">-- Chọn --</option>
+        <option>Chưa có</option>
+        <option>JLPT N5</option>
+        <option>JLPT N4</option>
+        <option>JLPT N3</option>
+        <option>JLPT N2</option>
+        <option>JLPT N1</option>
+        <option>NAT-TEST 5Q</option>
+        <option>NAT-TEST 4Q</option>
+        <option>NAT-TEST 3Q</option>
+        <option>JLCT</option>
+        <option>JFT-Basic</option>
+        <option>Chứng chỉ kỹ năng Tokutei</option>
+        <option>Chứng chỉ kỹ năng đặc định ngành điều dưỡng</option>
+        <option>Chứng chỉ kỹ năng ngành chế biến thực phẩm</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ĐƠN HÀNG & NGUỒN -->
+  <div class="section-label">📋 Đơn hàng & Nguồn</div>
+
+  <label>Đơn hàng / Vị trí <span class="req">*</span></label>
+  <select id="donHang" required>
+    <option value="">-- Chọn đơn hàng --</option>
+    <option>Tokutei Đầu Việt (VN → JP)</option>
+    <option>Tokutei Đầu Nhật (đang ở JP)</option>
+    <option>Kỹ sư IT</option>
+    <option>Tokutei Điều dưỡng</option>
+    <option>Tokutei Chế biến thực phẩm</option>
+    <option>Tokutei Nông nghiệp</option>
+    <option>Tokutei Xây dựng</option>
+    <option>Tokutei Cơ khí</option>
+    <option>Tokutei Vệ sinh tòa nhà</option>
+    <option>Khác</option>
+  </select>
+
+  <div class="row2">
+    <div>
+      <label>Nguồn / CTV</label>
+      <input type="text" id="nguonCtv" placeholder="Tên CTV hoặc kênh">
+    </div>
+    <div>
+      <label>Kênh tiếp cận</label>
+      <select id="nguon">
+        <option value="">-- Chọn --</option>
+        <option>Facebook</option>
+        <option>Zalo Group</option>
+        <option>TikTok</option>
+        <option>YouTube</option>
+        <option>Website</option>
+        <option>Giới thiệu</option>
+        <option>CTV</option>
+        <option>Khác</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- NGÀY THÁNG -->
+  <div class="section-label">📅 Lịch</div>
+
+  <div class="row2">
+    <div>
+      <label>Ngày đăng ký</label>
+      <input type="date" id="ngayDangKy">
+    </div>
+    <div>
+      <label>Ngày phỏng vấn</label>
+      <input type="date" id="ngayPv">
+    </div>
+  </div>
+
+  <!-- TRẠNG THÁI -->
+  <label>Trạng thái</label>
+  <select id="trangThai">
+    <option>Mới đăng ký</option>
+    <option>Đang liên hệ</option>
+    <option>Đã nộp hồ sơ</option>
+    <option>Lịch phỏng vấn</option>
+    <option>Đậu PV ✅</option>
+    <option>Rớt PV ❌</option>
+    <option>Đang chờ xuất cảnh</option>
+    <option>Đang làm việc</option>
+    <option>Hoàn thành</option>
+    <option>Hủy</option>
+  </select>
+
+  <!-- TÀI CHÍNH -->
+  <div class="section-label">💰 Tài chính (để trống nếu chưa có)</div>
+
+  <div class="row2">
+    <div>
+      <label>BACK (tổng phí nhận)</label>
+      <input type="number" id="back" placeholder="0" min="0" oninput="calcHH()">
+    </div>
+    <div>
+      <label>BACK CTV</label>
+      <input type="number" id="backCtv" placeholder="0" min="0" oninput="calcHH()">
+    </div>
+  </div>
+
+  <div class="row2">
+    <div>
+      <label>BACK GỐC</label>
+      <input type="number" id="backGoc" placeholder="0" min="0" oninput="calcHH()">
+    </div>
+    <div></div>
+  </div>
+
+  <div class="finance-box">
+    <div class="hoa-hong-label">HOA HỒNG = BACK − BACK CTV − BACK GỐC</div>
+    <div id="hoaHongPreview">0</div>
+  </div>
+
+  <div class="row2">
+    <div>
+      <label>NET CTV/UV</label>
+      <input type="number" id="netCtv" placeholder="0" min="0">
+    </div>
+    <div>
+      <label>NET GỐC</label>
+      <input type="number" id="netGoc" placeholder="0" min="0">
+    </div>
+  </div>
+
+  <!-- GHI CHÚ -->
+  <div class="section-label">📝 Ghi chú</div>
+  <textarea id="ghiChu" placeholder="Thông tin thêm về ứng viên, lưu ý đặc biệt..."></textarea>
+
+  <div id="toast"></div>
+
+  <button type="button" class="btn-save" id="btnSave" onclick="save()">
+    💾 Lưu ứng viên
+  </button>
+
+</form>
+
+<script>
+  // Set ngày đăng ký mặc định = hôm nay
+  document.getElementById('ngayDangKy').value = new Date().toISOString().split('T')[0];
+
+  function calcHH() {
+    const back    = Number(document.getElementById('back').value)    || 0;
+    const backCtv = Number(document.getElementById('backCtv').value) || 0;
+    const backGoc = Number(document.getElementById('backGoc').value) || 0;
+    const hh = back - backCtv - backGoc;
+    document.getElementById('hoaHongPreview').textContent =
+      hh.toLocaleString('vi-VN') + ' đ';
+    document.getElementById('hoaHongPreview').style.color = hh >= 0 ? '#1b5e20' : '#b71c1c';
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.className = type;
+    t.textContent = msg;
+    setTimeout(() => { t.className = ''; t.textContent = ''; }, 4000);
+  }
+
+  function save() {
+    const hoTen   = document.getElementById('hoTen').value.trim();
+    const donHang = document.getElementById('donHang').value;
+
+    if (!hoTen)   { showToast('⚠️ Vui lòng nhập Họ và tên.', 'error');      return; }
+    if (!donHang) { showToast('⚠️ Vui lòng chọn Đơn hàng.', 'error');      return; }
+
+    const btn = document.getElementById('btnSave');
+    btn.disabled = true;
+    btn.textContent = '⏳ Đang lưu...';
+
+    const data = {
+      hoTen:      hoTen,
+      nguonCtv:   document.getElementById('nguonCtv').value.trim(),
+      chungChi:   document.getElementById('chungChi').value,
+      tiengNhat:  document.getElementById('tiengNhat').value,
+      donHang:    donHang,
+      nguon:      document.getElementById('nguon').value,
+      back:       document.getElementById('back').value,
+      backCtv:    document.getElementById('backCtv').value,
+      backGoc:    document.getElementById('backGoc').value,
+      netCtv:     document.getElementById('netCtv').value,
+      netGoc:     document.getElementById('netGoc').value,
+      ghiChu:     document.getElementById('ghiChu').value.trim(),
+      trangThai:  document.getElementById('trangThai').value,
+      ngayDangKy: document.getElementById('ngayDangKy').value,
+      ngayPv:     document.getElementById('ngayPv').value,
+    };
+
+    google.script.run
+      .withSuccessHandler(function(res) {
+        showToast('✅ Đã lưu ứng viên vào hàng ' + res.row + '!', 'success');
+        btn.disabled = false;
+        btn.textContent = '💾 Lưu ứng viên';
+        document.getElementById('frm').reset();
+        document.getElementById('ngayDangKy').value = new Date().toISOString().split('T')[0];
+        document.getElementById('hoaHongPreview').textContent = '0';
+      })
+      .withFailureHandler(function(err) {
+        showToast('❌ Lỗi: ' + err.message, 'error');
+        btn.disabled = false;
+        btn.textContent = '💾 Lưu ứng viên';
+      })
+      .saveInterviewCandidate(data);
+  }
+</script>
+</body>
+</html>

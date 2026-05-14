@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Google Sans', Arial, sans-serif;
+      font-size: 13px;
+      color: #202124;
+      background: #f8f9fa;
+    }
+
+    .header {
+      background: #1a3c5e;
+      color: white;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .form-body { padding: 12px 16px 80px; }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #1a3c5e;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin: 16px 0 8px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #e8f0fe;
+    }
+
+    .field { margin-bottom: 10px; }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: #5f6368;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    label .req { color: #e8305a; margin-left: 2px; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 13px;
+      color: #202124;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      font-family: inherit;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #2D2CDB;
+      box-shadow: 0 0 0 2px rgba(45,44,219,0.12);
+    }
+    textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+    .footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      padding: 10px 16px;
+      background: #fff;
+      border-top: 1px solid #e8eaed;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-save {
+      flex: 1;
+      background: #2D2CDB;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-save:hover    { background: #1e1db8; }
+    .btn-save:disabled { background: #9aa0a6; cursor: not-allowed; }
+
+    .btn-clear {
+      background: transparent;
+      color: #5f6368;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-clear:hover { background: #f1f3f4; }
+
+    .toast {
+      position: fixed;
+      bottom: 68px; left: 16px; right: 16px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      display: none;
+      z-index: 100;
+      text-align: center;
+    }
+    .toast.success { background: #e6f4ea; color: #137333; border: 1px solid #b7dfbf; }
+    .toast.error   { background: #fce8e6; color: #c5221f; border: 1px solid #f5c6c4; }
+
+    /* Status badge colors */
+    .status-bar {
+      display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px;
+    }
+    .status-chip {
+      padding: 3px 10px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.12s;
+      white-space: nowrap;
+    }
+    .status-chip.active { border-color: #2D2CDB; }
+    .chip-moi      { background: #e8f0fe; color: #1a73e8; }
+    .chip-lienhe   { background: #fff8e1; color: #f57c00; }
+    .chip-nophs    { background: #e8f5e9; color: #2e7d32; }
+    .chip-phongvan { background: #f3e5f5; color: #7b1fa2; }
+    .chip-dau      { background: #c8e6c9; color: #1b5e20; }
+    .chip-rot      { background: #ffcdd2; color: #b71c1c; }
+    .chip-huy      { background: #eeeeee; color: #616161; }
+  </style>
+</head>
+<body>
+
+<div class="header">👤 Thêm ứng viên mới</div>
+
+<div class="form-body">
+
+  <!-- THÔNG TIN CÁ NHÂN -->
+  <div class="section-label">Thông tin cá nhân</div>
+
+  <div class="field">
+    <label>Họ và tên <span class="req">*</span></label>
+    <input type="text" id="hoTen" placeholder="VD: Nguyễn Văn An">
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>SĐT <span class="req">*</span></label>
+      <input type="tel" id="sdt" placeholder="0912 345 678">
+    </div>
+    <div class="field">
+      <label>Zalo</label>
+      <input type="text" id="zalo" placeholder="SĐT Zalo">
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="email" placeholder="email@gmail.com">
+    </div>
+    <div class="field">
+      <label>Ngày sinh</label>
+      <input type="date" id="ngaySinh">
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Giới tính</label>
+      <select id="gioiTinh">
+        <option value="Nam">Nam</option>
+        <option value="Nữ">Nữ</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Tỉnh / TP (VN)</label>
+      <input type="text" id="tinh" placeholder="VD: Hà Nội">
+    </div>
+  </div>
+
+  <!-- THÔNG TIN ỨNG TUYỂN -->
+  <div class="section-label">Thông tin ứng tuyển</div>
+
+  <div class="row2">
+    <div class="field">
+      <label>Loại đơn hàng <span class="req">*</span></label>
+      <select id="loaiDon" onchange="onTypeChange()">
+        <option value="">-- Chọn --</option>
+        <option value="viet">Tokutei Đầu Việt (VN→JP)</option>
+        <option value="nhat">Tokutei Đầu Nhật (đang ở JP)</option>
+        <option value="kysis">Kỹ sư IT</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Tiếng Nhật</label>
+      <select id="tiengNhat">
+        <option value="Không có">Không có</option>
+        <option value="N5">N5</option>
+        <option value="N4">N4</option>
+        <option value="N3">N3</option>
+        <option value="N2">N2</option>
+        <option value="N1">N1</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Ngành nghề <span class="req">*</span></label>
+    <select id="nganh">
+      <option value="">-- Chọn loại đơn hàng trước --</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Tên công việc cụ thể</label>
+    <input type="text" id="tenCv" placeholder="VD: Công nhân chế biến thực phẩm tại Aichi">
+  </div>
+
+  <!-- QUẢN LÝ -->
+  <div class="section-label">Quản lý hồ sơ</div>
+
+  <div class="field">
+    <label>Nguồn tìm kiếm</label>
+    <select id="nguon">
+      <option value="">-- Chọn --</option>
+      <option value="Facebook">Facebook</option>
+      <option value="Zalo Group">Zalo Group</option>
+      <option value="Website">Website</option>
+      <option value="Giới thiệu">Giới thiệu</option>
+      <option value="TikTok">TikTok</option>
+      <option value="YouTube">YouTube</option>
+      <option value="Khác">Khác</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label>Trạng thái</label>
+    <div class="status-bar" id="statusBar">
+      <span class="status-chip chip-moi active"      data-val="Mới nộp"       onclick="selectStatus(this)">Mới nộp</span>
+      <span class="status-chip chip-lienhe"          data-val="Đang liên hệ"  onclick="selectStatus(this)">Đang liên hệ</span>
+      <span class="status-chip chip-nophs"           data-val="Đã nộp hồ sơ" onclick="selectStatus(this)">Đã nộp HS</span>
+      <span class="status-chip chip-phongvan"        data-val="Phỏng vấn"     onclick="selectStatus(this)">Phỏng vấn</span>
+      <span class="status-chip chip-dau"             data-val="Đậu ✅"        onclick="selectStatus(this)">Đậu ✅</span>
+      <span class="status-chip chip-rot"             data-val="Rớt ❌"        onclick="selectStatus(this)">Rớt ❌</span>
+      <span class="status-chip chip-huy"             data-val="Hủy"           onclick="selectStatus(this)">Hủy</span>
+    </div>
+    <input type="hidden" id="trangThai" value="Mới nộp">
+  </div>
+
+  <div class="field">
+    <label>Ghi chú</label>
+    <textarea id="ghiChu" placeholder="Kinh nghiệm, tình trạng hồ sơ, lưu ý..."></textarea>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="footer">
+  <button class="btn-clear" onclick="clearForm()" title="Xóa form">↺</button>
+  <button class="btn-save" id="btnSave" onclick="saveCandidate()">Lưu ứng viên</button>
+</div>
+
+<script>
+  const TOKUTEI_CATS = [
+    'Chế biến thực phẩm','Nhóm ngành 1 (Cơ khí)','Nhóm ngành 2 (Điện tử)',
+    'Xây dựng','Điều dưỡng','Nhà hàng','Vệ sinh tòa nhà','Bảo dưỡng ô tô',
+    'Nông nghiệp','Lưu trú / Khách sạn','Ngư nghiệp','Đóng tàu','Hàng không',
+    'Vận tải','Lâm nghiệp','May','In ấn',
+  ];
+  const KYSIS_CATS = [
+    'Lập trình viên','Kỹ sư hệ thống / Mạng','AI & Data Science',
+    'Cơ khí','Điện - Điện tử','Hóa học & Vật liệu','Ô tô',
+    'Phiên dịch / Thông dịch','Xuất nhập khẩu','Quản trị kinh doanh / Marketing',
+  ];
+
+  function onTypeChange() {
+    const type = document.getElementById('loaiDon').value;
+    const sel  = document.getElementById('nganh');
+    sel.innerHTML = '';
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = '-- Chọn ngành --';
+    sel.appendChild(placeholder);
+
+    const list = type === 'kysis' ? KYSIS_CATS : (type ? TOKUTEI_CATS : []);
+    list.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = opt.textContent = c;
+      sel.appendChild(opt);
+    });
+  }
+
+  function selectStatus(el) {
+    document.querySelectorAll('.status-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('trangThai').value = el.getAttribute('data-val');
+  }
+
+  function saveCandidate() {
+    const get = id => document.getElementById(id).value.trim();
+
+    if (!get('hoTen'))   { showToast('Vui lòng nhập họ và tên', 'error'); return; }
+    if (!get('sdt'))     { showToast('Vui lòng nhập số điện thoại', 'error'); return; }
+    if (!get('loaiDon')) { showToast('Vui lòng chọn loại đơn hàng', 'error'); return; }
+    if (!get('nganh'))   { showToast('Vui lòng chọn ngành nghề', 'error'); return; }
+
+    const data = {
+      hoTen:      get('hoTen'),
+      sdt:        get('sdt'),
+      zalo:       get('zalo'),
+      email:      get('email'),
+      ngaySinh:   get('ngaySinh'),
+      gioiTinh:   get('gioiTinh'),
+      tinh:       get('tinh'),
+      tiengNhat:  get('tiengNhat'),
+      loaiDon:    get('loaiDon'),
+      nganh:      get('nganh'),
+      tenCv:      get('tenCv'),
+      nguon:      get('nguon'),
+      trangThai:  get('trangThai'),
+      ghiChu:     get('ghiChu'),
+    };
+
+    const btn = document.getElementById('btnSave');
+    btn.disabled    = true;
+    btn.textContent = 'Đang lưu...';
+
+    google.script.run
+      .withSuccessHandler(() => {
+        showToast('✅ Đã lưu ứng viên!', 'success');
+        clearForm();
+        btn.disabled    = false;
+        btn.textContent = 'Lưu ứng viên';
+      })
+      .withFailureHandler(err => {
+        showToast('❌ ' + err.message, 'error');
+        btn.disabled    = false;
+        btn.textContent = 'Lưu ứng viên';
+      })
+      .saveCandidate(data);
+  }
+
+  function clearForm() {
+    const texts = ['hoTen','sdt','zalo','email','tinh','tenCv','ghiChu'];
+    texts.forEach(id => document.getElementById(id).value = '');
+    document.getElementById('ngaySinh').value   = '';
+    document.getElementById('gioiTinh').value   = 'Nam';
+    document.getElementById('tiengNhat').value  = 'Không có';
+    document.getElementById('loaiDon').value    = '';
+    document.getElementById('nguon').value      = '';
+    document.getElementById('trangThai').value  = 'Mới nộp';
+
+    // Reset status chips
+    document.querySelectorAll('.status-chip').forEach(c => c.classList.remove('active'));
+    document.querySelector('.chip-moi').classList.add('active');
+
+    onTypeChange();
+  }
+
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent  = msg;
+    t.className    = 'toast ' + type;
+    t.style.display = 'block';
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.style.display = 'none', 3000);
+  }
+</script>
+</body>
+</html>

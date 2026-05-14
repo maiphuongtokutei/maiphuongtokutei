@@ -296,11 +296,6 @@ tr:hover td{background:#FAFAFA}
             </div>
 
             <div class="form-group">
-              <label>Số lượng tuyển (người)</label>
-              <input class="form-control" type="number" id="jobCount" placeholder="VD: 3">
-            </div>
-
-            <div class="form-group">
               <label>Giới tính</label>
               <select class="form-control" id="jobGender">
                 <option value="">Không yêu cầu</option>
@@ -708,7 +703,6 @@ function editJob(id) {
   document.getElementById('jobCategory').value = j.category || '';
   document.getElementById('jobCity').value = j.city || '';
   document.getElementById('jobSalary').value = j.salary || '';
-  document.getElementById('jobCount').value = j.count || '';
   document.getElementById('jobGender').value = j.gender || '';
   document.getElementById('jobJapanese').value = j.japanese || 'N4以上';
   document.getElementById('jobWorkHours').value = j.workHours || '';
@@ -738,7 +732,6 @@ function saveJob() {
     category,
     city,
     salary: document.getElementById('jobSalary').value.trim(),
-    count: parseInt(document.getElementById('jobCount').value) || 0,
     gender: document.getElementById('jobGender').value,
     japanese: document.getElementById('jobJapanese').value,
     workHours: document.getElementById('jobWorkHours').value.trim(),
