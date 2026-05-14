@@ -337,6 +337,9 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .jbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;flex-shrink:0;letter-spacing:.01em}
 .jbadge-viet{background:var(--viet-soft);color:var(--viet)}
 .jbadge-nhat{background:var(--nhat-soft);color:var(--nhat)}
+.jbadge-viet::before,.jbadge-nhat::before{content:'';display:block;width:14px;height:9px;border-radius:2px;background-size:cover;background-repeat:no-repeat;flex-shrink:0;box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.jbadge-viet::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23DA251D'/%3E%3Cpolygon points='1.5,.55 1.606,.854 1.928,.861 1.671,1.056 1.765,1.364 1.5,1.18 1.235,1.364 1.329,1.056 1.072,.861 1.394,.854' fill='%23FFCD00'/%3E%3C/svg%3E")}
+.jbadge-nhat::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23fff'/%3E%3Ccircle cx='1.5' cy='1' r='.6' fill='%23BC002D'/%3E%3C/svg%3E")}
 .jbadge-kysis{background:var(--kysis-soft);color:var(--kysis)}
 .jbadge-both{background:linear-gradient(90deg,var(--viet-soft),var(--nhat-soft));color:var(--text-1)}
 
@@ -495,9 +498,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 @media(max-width:600px){.jobs-list{grid-template-columns:1fr}}
 .jcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:11px;transition:transform .2s,box-shadow .2s;position:relative}
 .jcard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-.jcard.viet{background:linear-gradient(to right,#fff 30%,rgba(255,255,255,.80) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23DA251D'/%3E%3Cpolygon points='1.5,.55 1.606,.854 1.928,.861 1.671,1.056 1.765,1.364 1.5,1.18 1.235,1.364 1.329,1.056 1.072,.861 1.394,.854' fill='%23FFCD00'/%3E%3C/svg%3E") no-repeat right center/auto 100%}
-.jcard.nhat{background:linear-gradient(to right,#fff 30%,rgba(255,255,255,.74) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='white'/%3E%3Ccircle cx='1.5' cy='1' r='.6' fill='%23BC002D'/%3E%3C/svg%3E") no-repeat right center/auto 100%}
-.jcard.both{background:linear-gradient(to right,#fff 30%,rgba(255,255,255,.80) 65%,rgba(255,255,255,.74) 100%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='white'/%3E%3Ccircle cx='1.5' cy='1' r='.6' fill='%23BC002D'/%3E%3C/svg%3E") no-repeat right center/auto 100%,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 3 2'%3E%3Crect width='3' height='2' fill='%23DA251D'/%3E%3Cpolygon points='1.5,.55 1.606,.854 1.928,.861 1.671,1.056 1.765,1.364 1.5,1.18 1.235,1.364 1.329,1.056 1.072,.861 1.394,.854' fill='%23FFCD00'/%3E%3C/svg%3E") no-repeat right 140px center/auto 100%}
 .jcard-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-right:36px}
 .jcard-cat{font-size:11px;color:var(--text-3);background:var(--surface-alt);padding:3px 9px;border-radius:100px;white-space:nowrap}
 .jcard-title{font-size:15px;font-weight:700;color:var(--text-1);line-height:1.35}
@@ -2000,8 +2000,9 @@ function scrollToJob(id) {
   document.getElementById('groupGrid').style.display = 'grid';
   document.getElementById('subcatLevel').style.display = 'none';
 
-  // Tìm vị trí job trong danh sách để xác định trang
+  // Tìm vị trí job trong danh sách để xác định trang (sort phải khớp renderJobs)
   const allJobs = getJobs().filter(j => j.status === 'active');
+  allJobs.sort((a, b) => (a.category||'').localeCompare(b.category||'', 'vi') || (a.title||'').localeCompare(b.title||'', 'vi'));
   const idx = allJobs.findIndex(j => j.id === id);
   currentPage = idx === -1 ? 1 : Math.ceil((idx + 1) / JOBS_PER_PAGE);
 
