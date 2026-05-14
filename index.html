@@ -136,6 +136,8 @@ nav.scrolled{box-shadow:var(--sh)}
 .mock-jobs{display:grid;gap:7px}
 .mjob{background:#fff;border:1px solid var(--border);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:12px;text-align:left}
 .mlogo{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;font-family:'Noto Sans JP',sans-serif}
+.mjob-ico{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.mjob-ico svg{width:17px;height:17px;stroke-width:1.75}
 .minfo{flex:1}
 .mtitle{font-size:12px;font-weight:600;color:var(--text-1)}
 .mmeta{font-size:11px;color:var(--text-3)}
@@ -1745,6 +1747,21 @@ const ICONS = {
   search:  `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg>`,
   briefcase:`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`,
 };
+
+const CAT_ICON = {
+  'Chế biến thực phẩm':'utensils','Nhóm ngành 1 (Cơ khí)':'factory',
+  'Nhóm ngành 2 (Điện tử)':'cpu','Xây dựng':'hard-hat',
+  'Điều dưỡng':'heart-pulse','Nhà hàng':'chef-hat',
+  'Vệ sinh tòa nhà':'sparkles','Bảo dưỡng ô tô':'car',
+  'Nông nghiệp':'sprout','Lưu trú / Khách sạn':'building-2',
+  'Ngư nghiệp':'fish','Đóng tàu':'anchor','Hàng không':'plane',
+  'Vận tải':'truck','Lâm nghiệp':'tree-pine','May':'scissors','In ấn':'printer',
+  'Cơ khí':'cog','Điện - Điện tử':'zap','Hóa học & Vật liệu':'flask-conical',
+  'Ô tô':'car','Lập trình viên':'laptop','Kỹ sư hệ thống / Mạng':'server',
+  'AI & Data Science':'brain','Phiên dịch / Thông dịch':'languages',
+  'Xuất nhập khẩu':'package','Quản trị kinh doanh / Marketing':'trending-up',
+};
+
 let currentGroup = null; // null | 'tokutei' | 'kysis'
 let currentType = 'all';
 let currentCat = null;
@@ -1853,10 +1870,12 @@ function renderHeroJobs(filters) {
     const panel = document.getElementById('panel-' + type);
     if(!panel) return;
     const typeJobs = jobs.filter(j => j.type === type || (j.type === 'both' && (type === 'viet' || type === 'nhat')));
+    const icoStyle = type==='viet'?'background:var(--viet-soft);color:var(--viet)':type==='kysis'?'background:var(--kysis-soft);color:var(--kysis)':'background:var(--nhat-soft);color:var(--nhat)';
     panel.innerHTML = typeJobs.length
       ? typeJobs.map(j => {
           const sal = j.salary || '';
           return `<div class="mjob" onclick="scrollToJob('${j.id}')" title="Xem trong danh sách việc làm">
+            <div class="mjob-ico" style="${icoStyle}"><i data-lucide="${CAT_ICON[j.category]||'briefcase'}"></i></div>
             <div class="minfo">
               <div style="display:flex;align-items:baseline;gap:7px;flex-wrap:wrap">
                 <div class="mtitle">${j.title}</div>
@@ -1869,6 +1888,7 @@ function renderHeroJobs(filters) {
         }).join('')
       : `<p style="text-align:center;color:var(--text-3);padding:20px 14px;font-size:13px;font-weight:500">Không có kết quả phù hợp</p>`;
   });
+  lucide.createIcons();
 }
 
 function renderJobs() {
