@@ -502,7 +502,8 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .hf-select,.mock-field input,input,select,textarea{font-size:16px!important}
 
   /* Touch targets tối thiểu 44×44px */
-  .jcard .save-btn{width:40px;height:40px;top:10px;right:10px}
+  .jcard .save-btn{position:static;width:44px;height:44px}
+  .jcard-top{padding-right:0}
   .modal-close{width:44px;height:44px;border-radius:12px}
   .jcard-cta{padding:13px 16px;font-size:14px}
   .btn{padding:13px 22px}
@@ -536,7 +537,8 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .jcard.nhat .jcard-sal{color:var(--nhat)}
 .jcard-desc{font-size:12px;color:var(--text-3);line-height:1.55}
 @media(max-width:600px){.jcard-desc{display:none}}
-.jcard-cta{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;margin-top:auto}
+.jcard-footer{display:flex;align-items:center;gap:8px;margin-top:auto}
+.jcard-cta{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:transparent;color:var(--primary);border:1.5px solid var(--primary);border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;flex:1}
 .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
 .status-badge.active{background:#e8f8ef;color:#22a85a}
 .status-badge.active::before{content:'';width:6px;height:6px;background:#22a85a;border-radius:50%;display:inline-block}
@@ -2014,7 +2016,6 @@ function renderJobs() {
             <span class="jcard-cat">${j.category||''}</span>
             <span class="status-badge ${isActive?'active':'expired'}">${isActive?'Đang tuyển':'Hết hạn'}</span>
           </div>
-          <button class="save-btn${saved?' saved':''}" data-id="${j.id}" onclick="event.stopPropagation();toggleSave('${j.id}')" title="${saved?'Bỏ lưu':'Lưu việc làm'}">${saved?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
           <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
             <div class="jcard-title">${j.title}</div>
             ${j.gender?`<span style="font-size:11px;font-weight:600;color:var(--text-3);white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:3px">${ICONS.user}${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
@@ -2026,7 +2027,10 @@ function renderJobs() {
           <div class="jcard-sal">${sal}</div>
           ${desc?`<div class="jcard-desc">${desc}</div>`:''}
       </div>
-      <button class="jcard-cta" style="width:100%;background:var(--primary)" onclick="event.stopPropagation();openJob('${j.id}')">Xem chi tiết →</button>
+      <div class="jcard-footer">
+        <button class="save-btn${saved?' saved':''}" data-id="${j.id}" onclick="event.stopPropagation();toggleSave('${j.id}')" title="${saved?'Bỏ lưu':'Lưu việc làm'}">${saved?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
+        <button class="jcard-cta" style="background:var(--primary)" onclick="event.stopPropagation();openJob('${j.id}')">Xem chi tiết →</button>
+      </div>
     </div>`;
   }).join('');
 }
