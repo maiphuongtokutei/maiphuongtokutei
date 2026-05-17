@@ -485,6 +485,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .stats-in{grid-template-columns:repeat(3,1fr)}
   .sitem{padding:20px 12px;border-right:1px solid var(--border);border-bottom:none}
   .sitem:last-child{border-right:none}
+  .hero-acts{flex-direction:row;flex-wrap:wrap;justify-content:center}
   .snum{font-size:26px}
   .feat-grid,.steps,.tgrid{grid-template-columns:1fr}
   .price-grid{grid-template-columns:1fr}
@@ -520,6 +521,18 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .pref-con{flex-direction:column;align-items:center}
   .jpsvg{display:none}
   .track-nums{gap:24px}
+  /* Stats: 1 cột trên màn hình nhỏ */
+  .stats-in{grid-template-columns:1fr}
+  .sitem{border-right:none;border-bottom:1px solid var(--border);padding:16px 20px}
+  .sitem:last-child{border-bottom:none}
+  /* Search clear: dễ bấm hơn */
+  .search-clear{width:32px;height:32px;font-size:16px}
+  /* Auth inputs: tránh Safari auto-zoom */
+  .auth-input{font-size:16px!important}
+  .auth-submit{font-size:16px!important}
+  /* Hero buttons: full width trên mobile nhỏ */
+  .hero-acts{flex-direction:column;padding:0 16px}
+  .hero-acts .btn{text-align:center;width:100%}
 }
 
 /* ── MOBILE FRIENDLY (≤600px) ── */
