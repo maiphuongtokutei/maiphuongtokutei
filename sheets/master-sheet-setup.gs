@@ -9,14 +9,14 @@
 // ============================================================
 
 // ── SUPABASE ─────────────────────────────────────────────────
-const SUPABASE_URL = 'https://mfwxijsrrtfqmcmscocj.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1md3hpanNycnRmcW1jbXNjb2NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2MDk3MzgsImV4cCI6MjA5NDE4NTczOH0.2tGumJw0n1nVidFah-xp7WC96KYlla3BmrTVGGadsuo';
+const SUPABASE_URL = 'https://guiyhpaeackfdsptjbol.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1aXlocGFlYWNrZmRzcHRqYm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NTcwMDIsImV4cCI6MjA5NDUzMzAwMn0.jYXm2e1Wwkl8lLXOmT6JZkUxjZUKIdAPc6NdyEyFgeU';
 
 // ── 1 TAB DUY NHẤT ───────────────────────────────────────────
-// A: type   B: title     C: category  D: city      E: salary
-// F: japanese  G: gender  H: workHours  I: daysOff  J: overtime
-// K: raise  L: bonus  M: housing  N: desc  O: status
-// P: nguon (nội bộ)  Q: hoaHong  R: phiNet  S: updatedAt
+// A: type   B: title     C: category  D: category_sub  E: city   F: salary
+// G: japanese  H: gender  I: workHours  J: daysOff  K: overtime
+// L: raise  M: bonus  N: housing  O: desc  P: status
+// Q: nguon (nội bộ)  R: hoaHong  S: phiNet  T: updatedAt
 const SHEET_NAME = 'Công Việc';
 
 // ── HTML SIDEBAR (nhúng trực tiếp) ───────────────────────────
@@ -27,7 +27,6 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '.header { background: #1a3c5e; color: white; padding: 14px 16px; font-size: 15px; font-weight: 600; position: sticky; top: 0; z-index: 10; }' +
 '.form-body { padding: 12px 16px 80px; }' +
 '.section-label { font-size: 10px; font-weight: 700; color: #1a3c5e; text-transform: uppercase; letter-spacing: .07em; margin: 16px 0 8px; padding-bottom: 5px; border-bottom: 2px solid #e8f0fe; }' +
-'.mgmt-label { color: #4a3580; border-bottom-color: #ede7ff; }' +
 '.field { margin-bottom: 10px; }' +
 'label { display: block; font-size: 11px; font-weight: 600; color: #5f6368; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }' +
 'label .req { color: #e8305a; margin-left: 2px; }' +
@@ -73,10 +72,9 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '</select></div></div>' +
 '<div class="field"><label>Giới tính</label>' +
 '<select id="gender">' +
-'<option value="Không yêu cầu">Không yêu cầu</option>' +
-'<option value="Nam">Nam</option><option value="Nữ">Nữ</option>' +
-'<option value="Nam ưu tiên">Nam ưu tiên</option>' +
-'<option value="Nữ ưu tiên">Nữ ưu tiên</option>' +
+'<option value="Nam">Nam</option>' +
+'<option value="Nữ">Nữ</option>' +
+'<option value="Nam Nữ">Nam Nữ</option>' +
 '</select></div>' +
 '<div class="field"><label>Lương</label>' +
 '<input type="text" id="salary" placeholder="VD: 180.000 - 220.000 yên/tháng"></div>' +
@@ -96,7 +94,7 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '<div class="section-label">Mô tả</div>' +
 '<div class="field"><textarea id="desc" placeholder="Chi tiết công việc, yêu cầu, phúc lợi..."></textarea></div>' +
 '<div id="mgmt-section" style="display:none">' +
-'<div class="section-label mgmt-label">Quản lý nội bộ</div>' +
+'<div class="section-label">Quản lý nội bộ</div>' +
 '<div class="field"><label>Nguồn</label><input type="text" id="nguon" placeholder="VD: Đối tác ABC"></div>' +
 '<div class="row2">' +
 '<div class="field"><label>Hoa hồng</label><input type="text" id="hoaHong" placeholder="VD: 500.000đ"></div>' +
@@ -109,7 +107,7 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '<button class="btn-save" id="btnSave" onclick="doSave()">Lưu vào sheet</button>' +
 '</div>' +
 '<script>' +
-'var TOKUTEI_CATS=["Chế biến thực phẩm","Nhóm ngành 1 (Cơ khí)","Nhóm ngành 2 (Điện tử)","Xây dựng","Điều dưỡng","Nhà hàng","Vệ sinh tòa nhà","Bảo dưỡng ô tô","Nông nghiệp","Lưu trú / Khách sạn","Ngư nghiệp","Đóng tàu","Hàng không","Vận tải","Lâm nghiệp","May","In ấn"];' +
+'var TOKUTEI_CATS=["Chế biến thực phẩm","Nhóm 1","Nhóm 2","Nhóm 1+2","Đúc nóng","Đúc lạnh","Dập kim loại","Kim loại tấm","Tekko","Rèn","Gia công cơ khí","Hoàn thiện sản phẩm","Đúc nhựa","Hàn","Sơn kim loại","Lắp ráp thiết bị điện","Lắp ráp thiết bị điện tử","Sản xuất bảng mạch in (PCB)","Kiểm tra máy móc","Bảo trì máy móc","Đóng gói công nghiệp","Mạ điện","Xử lý oxy hóa nhôm (Anodize)","Xây dựng","Điều dưỡng","Nhà hàng","Vệ sinh tòa nhà","Bảo dưỡng ô tô","Nông nghiệp","Lưu trú / Khách sạn","Ngư nghiệp","Đóng tàu","Hàng không","Vận tải","Lâm nghiệp","May","In ấn"];' +
 'var KYSIS_CATS=["Lập trình viên","Kỹ sư hệ thống / Mạng","AI & Data Science","Cơ khí","Điện - Điện tử","Hóa học & Vật liệu","Ô tô","Phiên dịch / Thông dịch","Xuất nhập khẩu","Quản trị kinh doanh / Marketing"];' +
 'function onTypeChange(){' +
 'var type=document.getElementById("type").value;' +
@@ -138,7 +136,7 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 'document.getElementById("type").value="";' +
 'document.getElementById("status").value="active";' +
 'document.getElementById("japanese").value="Không yêu cầu";' +
-'document.getElementById("gender").value="Không yêu cầu";' +
+'document.getElementById("gender").value="Nam Nữ";' +
 'onTypeChange();}' +
 'function showToast(msg,type){var t=document.getElementById("toast");t.textContent=msg;t.className="toast "+type;t.style.display="block";clearTimeout(t._timer);t._timer=setTimeout(function(){t.style.display="none";},3000);}' +
 'google.script.run.withSuccessHandler(function(owner){if(owner)document.getElementById("mgmt-section").style.display="block";}).isOwner();' +
@@ -154,11 +152,11 @@ function onEdit(e) {
   const endRow   = startRow + e.range.getNumRows() - 1;
   const col      = e.range.getColumn();
 
-  if (endRow < 2 || col === 19) return;
+  if (endRow < 2 || col === 20) return;
 
   const now = new Date();
   for (let r = Math.max(startRow, 2); r <= endRow; r++) {
-    sheet.getRange(r, 19).setValue(now).setNumberFormat('dd/MM/yyyy HH:mm');
+    sheet.getRange(r, 20).setValue(now).setNumberFormat('dd/MM/yyyy HH:mm');
   }
 }
 
@@ -211,11 +209,11 @@ function setupPublicSheet() {
 
   const pub = SpreadsheetApp.create('TokuteiJob — Công Khai');
   const HEADERS = [
-    'Loại đơn','Tên công việc','Ngành nghề','Tỉnh/TP','Lương','Tiếng Nhật',
+    'Loại đơn','Tên công việc','Ngành chính','Ngành phụ','Tỉnh/TP','Lương','Tiếng Nhật',
     'Giới tính','Giờ làm','Ngày nghỉ','Tăng ca',
     'Tăng lương','Thưởng','Nhà ở','Mô tả','Trạng thái',
   ];
-  const COL_WIDTHS = [100,160,160,120,200,110,110,130,130,100,100,110,120,300,90];
+  const COL_WIDTHS = [100,160,160,130,120,200,110,110,130,130,100,100,110,120,300,90];
 
   const sheet = pub.getSheets()[0];
   sheet.setName(SHEET_NAME);
@@ -253,14 +251,14 @@ function _doSyncToPublic(pubSS) {
   if (!sheet || !pubSheet) return;
 
   const pubLast = pubSheet.getLastRow();
-  if (pubLast > 1) pubSheet.getRange(2, 1, pubLast - 1, 15).clearContent();
+  if (pubLast > 1) pubSheet.getRange(2, 1, pubLast - 1, 16).clearContent();
 
   const last = sheet.getLastRow();
   if (last < 2) return;
 
-  const data = sheet.getRange(2, 1, last - 1, 15).getValues()
+  const data = sheet.getRange(2, 1, last - 1, 16).getValues()
                     .filter(r => r[1]);
-  if (data.length) pubSheet.getRange(2, 1, data.length, 15).setValues(data);
+  if (data.length) pubSheet.getRange(2, 1, data.length, 16).setValues(data);
 }
 
 // ── TOGGLE CỘT NỘI BỘ ────────────────────────────────────────
@@ -271,8 +269,8 @@ function toggleInternalColumns() {
   }
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
   if (!sheet) return;
-  const hidden = sheet.isColumnHiddenByUser(16);
-  for (let c = 16; c <= 19; c++) {
+  const hidden = sheet.isColumnHiddenByUser(17);
+  for (let c = 17; c <= 20; c++) {
     hidden ? sheet.showColumns(c) : sheet.hideColumns(c);
   }
 }
@@ -293,28 +291,29 @@ function saveJob(data) {
     data.type,               // A
     data.title,              // B
     data.category,           // C
-    data.city,               // D
-    data.salary,             // E
-    data.japanese,           // F
-    data.gender,             // G
-    data.workHours,          // H
-    data.daysOff,            // I
-    data.overtime,           // J
-    data.raise,              // K
-    data.bonus,              // L
-    data.housing,            // M
-    data.desc,               // N
-    data.status || 'active', // O
-    data.nguon   || '',      // P — nội bộ
-    data.hoaHong || '',      // Q — nội bộ
-    data.phiNet  || '',      // R — nội bộ
-    new Date(),              // S — nội bộ
+    '',                      // D — category_sub (nhập tay trong sheet)
+    data.city,               // E
+    data.salary,             // F
+    data.japanese,           // G
+    data.gender,             // H
+    data.workHours,          // I
+    data.daysOff,            // J
+    data.overtime,           // K
+    data.raise,              // L
+    data.bonus,              // M
+    data.housing,            // N
+    data.desc,               // O
+    data.status || 'active', // P
+    data.nguon   || '',      // Q — nội bộ
+    data.hoaHong || '',      // R — nội bộ
+    data.phiNet  || '',      // S — nội bộ
+    new Date(),              // T — nội bộ
   ];
 
   const insertAt = sheet.getLastRow() + 1;
   sheet.getRange(insertAt, 1, 1, row.length).setValues([row]);
-  sheet.getRange(insertAt, 16, 1, 4).setBackground('#f3f0ff').setFontColor('#5f4b8b');
-  sheet.getRange(insertAt, 19).setNumberFormat('dd/MM/yyyy HH:mm');
+  sheet.getRange(insertAt, 17, 1, 4).setBackground('#f3f0ff').setFontColor('#5f4b8b');
+  sheet.getRange(insertAt, 20).setNumberFormat('dd/MM/yyyy HH:mm');
 
   const lastRow = sheet.getLastRow();
   if (lastRow > 2) {
@@ -371,23 +370,25 @@ function getSupabaseHeaders() {
 }
 
 function buildJob(r, i) {
-  const type = normalizeType(r[0]);
+  const type    = normalizeType(r[0]);
+  const catMain = String(r[2] || '').trim();
+  const catSub  = String(r[3] || '').trim();
   return {
     id:        type + '-' + i,
     type:      type,
     title:     String(r[1] || '').trim(),
-    category:  String(r[2] || '').trim(),
-    city:      String(r[3] || '').trim(),
-    salary:    String(r[4] || '').trim(),
-    japanese:  String(r[5] || '').trim(),
-    gender:    String(r[6] || '').trim(),
-    workHours: String(r[7] || '').trim(),
-    daysOff:   String(r[8] || '').trim(),
-    overtime:  String(r[9] || '').trim(),
-    raise:     String(r[10]|| '').trim(),
-    bonus:     String(r[11]|| '').trim(),
-    housing:   String(r[12]|| '').trim(),
-    desc:      String(r[13]|| '').trim(),
+    category:  [catMain, catSub].filter(Boolean).join(','),
+    city:      String(r[4] || '').trim(),
+    salary:    String(r[5] || '').trim(),
+    japanese:  String(r[6] || '').trim(),
+    gender:    String(r[7] || '').trim(),
+    workHours: String(r[8] || '').trim(),
+    daysOff:   String(r[9] || '').trim(),
+    overtime:  String(r[10]|| '').trim(),
+    raise:     String(r[11]|| '').trim(),
+    bonus:     String(r[12]|| '').trim(),
+    housing:   String(r[13]|| '').trim(),
+    desc:      String(r[14]|| '').trim(),
     status:    'active',
   };
 }
@@ -402,7 +403,7 @@ function syncToSupabase() {
 
   const rows = sheet.getDataRange().getValues()
     .slice(1)
-    .filter(r => r[1] && String(r[14] || '').toLowerCase().trim() === 'active');
+    .filter(r => r[1] && String(r[15] || '').toLowerCase().trim() !== 'inactive');
 
   const delRes = UrlFetchApp.fetch(
     SUPABASE_URL + '/rest/v1/jobs?id=not.is.null',
@@ -441,31 +442,54 @@ function setupSourceSheet() {
 
   if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
 
-  const PUB_HEADERS  = ['Loại đơn','Tên công việc','Ngành nghề','Tỉnh/TP','Lương','Tiếng Nhật','Giới tính','Giờ làm','Ngày nghỉ','Tăng ca','Tăng lương','Thưởng','Nhà ở','Mô tả','Trạng thái'];
+  const PUB_HEADERS  = ['Loại đơn','Tên công việc','Ngành chính','Ngành phụ','Tỉnh/TP','Lương','Tiếng Nhật','Giới tính','Giờ làm','Ngày nghỉ','Tăng ca','Tăng lương','Thưởng','Nhà ở','Mô tả','Trạng thái'];
   const PRIV_HEADERS = ['Nguồn','Hoa hồng','Phí net','Ngày cập nhật'];
 
-  sheet.getRange(1, 1, 1, 15)
+  sheet.getRange(1, 1, 1, 16)
     .setValues([PUB_HEADERS])
     .setBackground('#1a3c5e').setFontColor('#fff')
     .setFontWeight('bold').setHorizontalAlignment('center');
-  sheet.getRange(1, 16, 1, 4)
+  sheet.getRange(1, 17, 1, 4)
     .setValues([PRIV_HEADERS])
     .setBackground('#4a3580').setFontColor('#fff')
     .setFontWeight('bold').setHorizontalAlignment('center');
 
   sheet.setFrozenRows(1);
 
-  [100,160,160,120,200,110,110,130,130,100,100,110,120,300,90,150,110,110,140]
+  [100,160,160,130,120,200,110,110,130,130,100,100,110,120,300,90,150,110,110,140]
     .forEach(function(w, i) { sheet.setColumnWidth(i + 1, w); });
 
   const lastRow = Math.max(sheet.getLastRow(), 2);
-  sheet.getRange(2, 19, lastRow - 1, 1).setNumberFormat('dd/MM/yyyy HH:mm');
+  sheet.getRange(2, 20, lastRow - 1, 1).setNumberFormat('dd/MM/yyyy HH:mm');
 
-  for (let c = 16; c <= 19; c++) sheet.hideColumns(c);
+  for (let c = 17; c <= 20; c++) sheet.hideColumns(c);
 
   SpreadsheetApp.getUi().alert(
     '✅ Hoàn tất!\n\n' +
     'Tab "' + SHEET_NAME + '" đã sẵn sàng.\n\n' +
     'Tiếp theo: Menu → 🌐 Tạo Sheet Công Khai'
   );
+}
+
+// ── HIGHLIGHT ROW & COLUMN KHI CHỌN Ô ───────────────────────
+const HL_COLOR = '#DBEAFE'; // xanh nhạt
+
+function onSelectionChange(e) {
+  const sheet = e.range.getSheet();
+  if (sheet.getName() !== SHEET_NAME) return;
+
+  const row     = e.range.getRow();
+  const col     = e.range.getColumn();
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  if (lastRow < 2 || lastCol < 1) return;
+
+  // Xóa highlight cũ (bỏ qua hàng tiêu đề - row 1)
+  sheet.getRange(2, 1, lastRow - 1, lastCol).setBackground(null);
+
+  // Highlight toàn dòng (bỏ qua header)
+  if (row >= 2) sheet.getRange(row, 1, 1, lastCol).setBackground(HL_COLOR);
+
+  // Highlight toàn cột (bỏ qua header)
+  sheet.getRange(2, col, lastRow - 1, 1).setBackground(HL_COLOR);
 }
