@@ -28,11 +28,11 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f5f7f5;--surface:#ffffff;--surface-alt:#f0f4f2;--border:#e2ece8;
-  --primary:#356854;--primary-soft:#e8f2ee;
-  --accent:#E53935;--accent-soft:#FFEEF2;
-  --text-1:#1e2d27;--text-2:#5a6b64;--text-3:#9aada6;
-  --grad:linear-gradient(135deg,#1a3b2a 0%,#2a5442 40%,#356854 100%);
+  --bg:#FAF8FA;--surface:#ffffff;--surface-alt:#FAF5F8;--border:#ECE4E9;
+  --primary:#B5426A;--primary-soft:#FCEEF4;
+  --accent:#C8953A;--accent-soft:#FEF5E6;
+  --text-1:#231520;--text-2:#635060;--text-3:#AD9BA6;
+  --grad:linear-gradient(135deg,#3D1530 0%,#7A2850 45%,#B5426A 100%);
   --r:14px;--sh:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.06);
   --sh2:0 2px 8px rgba(0,0,0,.06),0 12px 36px rgba(0,0,0,.1);
   --nav:64px
@@ -60,9 +60,9 @@ section{padding:80px 0}
 .auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text-3);font-size:12px}
 .auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .auth-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;outline:none;transition:border .2s;font-family:inherit;margin-bottom:10px}
-.auth-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(53,104,84,.1)}
+.auth-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(181,66,106,.1)}
 .auth-submit{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;margin-top:4px}
-.auth-submit:hover{background:#2420c8}
+.auth-submit:hover{background:#8B2B4F}
 .auth-err{font-size:12px;color:var(--accent);margin-top:6px;display:none}
 .auth-err.show{display:block}
 .auth-close{position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-3);line-height:1}
@@ -83,7 +83,7 @@ section{padding:80px 0}
 .user-wrap{position:relative}
 
 /* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;height:var(--nav);background:rgba(250,252,251,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(53,104,84,.08);z-index:100;transition:box-shadow .2s}
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav);background:rgba(253,250,252,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(181,66,106,.08);z-index:100;transition:box-shadow .2s}
 nav.scrolled{box-shadow:var(--sh)}
 .nav-inner{max-width:1120px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;gap:32px}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0}
@@ -98,7 +98,7 @@ nav.scrolled{box-shadow:var(--sh)}
 .lang button.on{background:#fff;color:var(--text-1);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;padding:8px 18px;border-radius:100px;border:none;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap}
 .btn-ghost{background:transparent;color:var(--text-2)}.btn-ghost:hover{background:var(--surface-alt);color:var(--text-1)}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#2a5442;transform:translateY(-1px);box-shadow:0 4px 12px rgba(53,104,84,.3)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#8B2B4F;transform:translateY(-1px);box-shadow:0 4px 12px rgba(181,66,106,.3)}
 .btn-dark{background:var(--text-1);color:#fff}.btn-dark:hover{background:#1a1a2e;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
 .btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5)}.btn-outline:hover{background:rgba(255,255,255,.15);border-color:#fff}
 .btn-lg{font-size:16px;padding:13px 28px;border-radius:100px}
@@ -109,17 +109,33 @@ nav.scrolled{box-shadow:var(--sh)}
 .mob-menu a{font-size:15px;font-weight:500;color:var(--text-2);text-decoration:none;padding:12px 0;border-bottom:1px solid var(--border)}
 
 /* ── HERO ── */
-.hero{background:var(--grad);padding:calc(var(--nav) + 72px) 0 0;overflow:hidden;position:relative}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,255,255,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.08));pointer-events:none;z-index:1}
-.hero-in{max-width:1120px;margin:0 auto;padding:0 24px;text-align:center;position:relative;z-index:2}
-.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:13px;font-weight:500;padding:6px 14px;border-radius:100px;margin-bottom:28px;backdrop-filter:blur(8px)}
-.badge-dot{width:6px;height:6px;background:#4ade80;border-radius:50%;animation:pulse 2s infinite}
+.hero{background:var(--grad);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--nav) 0 0;overflow:hidden;position:relative}
+.hero::before{content:'';position:absolute;top:-20%;right:-10%;width:65%;aspect-ratio:1;background:radial-gradient(circle,rgba(255,255,255,.07) 0%,transparent 65%);pointer-events:none;z-index:0}
+.hero::after{content:'';position:absolute;bottom:-10%;left:-8%;width:50%;aspect-ratio:1;background:radial-gradient(circle,rgba(255,255,255,.05) 0%,transparent 65%);pointer-events:none;z-index:0}
+.hero-in{max-width:760px;margin:0 auto;padding:72px 24px 120px;text-align:center;position:relative;z-index:2;width:100%}
+.hero h1{font-size:clamp(38px,6.5vw,80px);font-weight:800;color:#fff;margin-bottom:16px;letter-spacing:-.03em}
+.hero h1 .l2{display:block;color:#FFBDD3}
+.hero-sub{font-size:clamp(15px,2vw,19px);color:rgba(255,255,255,.75);max-width:520px;margin:0 auto 36px}
+
+/* Hero CTA */
+.hero-acts{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.btn-white{background:#fff;color:var(--primary)}.btn-white:hover{background:rgba(255,255,255,.92);transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+/* Scroll arrow */
+.scroll-arrow{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);background:none;border:none;color:rgba(255,255,255,.45);cursor:pointer;z-index:2;animation:bounceArrow 2.2s ease-in-out infinite;padding:8px;transition:color .2s}
+.scroll-arrow:hover{color:rgba(255,255,255,.8)}
+@keyframes bounceArrow{0%,100%{transform:translateX(-50%) translateY(0)}55%{transform:translateX(-50%) translateY(9px)}}
+/* Decorative sakura */
+.hero-sakura{position:absolute;pointer-events:none;z-index:1;color:rgba(255,255,255,.12)}
+.hero-sakura.s1{width:130px;height:130px;top:12%;right:7%;animation:spinSlow 40s linear infinite}
+.hero-sakura.s2{width:90px;height:90px;bottom:22%;left:5%;animation:spinSlow 55s linear infinite reverse}
+.hero-sakura.s3{width:65px;height:65px;top:28%;left:10%;animation:spinSlow 35s linear infinite}
+@keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(.85)}}
-.hero h1{font-size:clamp(30px,5.5vw,68px);font-weight:800;color:#fff;margin-bottom:20px;letter-spacing:-.03em}
-.hero h1 .l2{display:block;color:#a8d5c2}
-.hero-sub{font-size:clamp(15px,2vw,20px);color:rgba(255,255,255,.78);max-width:560px;margin:0 auto 32px}
-.hero-acts{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:44px;flex-wrap:wrap}
+@media(max-width:768px){
+}
+@media(max-width:480px){
+  .hero-sakura{display:none}
+}
 
 /* Hero mockup */
 .mockup{background:#fff;border-radius:16px 16px 0 0;box-shadow:0 -8px 48px rgba(0,0,0,.18),0 0 0 1px rgba(0,0,0,.06);max-width:900px;margin:0 auto;overflow:hidden}
@@ -137,15 +153,6 @@ nav.scrolled{box-shadow:var(--sh)}
 .mock-field input{border:none;outline:none;flex:1;font-size:13px;color:var(--text-2);background:transparent;font-family:inherit;min-width:0}
 .mock-field input::placeholder{color:var(--text-3)}
 .mock-btn{background:var(--primary);color:#fff;border:none;border-radius:100px;padding:9px 20px;font-size:13px;font-weight:600;cursor:pointer}
-.hero-filter{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-.hf-row{display:flex;align-items:center;gap:8px;opacity:0;transform:translateY(6px);transition:opacity .28s,transform .28s;pointer-events:none;height:0;overflow:hidden}
-.hf-row.show{opacity:1;transform:none;pointer-events:auto;height:auto;overflow:visible}
-.hf-num{font-size:11px;font-weight:800;color:var(--primary);background:var(--primary-soft);border-radius:50%;width:20px;height:20px;min-width:20px;display:flex;align-items:center;justify-content:center}
-.hf-select{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text-3);background:#fff;outline:none;font-family:inherit;transition:border-color .2s,color .2s;cursor:pointer;min-width:0}
-.hf-select:focus{border-color:var(--primary)}
-.hf-select.filled{border-color:var(--primary);color:var(--text-1);font-weight:600}
-.hf-btn{width:100%;opacity:0;transform:translateY(6px);transition:opacity .28s,transform .28s;pointer-events:none;height:0;overflow:hidden;padding:0;border:none}
-.hf-btn.show{opacity:1;transform:none;pointer-events:auto;height:auto;overflow:visible;padding:10px 20px}
 .mock-tags{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
 .tag{font-size:11px;font-weight:500;padding:4px 10px;border-radius:100px;border:1px solid var(--border);background:#fff;color:var(--text-2)}
 .tag.on{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
@@ -167,11 +174,6 @@ nav.scrolled{box-shadow:var(--sh)}
 .snum{font-size:40px;font-weight:800;color:var(--text-1);letter-spacing:-.04em;line-height:1;margin-bottom:5px}
 .slabel{font-size:12px;color:var(--text-3);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
 
-/* ── SECTION HEADER ── */
-.sec-hd{text-align:center;margin-bottom:52px}
-.sec-label{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);margin-bottom:10px}
-.sec-title{font-size:clamp(24px,4vw,40px);font-weight:700;margin-bottom:14px;letter-spacing:-.03em}
-.sec-sub{font-size:17px;color:var(--text-2);max-width:540px;margin:0 auto}
 
 /* ── FEATURES GRID ── */
 .feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
@@ -227,27 +229,6 @@ nav.scrolled{box-shadow:var(--sh)}
 .step h3{font-size:17px;font-weight:700;margin-bottom:7px}
 .step p{font-size:13px;color:var(--text-2)}
 
-/* ── CATEGORIES ── */
-.group-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:8px}
-.group-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:36px 24px;text-align:center;cursor:pointer;transition:all .22s;display:flex;flex-direction:column;align-items:center;gap:8px;font-family:inherit}
-.group-card:hover{border-color:var(--primary);box-shadow:var(--sh2);transform:translateY(-3px)}
-.group-ico{margin-bottom:4px;display:flex;align-items:center;justify-content:center;color:var(--primary)}.group-ico svg{width:40px;height:40px;stroke-width:1.5}
-.group-name{font-size:22px;font-weight:800;color:var(--text-1)}
-.group-sub{font-size:13px;color:var(--text-3)}
-.group-count{font-size:13px;font-weight:700;color:var(--primary);background:var(--primary-soft);padding:3px 12px;border-radius:100px;margin-top:4px}
-.subcat-hd{display:flex;align-items:center;gap:16px;margin-bottom:20px;margin-top:8px}
-.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-2);transition:all .2s;font-family:inherit}
-.back-btn:hover{border-color:var(--primary);color:var(--primary)}
-.subcat-title{font-size:18px;font-weight:700;color:var(--text-1)}
-.cat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:0}
-.ccat{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:18px 10px;text-align:center;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;display:block}
-.ccat:hover{border-color:var(--primary);background:var(--primary-soft);transform:translateY(-2px);box-shadow:var(--sh)}
-.ccat .e{display:flex;align-items:center;justify-content:center;margin-bottom:8px;color:var(--text-3);transition:color .2s}
-.ccat .e svg{width:28px;height:28px;stroke-width:1.75}
-.ccat:hover .e{color:var(--primary)}
-.ccat.active .e{color:var(--primary)}
-.ccat-n{font-size:11px;font-weight:600;color:var(--text-2);line-height:1.3}
-.ccat-c{font-size:10px;color:var(--text-3);margin-top:2px}
 
 /* ── COMPARISON ── */
 .comp-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r);border:1px solid var(--border);position:relative}
@@ -347,7 +328,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
 /* ── TYPE SYSTEM ── */
-:root{--viet:#22a85a;--viet-soft:#e8f8ef;--nhat:#356854;--nhat-soft:#e8f2ee;--kysis:#d97706;--kysis-soft:#fef3c7}
+:root{--viet:#22a85a;--viet-soft:#e8f8ef;--nhat:#B5426A;--nhat-soft:#FCEEF4;--kysis:#C8953A;--kysis-soft:#FEF5E6}
 
 /* job type badge on cards */
 .jbadge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:100px;flex-shrink:0;letter-spacing:.01em}
@@ -399,37 +380,75 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .tc.viet .tc-type{color:rgba(255,255,255,.7)}
 .tc.viet .tc-title,.tc.viet .tc-who{color:#fff}
 .tc.viet .tc-icon-ok{color:var(--viet)}
-.tc.nhat .tc-head{background:linear-gradient(135deg,#1a3b2a,#2a5442,#356854)}
+.tc.nhat .tc-head{background:linear-gradient(135deg,#3D1530,#7A2850,#B5426A)}
 .tc.nhat .tc-type{color:rgba(255,255,255,.7)}
 .tc.nhat .tc-title,.tc.nhat .tc-who{color:#fff}
 .tc.nhat .tc-icon-ok{color:var(--nhat)}
 .tc-cta{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;transition:all .2s}
 .tc.viet .tc-cta{background:var(--viet);color:#fff}.tc.viet .tc-cta:hover{background:#1a9e52}
-.tc.nhat .tc-cta{background:var(--nhat);color:#fff}.tc.nhat .tc-cta:hover{background:#2420c8}
+.tc.nhat .tc-cta{background:var(--nhat);color:#fff}.tc.nhat .tc-cta:hover{background:#8B2B4F}
 
-/* search bar */
-.search-bar{position:relative;margin:28px 0 20px}
-.search-bar input{width:100%;border:2px solid var(--border);border-radius:12px;padding:14px 48px 14px 48px;font-size:15px;color:var(--text-1);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit}
-.search-bar input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(53,104,84,.1)}
+/* unified filter bar */
+.filter-bar{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:16px;margin-bottom:24px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.search-bar{position:relative;margin-bottom:12px}
+.search-bar input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 38px 11px 38px;font-size:14px;color:var(--text-1);background:var(--surface-alt,#f4f4f6);outline:none;transition:border-color .2s,box-shadow .2s;font-family:inherit;box-sizing:border-box}
+.search-bar input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(181,66,106,.1);background:#fff}
 .search-bar input::placeholder{color:var(--text-3)}
-.search-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:17px;pointer-events:none;color:var(--text-3)}
-.search-clear{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--surface-alt);border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:16px;color:var(--text-2);display:none;align-items:center;justify-content:center;line-height:1}
+.search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-3)}
+.search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:var(--border);border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:14px;color:var(--text-2);display:none;align-items:center;justify-content:center;line-height:1;padding:0}
 .search-clear.show{display:flex}
-/* type filter for categories */
-.type-filter{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
-.tf-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:100px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--text-2)}
+.filter-type-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.tf-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:100px;border:1.5px solid var(--border);background:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;color:var(--text-2);white-space:nowrap}
 .tf-btn:hover{border-color:var(--primary);color:var(--primary)}
 .tf-btn.on-all{border-color:var(--primary);background:var(--primary);color:#fff}
 .tf-btn.on-viet{border-color:var(--viet);background:var(--viet);color:#fff}
 .tf-btn.on-nhat{border-color:var(--nhat);background:var(--nhat);color:#fff}
 .tf-btn.on-kysis{border-color:var(--kysis);background:var(--kysis);color:#fff}
+.filter-select-row{display:flex;gap:8px;flex-wrap:wrap}
+.filter-select{flex:1;min-width:130px;padding:9px 28px 9px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:500;color:var(--text-1);background:#fff;outline:none;cursor:pointer;transition:border .2s;font-family:inherit;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+.filter-select:focus{border-color:var(--primary)}
+.filter-select.has-value{border-color:var(--primary);color:var(--primary)}
+.cs-wrap{position:relative;flex:1;min-width:130px}
+.cs-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:9px 10px 9px 12px;border:1.5px solid var(--border);border-radius:10px;background:#fff;font-size:13px;font-weight:500;color:var(--text-3);cursor:pointer;font-family:inherit;text-align:left;transition:border .2s,color .2s;white-space:nowrap;overflow:hidden}
+.cs-trigger.has-value{border-color:var(--primary);color:var(--primary)}
+.cs-trigger-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cs-trigger svg{flex-shrink:0;transition:transform .2s}
+.cs-trigger.open svg{transform:rotate(180deg)}
+.cs-panel{position:absolute;top:calc(100% + 4px);left:0;min-width:100%;width:max-content;max-width:320px;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.1);z-index:200;display:none;max-height:340px;overflow-y:auto}
+.cs-panel.open{display:block}
+.cs-ico{width:15px;height:15px;flex-shrink:0;stroke-width:1.8;color:var(--text-3)}
+.cs-flat-item{display:flex;align-items:center;gap:7px;width:100%;padding:9px 16px;background:none;border:none;text-align:left;font-size:13px;color:var(--text-1);cursor:pointer;font-family:inherit;white-space:nowrap}
+.cs-flat-item:hover,.cs-flat-item:focus{background:var(--surface-alt,#f4f4f6);outline:none}
+.cs-flat-item.cs-selected{color:var(--primary);font-weight:600}
+.cs-group-hd{display:flex;align-items:center;gap:7px;width:100%;padding:9px 12px 9px 16px;background:none;border:none;text-align:left;font-size:11px;font-weight:700;color:var(--text-2);cursor:pointer;font-family:inherit;letter-spacing:.03em;text-transform:uppercase}
+.cs-group-hd span:not(.cs-ico){flex:1}
+.cs-group-hd:hover{background:var(--surface-alt,#f4f4f6)}
+.cs-group-hd svg{flex-shrink:0;margin-left:auto;transition:transform .2s}
+.cs-group-hd.open svg{transform:rotate(180deg)}
+.cs-group-items{display:none;padding:0 0 4px 0}
+.cs-group-items.open{display:block}
+.cs-group-items .cs-flat-item{padding-left:26px;font-size:13px}
+.filter-chips-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.filter-chips-row:empty{display:none;margin-top:0}
+.fchip{display:inline-flex;align-items:center;gap:4px;padding:5px 10px 5px 12px;border-radius:100px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:opacity .15s}
+.fchip:hover{opacity:.75}
+.fchip-search,.fchip-all{background:var(--primary-soft);color:var(--primary)}
+.fchip-viet{background:#e8f8ef;color:var(--viet,#1eb35c)}
+.fchip-nhat{background:var(--nhat-soft);color:var(--nhat)}
+.fchip-kysis{background:var(--kysis-soft);color:var(--kysis)}
+.fchip-cat{background:var(--primary-soft);color:var(--primary)}
+.fchip-pref{background:#fff3e0;color:#e07000}
+.fchip-x{font-size:14px;opacity:.55;margin-left:2px;line-height:1}
+.clear-all-btn{background:none;border:1.5px solid var(--border);border-radius:100px;padding:5px 12px;font-size:12px;color:var(--text-3);cursor:pointer;font-family:inherit;font-weight:500;white-space:nowrap;transition:all .15s}
+.clear-all-btn:hover{border-color:var(--accent,#e8305a);color:var(--accent,#e8305a)}
+.type-filter{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;justify-content:center}
 
 /* 2-track how it works */
 .tracks{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:52px}
 .track{border-radius:16px;overflow:hidden}
 .track-hd{padding:20px 24px;display:flex;align-items:center;gap:12px}
 .track.viet .track-hd{background:linear-gradient(135deg,#1a9e52,#34c471)}
-.track.nhat .track-hd{background:linear-gradient(135deg,#1a1acb,#5554e8)}
+.track.nhat .track-hd{background:linear-gradient(135deg,#3D1530,#B5426A)}
 .track-hd-info{}
 .track-hd-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 .track-hd-title{font-size:18px;font-weight:800;color:#fff}
@@ -457,7 +476,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 
 /* ── RESPONSIVE ── */
 @media(max-width:1024px){
-  .cat-grid{grid-template-columns:repeat(4,1fr)}
   .ft-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:768px){
@@ -469,7 +487,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .sitem:last-child{border-right:none}
   .snum{font-size:26px}
   .feat-grid,.steps,.tgrid{grid-template-columns:1fr}
-  .cat-grid{grid-template-columns:repeat(4,1fr)}
   .price-grid{grid-template-columns:1fr}
   .pcard.feat{transform:none}.pcard.feat:hover{transform:translateY(-2px)}
   .ft-grid{grid-template-columns:1fr;gap:24px}
@@ -489,16 +506,17 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .fq{font-size:13px;padding:14px 18px}
   .fans p{padding:0 18px 14px}
 }
+@media(max-width:600px){
+  .filter-select-row{flex-direction:column}
+  .filter-select{min-width:0;width:100%}
+  .filter-type-row{gap:5px}
+  .tf-btn{padding:6px 11px;font-size:11px}
+}
 @media(max-width:480px){
-  .cat-grid{grid-template-columns:repeat(3,1fr)}
-  .ccat{padding:14px 6px}
-  .ccat .e svg{width:24px;height:24px}
-  .ccat-n{font-size:10px}
   .mock-tags{display:none}
   .mock-field:nth-child(2){display:none}
   .ctable th,.ctable td{padding:9px 10px;font-size:11px}
   .ctable th:nth-child(3),.ctable td:nth-child(3){display:none}
-  .sec-sub{font-size:15px}
   .pref-con{flex-direction:column;align-items:center}
   .jpsvg{display:none}
   .track-nums{gap:24px}
@@ -514,7 +532,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .mock-body{padding:14px 14px}
 
   /* Input/select ≥16px để Safari không auto-zoom */
-  .hf-select,.mock-field input,input,select,textarea{font-size:16px!important}
+  .mock-field input,input,select,textarea{font-size:16px!important}
 
   /* Touch targets tối thiểu 44×44px */
   .jcard .save-btn{position:static;width:44px;height:44px}
@@ -543,7 +561,9 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .jcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:11px;transition:transform .2s,box-shadow .2s;position:relative}
 .jcard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
 .jcard-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-right:36px}
-.jcard-cat{font-size:11px;color:var(--text-3);background:var(--surface-alt);padding:3px 9px;border-radius:100px;white-space:nowrap}
+.jcard-cat{font-size:11px;color:var(--text-3);background:var(--surface-alt);padding:3px 9px;border-radius:100px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.jcat-nhom1{background:#fff3e0;color:#b45309}
+.jcat-nhom2{background:#e8e8ff;color:var(--nhat,#2D2CDB)}
 .jcard-title{font-size:15px;font-weight:700;color:var(--text-1);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .jcard-meta{display:flex;flex-wrap:wrap;gap:6px}
 .jcard-meta span{font-size:12px;color:var(--text-2);display:inline-flex;align-items:center;gap:4px}
@@ -561,12 +581,12 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .status-badge.expired::before{content:'';width:6px;height:6px;background:#a1a1aa;border-radius:50%;display:inline-block}
 .jcard.expired{opacity:.65}
 .jcard.expired .jcard-cta{background:var(--text-3);pointer-events:none}
-.jcard-cta:hover{background:#2a5442;color:#fff}
+.jcard-cta:hover{background:#8B2B4F;color:#fff}
 #jobsPagination{grid-column:1/-1;display:flex;justify-content:center;padding:28px 0 8px}
 .pg{display:flex;align-items:center;gap:4px}
 .pg-btn{min-width:40px;height:40px;padding:0 10px;border:1.5px solid var(--border);background:#fff;color:var(--text-2);font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;justify-content:center}
 .pg-btn:hover:not(:disabled){background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
-.pg-btn.pg-on{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 8px rgba(53,104,84,.25)}
+.pg-btn.pg-on{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 8px rgba(181,66,106,.25)}
 .pg-btn:disabled{opacity:.35;cursor:default}
 .pg-btn.pg-nav{min-width:72px;font-size:13px;gap:4px}
 .pg-dots{width:36px;height:40px;display:inline-flex;align-items:center;justify-content:center;color:var(--text-3);font-size:15px;letter-spacing:.1em;user-select:none}
@@ -605,7 +625,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .docs-list li::before{content:'📎';flex-shrink:0}
 .apply-ft{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
 .apply-submit{width:100%;padding:13px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s}
-.apply-submit:hover{background:#2420c8}
+.apply-submit:hover{background:#8B2B4F}
 .apply-done{display:none;padding:28px 24px;text-align:center;overflow-y:auto;flex:1}
 .apply-done.show{display:block}
 .apply-done .done-ico{font-size:48px;margin-bottom:10px}
@@ -638,8 +658,8 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .modal-div{border:none;border-top:1px solid var(--border);margin:18px 0}
 .modal-desc-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
 .modal-desc{font-size:14px;color:var(--text-2);line-height:1.75;white-space:pre-wrap}
-.modal-cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:#356854;color:#fff;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;margin-top:20px;transition:all .2s}
-.modal-cta:hover{background:#2a5442}
+.modal-cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:var(--primary);color:#fff;border-radius:100px;font-size:15px;font-weight:700;text-decoration:none;margin-top:20px;transition:all .2s}
+.modal-cta:hover{background:#8B2B4F}
 
 /* ── SAVE BUTTON ── */
 .save-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--text-3);flex-shrink:0;font-family:inherit}
@@ -706,59 +726,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .cmp-footer{margin-top:20px;display:flex;justify-content:center}
 
 /* ── ARTICLES SECTION (landing preview) ── */
-.art-section{background:var(--surface-alt)}
-.art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
-@media(max-width:900px){.art-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.art-grid{grid-template-columns:1fr}#artPreviewGrid .acard:nth-child(n+2){display:none!important}}
-.acard{background:#fff;border-radius:16px;overflow:hidden;border:1.5px solid var(--border);cursor:pointer;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column}
-.acard:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
-.acard-thumb{width:100%;aspect-ratio:16/9;background:var(--surface-alt);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
-.acard-thumb img{width:100%;height:100%;object-fit:cover}
-.acard-body{padding:16px;flex:1;display:flex;flex-direction:column}
-.acat-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:8px}
-.acat-badge.tokutei{background:#eeeeff;color:var(--primary)}
-.acat-badge.japan-life{background:#dcfce7;color:#16a34a}
-.acat-badge.experience{background:#fef3c7;color:#d97706}
-.acat-badge.news{background:var(--accent-soft);color:var(--accent)}
-.acard h3{font-size:15px;font-weight:700;line-height:1.35;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.acard-excerpt{font-size:13px;color:var(--text-2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:12px;flex:1}
-.acard-ft{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text-3);margin-top:auto}
-.acard-read{font-size:12px;font-weight:700;color:var(--primary)}
-.arts-more-btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:1.5px solid var(--border);border-radius:12px;background:#fff;font-size:14px;font-weight:600;cursor:pointer;color:var(--text-2);font-family:inherit;transition:all .2s}
-.arts-more-btn:hover{border-color:var(--primary);color:var(--primary)}
-
-/* ── ARTICLES LISTING PANEL ── */
-.arts-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:360;display:none;align-items:flex-end;justify-content:center}
-@media(min-width:600px){.arts-overlay{align-items:center;padding:20px}}
-.arts-overlay.open{display:flex}
-.arts-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:800px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 -8px 48px rgba(0,0,0,.22)}
-@media(min-width:600px){.arts-box{border-radius:20px;max-height:88vh}}
-.arts-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
-.arts-hd-title{font-size:17px;font-weight:800}
-.arts-cats{display:flex;gap:6px;padding:12px 20px;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;scrollbar-width:none}
-.arts-cats::-webkit-scrollbar{display:none}
-.acat-tab{flex-shrink:0;padding:6px 14px;border-radius:100px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-2)}
-.acat-tab.on{background:var(--primary);border-color:var(--primary);color:#fff}
-.arts-list{flex:1;overflow-y:auto;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
-@media(max-width:500px){.arts-list{grid-template-columns:1fr}}
-.arts-empty{text-align:center;padding:48px 24px;color:var(--text-3);grid-column:1/-1}
-
-/* ── ARTICLE DETAIL ── */
-.artd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:380;display:none;align-items:flex-end;justify-content:center}
-@media(min-width:600px){.artd-overlay{align-items:center;padding:20px}}
-.artd-overlay.open{display:flex}
-.artd-box{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:680px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 -8px 48px rgba(0,0,0,.22)}
-@media(min-width:600px){.artd-box{border-radius:20px;max-height:90vh}}
-.artd-hd{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
-.artd-back{display:flex;align-items:center;gap:6px;border:none;background:none;font-size:13px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:inherit;padding:4px 0}
-.artd-scroll{flex:1;overflow-y:auto}
-.artd-thumb{width:100%;aspect-ratio:16/7;object-fit:cover;display:block}
-.artd-thumb-ph{width:100%;aspect-ratio:16/7;display:flex;align-items:center;justify-content:center;font-size:60px}
-.artd-content{padding:20px 24px 32px}
-.artd-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
-.artd-title{font-size:22px;font-weight:800;line-height:1.3;letter-spacing:-.02em;margin-bottom:16px}
-.artd-body{font-size:15px;color:var(--text-2);line-height:1.8}
-.artd-body p{margin-bottom:14px}
 
 /* ── ADMIN PANEL (full-screen) ── */
 .admin-overlay{position:fixed;inset:0;z-index:600;display:none}
@@ -863,16 +830,21 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 <nav id="nav">
   <div class="nav-inner">
     <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" class="logo">
-      <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M3 20 L12 3 L21 20 Z"/>
-        <path d="M8 12 Q12 9.5 16 12"/>
+      <svg class="logo-icon" viewBox="0 0 32 32" aria-hidden="true" fill="currentColor">
+        <g transform="translate(16,16)">
+          <ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" opacity=".95"/>
+          <ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(72)" opacity=".95"/>
+          <ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(144)" opacity=".95"/>
+          <ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(216)" opacity=".95"/>
+          <ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(288)" opacity=".95"/>
+          <circle cx="0" cy="0" r="2.2" fill="white" opacity=".85"/>
+        </g>
       </svg>
-      <span class="logo-text">Nippon <em>Tokutei</em></span>
+      <span class="logo-text">Mai Phương <em>Tokutei</em></span>
     </a>
     <ul class="nav-links">
       <li><a href="#hero-search" onclick="event.preventDefault();document.getElementById('mockTypeTabs').scrollIntoView({behavior:'smooth',block:'center'})">Tìm việc làm</a></li>
       <li><a href="#categories">Danh mục</a></li>
-      <li><a href="#thongtin" onclick="event.preventDefault();openArticles()">Thông tin</a></li>
     </ul>
     <div class="nav-right" id="navRight">
       <button class="btn btn-ghost" onclick="openAuth('login')">Đăng nhập</button>
@@ -904,133 +876,37 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   </div>
 </nav>
 <div class="mob-menu" id="mobmenu">
-  <a href="#hero-search" onclick="document.getElementById('mobmenu').classList.remove('open');document.getElementById('mockTypeTabs').scrollIntoView({behavior:'smooth',block:'center'})">Tìm việc làm</a>
+  <a href="#hero-search" onclick="document.getElementById('mobmenu').classList.remove('open');document.getElementById('filterBar').scrollIntoView({behavior:'smooth'})">Tìm việc làm</a>
   <a href="#categories">Danh mục</a>
-  <a href="#thongtin" onclick="document.getElementById('mobmenu').classList.remove('open');openArticles()">Thông tin</a>
-  <a href="https://zalo.me/0386887691" target="_blank" style="color:var(--primary);font-weight:700;border-bottom:none;display:inline-flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Liên hệ Zalo →</a>
+  <a href="https://zalo.me/0367935698" target="_blank" style="color:var(--primary);font-weight:700;border-bottom:none;display:inline-flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Liên hệ Zalo →</a>
 </div>
 
 <!-- HERO -->
 <section class="hero" id="hero-search">
+  <!-- Decorative sakura petals -->
+  <svg class="hero-sakura s1" viewBox="0 0 32 32" aria-hidden="true" fill="currentColor"><g transform="translate(16,16)"><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(72)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(144)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(216)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(288)"/><circle cx="0" cy="0" r="1.8" fill="rgba(255,255,255,.5)"/></g></svg>
+  <svg class="hero-sakura s2" viewBox="0 0 32 32" aria-hidden="true" fill="currentColor"><g transform="translate(16,16)"><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(72)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(144)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(216)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(288)"/><circle cx="0" cy="0" r="1.8" fill="rgba(255,255,255,.5)"/></g></svg>
+  <svg class="hero-sakura s3" viewBox="0 0 32 32" aria-hidden="true" fill="currentColor"><g transform="translate(16,16)"><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(72)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(144)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(216)"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(288)"/><circle cx="0" cy="0" r="1.8" fill="rgba(255,255,255,.5)"/></g></svg>
+
   <div class="hero-in">
-    <h1>Nippon Tokutei</h1>
+    <h1>Mai Phương <span class="l2">Tokutei</span></h1>
     <p class="hero-sub">Hỗ trợ tìm, đăng ký ứng tuyển các đơn hàng Tokutei, Kỹ sư hai đầu Nhật - Việt</p>
+
+    <!-- CTA buttons -->
     <div class="hero-acts">
-      <a href="#categories" class="btn btn-outline btn-lg">Xem tất cả việc làm</a>
-    </div>
-    <div class="mockup">
-      <div class="mock-bar">
-        <div class="mock-dots"><span></span><span></span><span></span></div>
-        <div class="mock-url">Tìm việc Tokutei, Kỹ sư</div>
-      </div>
-      <div class="mock-body">
-        <div class="mock-type" id="mockTypeTabs">
-          <button class="mtt viet on" onclick="switchTab('viet')">
-            <span class="mtt-name">Tokutei đầu Việt</span>
-            <span class="mtt-sub">Phí thấp · Từ Việt Nam</span>
-          </button>
-          <button class="mtt nhat" onclick="switchTab('nhat')">
-            <span class="mtt-name">Tokutei đầu Nhật</span>
-            <span class="mtt-sub">Không cọc không phí</span>
-          </button>
-          <button class="mtt kysis" onclick="switchTab('kysis')">
-            <span class="mtt-name">Kỹ sư đầu Nhật</span>
-            <span class="mtt-sub">Không cọc không phí</span>
-          </button>
-        </div>
-        <div class="hero-filter">
-          <div class="hf-row show" id="hfRow1">
-            <span class="hf-num">1</span>
-            <select id="filterNganh" class="hf-select" onchange="hfNext(1)">
-              <option value="">Ngành nghề</option>
-            </select>
-          </div>
-          <div class="hf-row show" id="hfRow2">
-            <span class="hf-num">2</span>
-            <select id="filterTinh" class="hf-select" onchange="hfNext(2)">
-              <option value="">Khu vực</option>
-              <option value="Hokkaido">1. Hokkaido (北海道)</option>
-              <option value="Tohoku">2. Tohoku (東北) — Aomori, Iwate, Miyagi, Akita, Yamagata, Fukushima</option>
-              <option value="Kanto">3. Kanto (関東) — Tokyo, Kanagawa, Saitama, Chiba, Ibaraki, Tochigi, Gunma</option>
-              <option value="Chubu">4. Chubu (中部) — Aichi, Shizuoka, Niigata, Nagano, Toyama, Ishikawa, Fukui, Yamanashi, Mie</option>
-              <option value="Kansai">5. Kansai (関西) — Osaka, Hyogo, Kyoto, Shiga, Nara, Wakayama</option>
-              <option value="Chugoku">6. Chugoku (中国) — Hiroshima, Okayama, Yamaguchi, Tottori, Shimane</option>
-              <option value="Shikoku">7. Shikoku (四国) — Ehime, Kagawa, Tokushima, Kochi</option>
-              <option value="Kyushu">8. Kyushu (九州) — Fukuoka, Kumamoto, Nagasaki, Kagoshima, Oita, Miyazaki, Saga</option>
-              <option value="Okinawa">9. Okinawa (沖縄)</option>
-            </select>
-          </div>
-          <div class="hf-row show" id="hfRow3">
-            <span class="hf-num">3</span>
-            <select id="filterJapanese" class="hf-select" onchange="hfNext(3)">
-              <option value="">Trình độ tiếng Nhật yêu cầu</option>
-              <option value="N1">N1 (cao nhất)</option>
-              <option value="N2">N2</option>
-              <option value="N3">N3</option>
-              <option value="N4">N4</option>
-              <option value="N5">N5 (cơ bản)</option>
-              <option value="không yêu cầu">Không yêu cầu</option>
-            </select>
-          </div>
-          <button class="mock-btn hf-btn show" id="hfSearchBtn" onclick="doHeroSearch()" style="display:inline-flex;align-items:center;gap:8px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg> Tìm kiếm việc làm phù hợp</button>
-        </div>
-        <div class="mock-jobs-wrap">
-          <div class="jobs-panel on" id="panel-viet">
-            <div class="mjob">
-              <div class="mlogo" style="background:#356854">豊</div>
-              <div class="minfo"><div class="mtitle">Kỹ thuật viên chế biến thực phẩm</div><div class="mmeta">Toyota Foods · Aichi · N3 · ¥200,000/月</div></div>
-              <span class="jbadge jbadge-viet">Đầu Việt</span>
-            </div>
-            <div class="mjob">
-              <div class="mlogo" style="background:#E8305A">建</div>
-              <div class="minfo"><div class="mtitle">Công nhân xây dựng</div><div class="mmeta">Osaka Build · Osaka · N4 · ¥220,000/月</div></div>
-              <span class="jbadge jbadge-viet">Đầu Việt</span>
-            </div>
-            <div class="mjob">
-              <div class="mlogo" style="background:#22c55e">農</div>
-              <div class="minfo"><div class="mtitle">Nhân viên nông nghiệp</div><div class="mmeta">Hokkaido Farm · Hokkaido · N5 · ¥185,000/月</div></div>
-              <span class="jbadge jbadge-viet">Đầu Việt</span>
-            </div>
-          </div>
-          <div class="jobs-panel" id="panel-kysis">
-            <div class="mjob">
-              <div class="mlogo" style="background:#d97706">エ</div>
-              <div class="minfo"><div class="mtitle">Kỹ sư IT (システムエンジニア)</div><div class="mmeta">Tokyo Tech · Tokyo · N3 · ¥300,000/月</div></div>
-              <span class="jbadge jbadge-kysis">Kỹ sư</span>
-            </div>
-            <div class="mjob">
-              <div class="mlogo" style="background:#d97706">機</div>
-              <div class="minfo"><div class="mtitle">Kỹ sư cơ khí (機械設計)</div><div class="mmeta">Osaka Mfg · Osaka · N3 · ¥280,000/月</div></div>
-              <span class="jbadge jbadge-kysis">Kỹ sư</span>
-            </div>
-            <div class="mjob">
-              <div class="mlogo" style="background:#d97706">建</div>
-              <div class="minfo"><div class="mtitle">Kỹ sư xây dựng (施工管理)</div><div class="mmeta">Nagoya Build · Aichi · N2 · ¥320,000/月</div></div>
-              <span class="jbadge jbadge-kysis">Kỹ sư</span>
-            </div>
-          </div>
-          <div class="jobs-panel" id="panel-nhat">
-            <div class="mjob">
-              <div class="mlogo" style="background:#2a5442">護</div>
-              <div class="minfo"><div class="mtitle">Điều dưỡng viên (介護福祉)</div><div class="mmeta">Sapporo Care · Hokkaido · N3 · ¥230,000/月</div></div>
-              <span class="jbadge jbadge-nhat">Đầu Nhật</span>
-            </div>
-            <div class="mjob">
-              <div class="mlogo" style="background:#f59e0b">溶</div>
-              <div class="minfo"><div class="mtitle">Thợ hàn công nghiệp</div><div class="mmeta">Kawasaki Steel · Kanagawa · N4 · ¥250,000/月</div></div>
-              <span class="jbadge jbadge-nhat">Đầu Nhật</span>
-            </div>
-            <div class="mjob">
-              <div class="mlogo" style="background:#0ea5e9">食</div>
-              <div class="minfo"><div class="mtitle">Nhân viên chế biến thuỷ sản</div><div class="mmeta">Nagasaki Fish · Nagasaki · N4 · ¥195,000/月</div></div>
-              <span class="jbadge jbadge-nhat">Đầu Nhật</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <a href="https://www.facebook.com/profile.php?id=100083745456974" target="_blank" class="btn btn-outline btn-lg">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+        Liên hệ tư vấn
+      </a>
     </div>
   </div>
+
+  <!-- Scroll indicator -->
+  <button class="scroll-arrow" aria-label="Cuộn xuống" onclick="document.getElementById('filterBar').scrollIntoView({behavior:'smooth'})">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
 </section>
+
 
 <!-- STATS -->
 <div class="stats">
@@ -1041,73 +917,46 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   </div>
 </div>
 
-<!-- CATEGORIES -->
+<!-- JOBS -->
 <section id="categories">
   <div class="container">
-    <div class="sec-hd anim">
-      <h2 class="sec-title">Tìm việc theo ngành nghề</h2>
-      <p class="sec-sub">Lựa chọn công việc phù hợp với visa và chứng chỉ/bằng cấp của bạn</p>
-    </div>
-    <!-- Cấp 1: chọn nhóm -->
-    <div class="group-grid anim" id="groupGrid">
-      <button class="group-card" onclick="selectGroup('tokutei')">
-        <div class="group-ico"><i data-lucide="factory"></i></div>
-        <div class="group-name">Tokutei</div>
-        <div class="group-sub">Thực phẩm · Xây dựng · Điều dưỡng · 17 ngành</div>
-        <div class="group-count" id="gc-tokutei">0 việc</div>
-      </button>
-      <button class="group-card" onclick="selectGroup('kysis')">
-        <div class="group-ico"><i data-lucide="laptop"></i></div>
-        <div class="group-name">Kỹ sư</div>
-        <div class="group-sub">IT · Cơ khí · Điện tử · 13 ngành</div>
-        <div class="group-count" id="gc-kysis">0 việc</div>
-      </button>
-    </div>
-
-    <!-- Cấp 2: ngành con (ẩn cho đến khi chọn nhóm) -->
-    <div id="subcatLevel" style="display:none">
-      <div class="subcat-hd">
-        <button class="back-btn" onclick="backToGroups()">← Quay lại</button>
-        <span class="subcat-title" id="subcatTitle"></span>
+    <div class="jobs-section" style="margin-top:0;padding-top:0;border-top:none">
+      <!-- FILTER BAR -->
+      <div class="filter-bar" id="filterBar">
+        <div class="search-bar">
+          <span class="search-ico"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/></svg></span>
+          <input id="searchInput" type="text" placeholder="Tìm theo tên việc, địa điểm, ngành nghề..." oninput="doSearch(this.value)" autocomplete="off">
+          <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
+        </div>
+        <div class="filter-type-row">
+          <button class="tf-btn on-all" id="tfAll" onclick="filterType('all')">Tất cả</button>
+          <button class="tf-btn" id="tfViet" onclick="filterType('viet')">Đầu Việt</button>
+          <button class="tf-btn" id="tfNhat" onclick="filterType('nhat')">Đầu Nhật</button>
+          <button class="tf-btn" id="tfKysis" onclick="filterType('kysis')">Kỹ sư</button>
+        </div>
+        <div class="filter-select-row">
+          <div class="cs-wrap" id="nganhSelectWrap">
+            <button class="cs-trigger" id="nganhTrigger" onclick="toggleNganhDrop(event)">
+              <span class="cs-trigger-label" id="nganhLabel">Ngành nghề</span>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cs-panel" id="nganhPanel"></div>
+          </div>
+          <select id="khuvucSelect" class="filter-select" onchange="setFilterPref(this.value)">
+            <option value="">Khu vực</option>
+            <option value="Hokkaido">Hokkaido (北海道)</option>
+            <option value="Tohoku">Tohoku — Aomori, Miyagi...</option>
+            <option value="Kanto">Kanto — Tokyo, Kanagawa...</option>
+            <option value="Chubu">Chubu — Aichi, Shizuoka...</option>
+            <option value="Kansai">Kansai — Osaka, Kyoto...</option>
+            <option value="Chugoku">Chugoku — Hiroshima...</option>
+            <option value="Shikoku">Shikoku — Ehime, Kagawa...</option>
+            <option value="Kyushu">Kyushu — Fukuoka...</option>
+            <option value="Okinawa">Okinawa (沖縄)</option>
+          </select>
+        </div>
+        <div class="filter-chips-row" id="filterChipsRow"></div>
       </div>
-      <!-- Tokutei: 17 ngành -->
-      <div class="cat-grid stag" id="catGridTokutei" style="display:none">
-        <a href="#" class="ccat" data-cat="Chế biến thực phẩm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="utensils"></i></span><div class="ccat-n">Chế biến thực phẩm</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nhóm ngành 1 (Cơ khí)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="factory"></i></span><div class="ccat-n">Nhóm ngành 1 (Cơ khí)</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nhóm ngành 2 (Điện tử)" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="cpu"></i></span><div class="ccat-n">Nhóm ngành 2 (Điện tử)</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="hard-hat"></i></span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Điều dưỡng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="heart-pulse"></i></span><div class="ccat-n">Điều dưỡng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nhà hàng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="chef-hat"></i></span><div class="ccat-n">Nhà hàng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Vệ sinh tòa nhà" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="sparkles"></i></span><div class="ccat-n">Vệ sinh tòa nhà</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Bảo dưỡng ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="car"></i></span><div class="ccat-n">Bảo dưỡng ô tô</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nông nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="sprout"></i></span><div class="ccat-n">Nông nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Lưu trú / Khách sạn" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="building-2"></i></span><div class="ccat-n">Lưu trú / Khách sạn</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Ngư nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="fish"></i></span><div class="ccat-n">Ngư nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Đóng tàu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="anchor"></i></span><div class="ccat-n">Đóng tàu</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Hàng không" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="plane"></i></span><div class="ccat-n">Hàng không</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Vận tải" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="truck"></i></span><div class="ccat-n">Vận tải</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Lâm nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="tree-pine"></i></span><div class="ccat-n">Lâm nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="May" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="scissors"></i></span><div class="ccat-n">May</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="In ấn" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="printer"></i></span><div class="ccat-n">In ấn</div><div class="ccat-c">0 việc</div></a>
-      </div>
-      <!-- Kỹ sư: 13 ngành / 4 nhóm -->
-      <div class="cat-grid stag" id="catGridKysis" style="display:none">
-        <a href="#" class="ccat" data-cat="Cơ khí" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="cog"></i></span><div class="ccat-n">Cơ khí</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Điện - Điện tử" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="zap"></i></span><div class="ccat-n">Điện - Điện tử</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Xây dựng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="hard-hat"></i></span><div class="ccat-n">Xây dựng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Hóa học & Vật liệu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="flask-conical"></i></span><div class="ccat-n">Hóa học & Vật liệu</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Ô tô" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="car"></i></span><div class="ccat-n">Ô tô</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Lập trình viên" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="laptop"></i></span><div class="ccat-n">Lập trình viên</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Kỹ sư hệ thống / Mạng" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="server"></i></span><div class="ccat-n">Hệ thống / Mạng</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="AI & Data Science" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="brain"></i></span><div class="ccat-n">AI & Data Science</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Chế biến thực phẩm" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="utensils"></i></span><div class="ccat-n">Chế biến thực phẩm</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Nông nghiệp" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="sprout"></i></span><div class="ccat-n">Nông nghiệp</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Phiên dịch / Thông dịch" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="languages"></i></span><div class="ccat-n">Phiên dịch</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Xuất nhập khẩu" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="package"></i></span><div class="ccat-n">Xuất nhập khẩu</div><div class="ccat-c">0 việc</div></a>
-        <a href="#" class="ccat" data-cat="Quản trị kinh doanh / Marketing" onclick="event.preventDefault();filterCat(this.dataset.cat)"><span class="e"><i data-lucide="trending-up"></i></span><div class="ccat-n">Kinh doanh / Marketing</div><div class="ccat-c">0 việc</div></a>
-      </div>
-    </div>
-    <div class="jobs-section">
       <div class="jobs-section-hd">
         <div class="jobs-section-title">Danh sách việc làm</div>
         <div class="jobs-count" id="jobsCount">0 việc làm</div>
@@ -1119,26 +968,13 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 </section>
 
 
-<!-- THÔNG TIN TOKUTEI -->
-<section id="thongtin" class="art-section">
-  <div class="container">
-    <div class="sec-hd anim">
-      <h2 class="sec-title">Thông tin Tokutei</h2>
-      <p class="sec-sub">Cập nhật kiến thức về visa Tokutei, cuộc sống Nhật Bản và kinh nghiệm từ người đi trước.</p>
-    </div>
-    <div class="art-grid anim" id="artPreviewGrid"></div>
-    <div style="text-align:center;margin-top:32px">
-      <button class="arts-more-btn" onclick="openArticles()">Xem tất cả bài viết →</button>
-    </div>
-  </div>
-</section>
 
 <!-- CTA -->
 <section class="cta">
   <div class="container" style="position:relative;z-index:1">
     <div class="anim">
       <h2>Hỗ trợ, giải đáp cụ thể mọi thông tin về các đơn hàng</h2>
-      <a href="https://www.facebook.com/trungphamtokutei" target="_blank" class="btn btn-dark btn-lg" style="font-size:18px;padding:14px 32px;margin-bottom:16px">
+      <a href="https://www.facebook.com/profile.php?id=100083745456974" target="_blank" class="btn btn-dark btn-lg" style="font-size:18px;padding:14px 32px;margin-bottom:16px">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" style="margin-right:8px;vertical-align:middle"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>Liên hệ Facebook
       </a>
     </div>
@@ -1149,12 +985,12 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 <footer>
   <div style="max-width:1120px;margin:0 auto;padding:0 24px">
     <div style="text-align:center;margin-bottom:44px">
-      <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" class="logo" style="justify-content:center"><svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#fff"><path d="M3 20 L12 3 L21 20 Z"/><path d="M8 12 Q12 9.5 16 12"/></svg><span class="logo-text" style="color:#fff">Nippon <em>Tokutei</em></span></a>
+      <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false" class="logo" style="justify-content:center"><svg class="logo-icon" viewBox="0 0 32 32" aria-hidden="true" fill="currentColor" style="color:#fff"><g transform="translate(16,16)"><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" opacity=".95"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(72)" opacity=".95"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(144)" opacity=".95"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(216)" opacity=".95"/><ellipse cx="0" cy="-5.5" rx="2.3" ry="4.2" transform="rotate(288)" opacity=".95"/><circle cx="0" cy="0" r="2.2" fill="white" opacity=".7"/></g></svg><span class="logo-text" style="color:#fff">Mai Phương <em>Tokutei</em></span></a>
       <p class="ft-tagline" style="max-width:420px;margin:8px auto 0">Việc làm Tokutei và Kỹ sư đầu Nhật hoàn toàn miễn phí, không cọc. Việc làm Tokutei đầu Việt phí thấp, uy tín.</p>
-      <button onclick="openZaloQR()" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:#356854;color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer"><svg width="16" height="16" viewBox="0 0 32 32" fill="white"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Liên hệ Zalo</button>
+      <button onclick="openZaloQR()" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:var(--primary);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;border:none;cursor:pointer"><svg width="16" height="16" viewBox="0 0 32 32" fill="white"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Liên hệ Zalo</button>
     </div>
     <div class="ft-bot">
-      <span>© 2026 Nippon Tokutei. Bảo lưu mọi quyền.</span>
+      <span>© 2026 Mai Phương Tokutei. Bảo lưu mọi quyền.</span>
       <div class="soc">
         <a href="#" class="sl">f</a>
         <a href="#" class="sl">in</a>
@@ -1197,36 +1033,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 </div>
 
 <!-- ARTICLES LISTING PANEL -->
-<div class="arts-overlay" id="artsOverlay" onclick="if(event.target===this)closeArticles()">
-  <div class="arts-box">
-    <div class="arts-hd">
-      <span class="arts-hd-title">📰 Thông tin Tokutei</span>
-      <button class="modal-close" onclick="closeArticles()">✕</button>
-    </div>
-    <div class="arts-cats">
-      <button class="acat-tab on" data-cat="all" onclick="currentArtCat='all';renderArticlesPanel()">Tất cả</button>
-      <button class="acat-tab" data-cat="tokutei" onclick="currentArtCat='tokutei';renderArticlesPanel()">📋 Tokutei</button>
-      <button class="acat-tab" data-cat="japan-life" onclick="currentArtCat='japan-life';renderArticlesPanel()">🗾 Cuộc sống Nhật</button>
-      <button class="acat-tab" data-cat="experience" onclick="currentArtCat='experience';renderArticlesPanel()">💡 Kinh nghiệm</button>
-      <button class="acat-tab" data-cat="news" onclick="currentArtCat='news';renderArticlesPanel()">📰 Tin tức</button>
-    </div>
-    <div class="arts-list" id="artsList"></div>
-  </div>
-</div>
-
-<!-- ARTICLE DETAIL -->
-<div class="artd-overlay" id="artdOverlay" onclick="if(event.target===this)closeArticle()">
-  <div class="artd-box">
-    <div class="artd-hd">
-      <button class="artd-back" onclick="closeArticle()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Quay lại
-      </button>
-      <button class="modal-close" onclick="closeArticle()">✕</button>
-    </div>
-    <div class="artd-scroll" id="artdContent"></div>
-  </div>
-</div>
 
 <!-- ADMIN DASHBOARD -->
 <div class="admin-overlay" id="adminOverlay">
@@ -1496,20 +1302,21 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
           <div style="margin-top:10px;font-size:12px;color:var(--text-2);line-height:2;background:var(--surface-alt);padding:12px;border-radius:8px">
             <strong>Hàng 1: tiêu đề cột (bỏ qua khi đồng bộ)</strong><br>
             A: <code>type</code> — viet / nhat / both / kysis<br>
-            B: <code>category</code> — Ngành nghề<br>
-            C: <code>title</code> — Tên vị trí ⭐ <em>bắt buộc</em><br>
-            D: <code>city</code> — Tỉnh / Khu vực<br>
-            E: <code>salary</code> — Mức lương<br>
-            F: <code>japanese</code> — N1 / N2 / N3 / N4 / N5 / không yêu cầu<br>
-            G: <code>gender</code> — Nam / Nữ / Không yêu cầu<br>
-            H: <code>workHours</code> — Giờ làm việc<br>
-            I: <code>daysOff</code> — Ngày nghỉ<br>
-            J: <code>overtime</code> — Tăng ca<br>
-            K: <code>raise</code> — Tăng lương<br>
-            L: <code>bonus</code> — Thưởng<br>
-            M: <code>housing</code> — Nhà ở<br>
-            N: <code>desc</code> — Mô tả công việc<br>
-            O: <code>status</code> — active / expired (mặc định: active)
+            B: <code>title</code> — Tên vị trí ⭐ <em>bắt buộc</em><br>
+            C: <code>category</code> — Ngành chính (dropdown)<br>
+            D: <code>category_sub</code> — Ngành phụ (nhập tay, để trống nếu không cần)<br>
+            E: <code>city</code> — Tỉnh / Khu vực<br>
+            F: <code>salary</code> — Mức lương<br>
+            G: <code>japanese</code> — N1 / N2 / N3 / N4 / N5 / không yêu cầu<br>
+            H: <code>gender</code> — Nam / Nữ / Không yêu cầu<br>
+            I: <code>workHours</code> — Giờ làm việc<br>
+            J: <code>daysOff</code> — Ngày nghỉ<br>
+            K: <code>overtime</code> — Tăng ca<br>
+            L: <code>raise</code> — Tăng lương<br>
+            M: <code>bonus</code> — Thưởng<br>
+            N: <code>housing</code> — Nhà ở<br>
+            O: <code>desc</code> — Mô tả công việc<br>
+            P: <code>status</code> — active / expired (mặc định: active)
           </div>
         </details>
       </div>
@@ -1627,8 +1434,8 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
       <div id="applyKysisContact" style="display:none;padding:4px 0 8px">
         <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;line-height:1.65">Gửi hồ sơ và giấy tờ trên qua Zalo hoặc Facebook để được tư vấn:</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <button onclick="openZaloQR()" class="modal-cta" style="background:#356854;border:none;cursor:pointer;font-family:inherit;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:0"><svg width="18" height="18" viewBox="0 0 32 32" fill="white"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Gửi qua Zalo</button>
-          <a href="https://www.facebook.com/trungphamtokutei" target="_blank" class="modal-cta" style="background:#2a5442;margin-top:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg> Gửi qua Facebook</a>
+          <button onclick="openZaloQR()" class="modal-cta" style="background:var(--primary);border:none;cursor:pointer;font-family:inherit;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:0"><svg width="18" height="18" viewBox="0 0 32 32" fill="white"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Gửi qua Zalo</button>
+          <a href="https://www.facebook.com/profile.php?id=100083745456974" target="_blank" class="modal-cta" style="background:var(--primary);margin-top:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg> Gửi qua Facebook</a>
         </div>
       </div>
 
@@ -1644,8 +1451,8 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
       <p>Nhấn <strong>"Mở Zalo/Facebook"</strong> rồi <strong>dán (paste)</strong> vào chat với tuyển dụng</p>
       <div class="copy-box" id="applyPreview"></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-        <button id="done-zalo" onclick="openZaloQR()" class="modal-cta" style="background:#356854;border:none;cursor:pointer;font-family:inherit;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px"><svg width="18" height="18" viewBox="0 0 32 32" fill="white"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Gửi qua Zalo</button>
-        <a id="done-fb"   href="https://www.facebook.com/trungphamtokutei" target="_blank" class="modal-cta" style="background:#2a5442"><svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg> Gửi qua Facebook</a>
+        <button id="done-zalo" onclick="openZaloQR()" class="modal-cta" style="background:var(--primary);border:none;cursor:pointer;font-family:inherit;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px"><svg width="18" height="18" viewBox="0 0 32 32" fill="white"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg> Gửi qua Zalo</button>
+        <a id="done-fb"   href="https://www.facebook.com/profile.php?id=100083745456974" target="_blank" class="modal-cta" style="background:var(--primary)"><svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.269h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg> Gửi qua Facebook</a>
       </div>
       <button onclick="closeApply()" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-size:13px;cursor:pointer;color:var(--text-2)">Đóng</button>
     </div>
@@ -1709,24 +1516,25 @@ document.querySelectorAll('.anim,.stag').forEach(el => io.observe(el));
 
 
 // Hero mockup tab switcher
-const NGANH_TOKUTEI = [
-  ['Chế biến thực phẩm','Chế biến thực phẩm'],
-  ['Nhóm ngành 1 (Cơ khí)','Nhóm ngành 1 (Cơ khí)'],
-  ['Nhóm ngành 2 (Điện tử)','Nhóm ngành 2 (Điện tử)'],
-  ['Xây dựng','Xây dựng'],
-  ['Điều dưỡng','Điều dưỡng'],
-  ['Nhà hàng','Nhà hàng'],
-  ['Vệ sinh tòa nhà','Vệ sinh tòa nhà'],
-  ['Bảo dưỡng ô tô','Bảo dưỡng ô tô'],
-  ['Nông nghiệp','Nông nghiệp'],
-  ['Lưu trú / Khách sạn','Lưu trú / Khách sạn'],
-  ['Ngư nghiệp','Ngư nghiệp'],
-  ['Đóng tàu','Đóng tàu'],
-  ['Hàng không','Hàng không'],
-  ['Vận tải','Vận tải'],
-  ['Lâm nghiệp','Lâm nghiệp'],
-  ['May','May'],
-  ['In ấn','In ấn'],
+const NGANH_TOKUTEI_GROUPS = [
+  {g:'Chế biến thực phẩm', items:['Chế biến thực phẩm']},
+  {g:'① Gia công cơ khí - kim loại', items:['Đúc nóng','Đúc lạnh','Dập kim loại','Kim loại tấm','Tekko','Rèn','Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Hàn','Sơn kim loại','Lắp ráp thiết bị điện','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']},
+  {g:'② Lắp ráp điện - điện tử', items:['Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Lắp ráp thiết bị điện','Lắp ráp thiết bị điện tử','Sản xuất bảng mạch in (PCB)','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']},
+  {g:'③ Xử lý bề mặt kim loại', items:['Mạ điện','Xử lý oxy hóa nhôm (Anodize)']},
+  {g:'Xây dựng', items:['Xây dựng']},
+  {g:'Điều dưỡng', items:['Điều dưỡng']},
+  {g:'Nhà hàng', items:['Nhà hàng']},
+  {g:'Nông nghiệp', items:['Nông nghiệp']},
+  {g:'Vệ sinh tòa nhà', items:['Vệ sinh tòa nhà']},
+  {g:'Bảo dưỡng ô tô', items:['Bảo dưỡng ô tô']},
+  {g:'Lưu trú / Khách sạn', items:['Lưu trú / Khách sạn']},
+  {g:'Ngư nghiệp', items:['Ngư nghiệp']},
+  {g:'Đóng tàu', items:['Đóng tàu']},
+  {g:'Hàng không', items:['Hàng không']},
+  {g:'Vận tải', items:['Vận tải']},
+  {g:'Lâm nghiệp', items:['Lâm nghiệp']},
+  {g:'May', items:['May']},
+  {g:'In ấn', items:['In ấn']},
 ];
 const NGANH_KYSIS_GROUPS = [
   {g:'Kỹ thuật & Sản xuất', items:['Cơ khí','Điện - Điện tử','Xây dựng','Hóa học & Vật liệu','Ô tô']},
@@ -1734,27 +1542,48 @@ const NGANH_KYSIS_GROUPS = [
   {g:'Thực phẩm & Nông nghiệp', items:['Chế biến thực phẩm','Nông nghiệp']},
   {g:'Kinh tế & Ngôn ngữ', items:['Phiên dịch / Thông dịch','Xuất nhập khẩu','Quản trị kinh doanh / Marketing']},
 ];
-function updateNganhOptions(type) {
-  const sel = document.getElementById('filterNganh');
-  if(!sel) return;
-  if(type === 'kysis') {
-    sel.innerHTML = '<option value="">Ngành nghề</option>' +
-      NGANH_KYSIS_GROUPS.map(({g,items}) =>
-        `<optgroup label="${g}">${items.map(v=>`<option value="${v}">${v}</option>`).join('')}</optgroup>`
-      ).join('');
-  } else {
-    sel.innerHTML = '<option value="">Ngành nghề</option>' +
-      NGANH_TOKUTEI.map(([val,label]) => `<option value="${val}">${label}</option>`).join('');
-  }
+const NHOM_1_ITEMS = new Set(['Đúc nóng','Đúc lạnh','Dập kim loại','Kim loại tấm','Tekko','Rèn','Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Hàn','Sơn kim loại','Lắp ráp thiết bị điện','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']);
+const NHOM_2_ITEMS = new Set(['Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Lắp ráp thiết bị điện','Lắp ráp thiết bị điện tử','Sản xuất bảng mạch in (PCB)','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']);
+
+function jobMatchesCat(jcat, selectedCat) {
+  if(!jcat || !selectedCat) return false;
+  const jcatLow = jcat.toLowerCase().trim();
+  const selLow = selectedCat.toLowerCase().trim();
+  // Comma-separated: check each part
+  const parts = jcat.split(',').map(s => s.trim().toLowerCase());
+  if(parts.some(p => p === selLow)) return true;
+  // Group-level match: Nhóm 1 / Nhóm 2 / Nhóm 1+2
+  const inNhom1 = NHOM_1_ITEMS.has(selectedCat);
+  const inNhom2 = NHOM_2_ITEMS.has(selectedCat);
+  if(jcatLow === 'nhóm 1' && inNhom1) return true;
+  if(jcatLow === 'nhóm 2' && inNhom2) return true;
+  if(jcatLow === 'nhóm 1+2' && (inNhom1 || inNhom2)) return true;
+  return false;
+}
+
+function renderJobCat(cat) {
+  if(!cat) return '';
+  const c = cat.trim();
+  if(c === 'Nhóm 1') return `<span class="jcard-cat jcat-nhom1">① Cơ khí - Kim loại</span>`;
+  if(c === 'Nhóm 2') return `<span class="jcard-cat jcat-nhom2">② Điện - Điện tử</span>`;
+  if(c === 'Nhóm 1+2') return `<span class="jcard-cat jcat-nhom1">① Cơ khí</span><span class="jcard-cat jcat-nhom2">② Điện tử</span>`;
+  const parts = c.split(',').map(s => s.trim()).filter(Boolean);
+  if(parts.length > 1) return parts.map(p => `<span class="jcard-cat">${p}</span>`).join('');
+  return `<span class="jcard-cat">${c}</span>`;
 }
 function switchTab(type) {
   document.querySelectorAll('.mtt').forEach(b => b.classList.remove('on'));
-  document.querySelector(`.mtt.${type}`).classList.add('on');
+  const el = document.querySelector(`.mtt.${type}`);
+  if (el) el.classList.add('on');
   document.querySelectorAll('.jobs-panel').forEach(p => p.classList.remove('on'));
-  document.getElementById('panel-' + type).classList.add('on');
-  updateNganhOptions(type);
+  const panel = document.getElementById('panel-' + type);
+  if (panel) panel.classList.add('on');
 }
-updateNganhOptions('viet');
+
+function heroSelectType(type) {
+  filterType(type);
+  setTimeout(() => document.getElementById('jobsList').scrollIntoView({behavior:'smooth'}), 120);
+}
 
 // ── JOB DATA ──
 const STORE_KEY  = 'tp_tokutei_jobs';
@@ -1779,8 +1608,8 @@ async function syncFromSupabase() {
 const SEED_JOBS = [{"id":"mp2vkfxjxguo","type":"both","title":"Làm bánh mỳ","category":"🍱 Chế biến thực phẩm","city":"Osaka","salary":"20man","gender":"Nam","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:58:42.727Z"},{"id":"mp2u5ouc4568","type":"kysis","title":"Kỹ sư xây dựng","category":"🏗️ Xây dựng / Kiến trúc","city":"Mie - Komono","salary":"1300 Y/H","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"10-45h","raise":"Có","bonus":"Không","housing":"2man/tháng","desc":"Vệ sinh sửa chữa giàn giáo","status":"active","updatedAt":"2026-05-12T16:19:14.820Z"},{"id":"mp2tj8y8rzpt","type":"viet","title":"Làm bánh mochi","category":"🍱 Chế biến thực phẩm","city":"Tokyo","salary":"","gender":"Nam","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:01:47.792Z"},{"id":"mp2ka8qloryz","type":"nhat","title":"gdfgd","category":"🏗️ Xây dựng","city":"fdgdf","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:51.069Z"},{"id":"mp2ka4rqtwwx","type":"nhat","title":"retgfd","category":"🏗️ Xây dựng","city":"AAA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:45.926Z"},{"id":"mp2k9ym4mnxs","type":"nhat","title":"122","category":"🌾 Nông nghiệp","city":"AA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:37.948Z"},{"id":"mp2k9ih0679v","type":"viet","title":"1111","category":"🌾 Nông nghiệp","city":"Aichi","salary":"","gender":"","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:17.028Z"},{"id":"mp2bgskkpbj1","type":"nhat","title":"Làm bánh Pizza","category":"🍱 Chế biến thực phẩm","city":"Yamagata - Yonezawa","salary":"1100y/h","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"40h/tháng","raise":"Có","bonus":"~10man","company":"","housing":"2man","desc":"Làm việc tại dây chuyền chế biến thực phẩm đông lạnh. Bao ký túc xá, 2 bữa/ngày.","status":"active","updatedAt":"2026-05-12T08:07:16.258Z"},{"id":"mp2bgsklo2sk","type":"viet","title":"Công nhân xây dựng (型枠工)","category":"🏗️ Xây dựng","city":"Osaka 大阪","salMin":200000,"salMax":240000,"japanese":"N4以上","company":"Osaka Build Corp.","desc":"Gia công cốp pha, lắp dựng khung bê tông. OT được trả 125%.","status":"active"},{"id":"mp2bgskl9otm","type":"nhat","title":"Điều dưỡng viên tại cơ sở chăm sóc người già","category":"💊 Điều dưỡng / Hộ lý","city":"Hokkaido 北海道","salMin":210000,"salMax":250000,"japanese":"N3以上","company":"Sapporo Care Center","desc":"Chăm sóc người cao tuổi, hỗ trợ sinh hoạt hàng ngày. Không cần kinh nghiệm.","status":"active"},{"id":"mp2bgsklr9ql","type":"nhat","title":"Thợ hàn công nghiệp (溶接)","category":"🏗️ Xây dựng","city":"Kanagawa 神奈川","salMin":230000,"salMax":280000,"japanese":"N4以上","company":"Kawasaki Steel Works","desc":"Hàn kết cấu thép tại xưởng. Có chứng chỉ hàn được ưu tiên.","status":"active"}];
 if (!localStorage.getItem(STORE_KEY)) { localStorage.setItem(STORE_KEY, JSON.stringify(SEED_JOBS)); }
 const SAVED_KEY  = 'tp_saved_jobs';
-const ZALO_URL   = 'https://zalo.me/0386887691';
-const FB_URL     = 'https://www.facebook.com/trungphamtokutei';
+const ZALO_URL   = 'https://zalo.me/0367935698';
+const FB_URL     = 'https://www.facebook.com/profile.php?id=100083745456974';
 const SVG_BOOKMARK_OUT = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
 const SVG_BOOKMARK_FILL = `<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
 
@@ -1821,7 +1650,6 @@ let currentType = 'all';
 let currentCat = null;
 let currentSearch = '';
 let currentPref = null;
-let currentJapanese = null;
 let currentPage = 1;
 const JOBS_PER_PAGE = 9;
 
@@ -1835,34 +1663,169 @@ function scrollToSearch() {
 function doSearch(val) {
   currentSearch = val.trim().toLowerCase();
   currentPage = 1;
+  const clr = document.getElementById('searchClear');
+  if(clr) clr.classList.toggle('show', !!currentSearch);
   renderJobs();
 }
 
-function hfNext(step) {
-  if(step === 1 && document.getElementById('filterNganh').value) {
-    document.getElementById('filterNganh').classList.add('filled');
-    document.getElementById('hfRow2').classList.add('show');
-  }
-  if(step === 2 && document.getElementById('filterTinh').value) {
-    document.getElementById('filterTinh').classList.add('filled');
-    document.getElementById('hfRow3').classList.add('show');
-  }
-  if(step === 3 && document.getElementById('filterJapanese').value) {
-    document.getElementById('filterJapanese').classList.add('filled');
-    document.getElementById('hfSearchBtn').classList.add('show');
-  }
+
+function setFilterNganh(val, skipSelect) {
+  currentCat = val || null;
+  currentPage = 1;
+  const trigger = document.getElementById('nganhTrigger');
+  const label = document.getElementById('nganhLabel');
+  if(trigger) trigger.classList.toggle('has-value', !!val);
+  if(label) label.textContent = val || 'Ngành nghề';
+  document.querySelectorAll('#nganhPanel .cs-flat-item').forEach(b => b.classList.toggle('cs-selected', b.dataset.val === val));
+  document.querySelectorAll('.ccat').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCat));
+  renderJobs();
 }
-function doHeroSearch() {
-  const cat      = document.getElementById('filterNganh').value || null;
-  const pref     = document.getElementById('filterTinh').value || null;
-  const japanese = document.getElementById('filterJapanese').value || null;
-  renderHeroJobs({cat, pref, japanese});
+function toggleNganhDrop(e) {
+  e.stopPropagation();
+  const panel = document.getElementById('nganhPanel');
+  const trigger = document.getElementById('nganhTrigger');
+  const isOpen = panel.classList.toggle('open');
+  trigger.classList.toggle('open', isOpen);
+}
+function closeNganhDrop() {
+  document.getElementById('nganhPanel')?.classList.remove('open');
+  document.getElementById('nganhTrigger')?.classList.remove('open');
+}
+function toggleNganhGroup(el) {
+  const items = el.nextElementSibling;
+  const isOpen = items.classList.toggle('open');
+  el.classList.toggle('open', isOpen);
+}
+function selectNganhItem(val) {
+  setFilterNganh(val);
+  closeNganhDrop();
+}
+
+function setFilterPref(val, skipSelect) {
+  currentPref = val || null;
+  currentPage = 1;
+  const sel = document.getElementById('khuvucSelect');
+  if(sel && !skipSelect) sel.value = val || '';
+  if(sel) sel.classList.toggle('has-value', !!val);
+  renderJobs();
+}
+
+function renderFilterChips() {
+  const row = document.getElementById('filterChipsRow');
+  if(!row) return;
+  const chips = [];
+  if(currentSearch) chips.push(`<button class="fchip fchip-search" onclick="clearSearch()">🔍 "${currentSearch}" <span class="fchip-x">×</span></button>`);
+  if(currentType && currentType !== 'all') {
+    const lbl = currentType==='viet'?'Đầu Việt':currentType==='nhat'?'Đầu Nhật':'Kỹ sư';
+    chips.push(`<button class="fchip fchip-${currentType}" onclick="filterType('all')">${lbl} <span class="fchip-x">×</span></button>`);
+  }
+  if(currentCat) chips.push(`<button class="fchip fchip-cat" onclick="setFilterNganh('')">${currentCat} <span class="fchip-x">×</span></button>`);
+  if(currentPref) chips.push(`<button class="fchip fchip-pref" onclick="setFilterPref('')">${currentPref} <span class="fchip-x">×</span></button>`);
+  if(chips.length > 1) chips.push(`<button class="clear-all-btn" onclick="clearAllFilters()">Xóa tất cả</button>`);
+  row.innerHTML = chips.join('');
+}
+
+const NGANH_ICON_MAP = {
+  'Chế biến thực phẩm':'utensils',
+  '① Gia công cơ khí - kim loại':'factory',
+  '② Lắp ráp điện - điện tử':'cpu',
+  '③ Xử lý bề mặt kim loại':'layers',
+  'Xây dựng':'hard-hat','Điều dưỡng':'heart-pulse','Nhà hàng':'chef-hat',
+  'Nông nghiệp':'sprout','Vệ sinh tòa nhà':'sparkles','Bảo dưỡng ô tô':'car',
+  'Lưu trú / Khách sạn':'building-2','Ngư nghiệp':'fish','Đóng tàu':'anchor',
+  'Hàng không':'plane','Vận tải':'truck','Lâm nghiệp':'tree-pine','May':'scissors','In ấn':'printer',
+  'Đúc nóng':'flame','Đúc lạnh':'snowflake','Dập kim loại':'hammer','Kim loại tấm':'square','Tekko':'wrench',
+  'Rèn':'hammer','Gia công cơ khí':'cog','Hoàn thiện sản phẩm':'sparkles',
+  'Đúc nhựa':'box','Hàn':'zap','Sơn kim loại':'paintbrush-vertical',
+  'Lắp ráp thiết bị điện':'plug','Kiểm tra máy móc':'scan-line','Bảo trì máy móc':'wrench',
+  'Đóng gói công nghiệp':'package','Lắp ráp thiết bị điện tử':'circuit-board',
+  'Sản xuất bảng mạch in (PCB)':'circuit-board','Mạ điện':'droplets','Xử lý oxy hóa nhôm (Anodize)':'layers',
+  'Kỹ thuật & Sản xuất':'wrench','Công nghệ thông tin (IT)':'laptop',
+  'Thực phẩm & Nông nghiệp':'sprout','Kinh tế & Ngôn ngữ':'trending-up',
+  'Cơ khí':'cog','Điện - Điện tử':'zap','Hóa học & Vật liệu':'flask-conical','Ô tô':'car',
+  'Lập trình viên':'laptop','Kỹ sư hệ thống / Mạng':'server','AI & Data Science':'brain',
+  'Phiên dịch / Thông dịch':'languages','Xuất nhập khẩu':'package',
+  'Quản trị kinh doanh / Marketing':'trending-up',
+};
+function getNganhIcon(name) {
+  const key = name.replace('Kỹ sư — ','');
+  const ico = NGANH_ICON_MAP[key];
+  return ico ? `<i data-lucide="${ico}" class="cs-ico"></i>` : '';
+}
+function buildNganhPanelHTML(groups) {
+  const chevron = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>`;
+  return groups.map(({g,items}) =>
+    items.length === 1
+      ? `<button class="cs-flat-item" data-val="${items[0]}">${getNganhIcon(items[0])}${items[0]}</button>`
+      : `<button class="cs-group-hd">${getNganhIcon(g)}<span>${g}</span>${chevron}</button>
+         <div class="cs-group-items">${items.map(v=>`<button class="cs-flat-item" data-val="${v}">${v}</button>`).join('')}</div>`
+  ).join('');
+}
+function initNganhPanelEvents() {
+  const panel = document.getElementById('nganhPanel');
+  if(!panel) return;
+  panel.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const item = e.target.closest('.cs-flat-item');
+    const hd   = e.target.closest('.cs-group-hd');
+    if(item) {
+      const val = item.dataset.val;
+      setFilterNganh(val);
+      closeNganhDrop();
+    } else if(hd) {
+      const groupItems = hd.nextElementSibling;
+      if(groupItems) {
+        const isOpen = groupItems.classList.toggle('open');
+        hd.classList.toggle('open', isOpen);
+      }
+    }
+  });
+}
+function populateNganhSelect(type) {
+  const panel = document.getElementById('nganhPanel');
+  if(!panel) return;
+  const t = type || currentType || 'all';
+  if(t === 'kysis') {
+    panel.innerHTML = buildNganhPanelHTML(NGANH_KYSIS_GROUPS);
+  } else if(t === 'viet' || t === 'nhat') {
+    panel.innerHTML = buildNganhPanelHTML(NGANH_TOKUTEI_GROUPS);
+  } else {
+    panel.innerHTML = buildNganhPanelHTML(NGANH_TOKUTEI_GROUPS) +
+      buildNganhPanelHTML(NGANH_KYSIS_GROUPS.map(({g,items}) => ({g:`Kỹ sư — ${g}`,items})));
+  }
+  if(window.lucide) lucide.createIcons();
 }
 function clearSearch() {
   currentSearch = '';
   currentPage = 1;
   const inp = document.getElementById('searchInput');
-  if (inp) inp.value = '';
+  if(inp) inp.value = '';
+  const clr = document.getElementById('searchClear');
+  if(clr) clr.classList.remove('show');
+  renderJobs();
+}
+
+function clearAllFilters() {
+  currentSearch = '';
+  currentType = 'all';
+  currentCat = null;
+  currentPref = null;
+  currentPage = 1;
+  const inp = document.getElementById('searchInput');
+  if(inp) inp.value = '';
+  const clr = document.getElementById('searchClear');
+  if(clr) clr.classList.remove('show');
+  const trigger = document.getElementById('nganhTrigger');
+  const label = document.getElementById('nganhLabel');
+  if(trigger) { trigger.classList.remove('has-value','open'); }
+  if(label) label.textContent = 'Ngành nghề';
+  closeNganhDrop();
+  const ks = document.getElementById('khuvucSelect');
+  if(ks) { ks.value = ''; ks.classList.remove('has-value'); }
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('on-all','on-viet','on-nhat','on-kysis'));
+  const tfAll = document.getElementById('tfAll');
+  if(tfAll) tfAll.classList.add('on-all');
+  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
   renderJobs();
 }
 
@@ -1899,7 +1862,7 @@ function getHeroFlagHTML(type) {
   if (type === 'viet') return FLAG_VN_SVG(36,24);
   if (type === 'nhat') return FLAG_JP_SVG(36,24);
   if (type === 'both') return `<div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">${FLAG_VN_SVG(36,16)}${FLAG_JP_SVG(36,16)}</div>`;
-  return `<div style="width:36px;height:36px;flex-shrink:0;background:#e8f2ee;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(53,104,84,.15)">🎓</div>`;
+  return `<div style="width:36px;height:36px;flex-shrink:0;background:#FCEEF4;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(181,66,106,.15)">🎓</div>`;
 }
 
 function renderHeroJobs(filters) {
@@ -1949,20 +1912,17 @@ function renderJobs() {
   const container = document.getElementById('jobsList');
   if(!container) return;
   let jobs = getJobs().filter(j => j.status === 'active');
-  if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
+  if(currentType === 'viet') jobs = jobs.filter(j => j.type === 'viet' || j.type === 'both');
+  else if(currentType === 'nhat') jobs = jobs.filter(j => j.type === 'nhat' || j.type === 'both');
+  else if(currentType === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
+  else if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
   else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type !== 'kysis');
-  if(currentCat) jobs = jobs.filter(j => (j.category||'').toLowerCase().includes(currentCat.toLowerCase()));
+  if(currentCat) jobs = jobs.filter(j => jobMatchesCat(j.category||'', currentCat));
   if(currentPref) {
     const REGIONS={'Hokkaido':['Hokkaido'],'Tohoku':['Aomori','Iwate','Miyagi','Akita','Yamagata','Fukushima'],'Kanto':['Ibaraki','Tochigi','Gunma','Saitama','Chiba','Tokyo','Kanagawa'],'Chubu':['Niigata','Toyama','Ishikawa','Fukui','Yamanashi','Nagano','Shizuoka','Aichi','Mie'],'Kansai':['Shiga','Kyoto','Osaka','Hyogo','Nara','Wakayama'],'Chugoku':['Tottori','Shimane','Okayama','Hiroshima','Yamaguchi'],'Shikoku':['Tokushima','Kagawa','Ehime','Kochi'],'Kyushu':['Fukuoka','Saga','Nagasaki','Kumamoto','Oita','Miyazaki','Kagoshima'],'Okinawa':['Okinawa']};
     const prefList = REGIONS[currentPref];
     if(prefList) jobs = jobs.filter(j => prefList.some(p => (j.city||'').toLowerCase().includes(p.toLowerCase())));
     else jobs = jobs.filter(j => (j.city||'').toLowerCase().includes(currentPref.toLowerCase()));
-  }
-  if(currentJapanese) {
-    const JP_RANK = {n1:1,n2:2,n3:3,n4:4,n5:5};
-    function jpRank(s){const t=(s||'').toLowerCase();if(t.includes('n1'))return 1;if(t.includes('n2'))return 2;if(t.includes('n3'))return 3;if(t.includes('n4'))return 4;if(t.includes('n5'))return 5;return 6;}
-    const userRank = JP_RANK[currentJapanese.toLowerCase()] || 6;
-    jobs = jobs.filter(j => jpRank(j.japanese) >= userRank);
   }
   if(currentSearch) {
     const q = currentSearch;
@@ -1974,7 +1934,11 @@ function renderJobs() {
     );
   }
 
-  jobs.sort((a, b) => (a.category||'').localeCompare(b.category||'', 'vi') || (a.title||'').localeCompare(b.title||'', 'vi'));
+  jobs.sort((a, b) => {
+    const ta = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+    const tb = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+    return tb - ta;
+  });
 
   const totalJobs = jobs.length;
   const totalPages = Math.ceil(totalJobs / JOBS_PER_PAGE);
@@ -1984,11 +1948,12 @@ function renderJobs() {
   const countEl = document.getElementById('jobsCount');
   if(countEl) countEl.textContent = totalJobs + ' việc làm';
 
+  renderFilterChips();
   if(!jobs.length) {
     container.innerHTML = `<div class="jobs-empty">
       <div class="ej" style="display:flex;align-items:center;justify-content:center;color:var(--text-3)">${ICONS.briefcase}</div>
       <p>Không tìm thấy việc làm${currentSearch ? ` cho "<strong>${currentSearch}</strong>"` : currentCat ? ' trong ngành này' : ''}</p>
-      <a href="https://zalo.me/0386887691" target="_blank">Nhắn Zalo để hỏi thêm →</a>
+      <a href="https://zalo.me/0367935698" target="_blank">Nhắn Zalo để hỏi thêm →</a>
     </div>`;
     return;
   }
@@ -2029,7 +1994,7 @@ function renderJobs() {
       <div style="display:flex;flex-direction:column;gap:10px">
           <div class="jcard-top">
             ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
-            <span class="jcard-cat">${j.category||''}</span>
+            ${renderJobCat(j.category||'')}
             <span class="status-badge ${isActive?'active':'expired'}">${isActive?'Đang tuyển':'Hết hạn'}</span>
           </div>
           <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
@@ -2057,7 +2022,6 @@ function scrollToJob(id) {
   currentCat = null;
   currentSearch = '';
   currentPref = null;
-  currentJapanese = null;
   const inp = document.getElementById('searchInput');
   if(inp) inp.value = '';
   document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
@@ -2066,7 +2030,11 @@ function scrollToJob(id) {
 
   // Tìm vị trí job trong danh sách để xác định trang (sort phải khớp renderJobs)
   const allJobs = getJobs().filter(j => j.status === 'active');
-  allJobs.sort((a, b) => (a.category||'').localeCompare(b.category||'', 'vi') || (a.title||'').localeCompare(b.title||'', 'vi'));
+  allJobs.sort((a, b) => {
+    const ta = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
+    const tb = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
+    return tb - ta;
+  });
   const idx = allJobs.findIndex(j => j.id === id);
   currentPage = idx === -1 ? 1 : Math.ceil((idx + 1) / JOBS_PER_PAGE);
 
@@ -2096,7 +2064,7 @@ function getJobFlagHTML(type) {
   if (type === 'viet') return FLAG_VN_SVG(48,32);
   if (type === 'nhat') return FLAG_JP_SVG(48,32);
   if (type === 'both') return `<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0">${FLAG_VN_SVG(48,21)}${FLAG_JP_SVG(48,21)}</div>`;
-  return `<div style="width:48px;height:32px;flex-shrink:0;background:#e8f2ee;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(53,104,84,.15)">🎓</div>`;
+  return `<div style="width:48px;height:32px;flex-shrink:0;background:#FCEEF4;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(181,66,106,.15)">🎓</div>`;
 }
 
 function selectGroup(group) {
@@ -2121,6 +2089,11 @@ function backToGroups() {
   document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
   document.getElementById('groupGrid').style.display = 'grid';
   document.getElementById('subcatLevel').style.display = 'none';
+  const trigger = document.getElementById('nganhTrigger');
+  const label = document.getElementById('nganhLabel');
+  if(trigger) { trigger.classList.remove('has-value','open'); }
+  if(label) label.textContent = 'Ngành nghề';
+  closeNganhDrop();
   updateGroupCounts();
   renderJobs();
 }
@@ -2136,12 +2109,18 @@ function updateGroupCounts() {
 function filterType(type) {
   currentType = type;
   currentCat = null;
-  const btns = document.querySelectorAll('.tf-btn');
-  btns.forEach(b => b.classList.remove('on-all','on-viet','on-nhat','on-kysis'));
-  if(type === 'all')   document.querySelector('.tf-btn:nth-child(1)').classList.add('on-all');
-  if(type === 'viet')  document.querySelector('.tf-btn:nth-child(2)').classList.add('on-viet');
-  if(type === 'nhat')  document.querySelector('.tf-btn:nth-child(3)').classList.add('on-nhat');
-  if(type === 'kysis') document.querySelector('.tf-btn:nth-child(4)').classList.add('on-kysis');
+  currentPage = 1;
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('on-all','on-viet','on-nhat','on-kysis'));
+  const map = {all:'tfAll',viet:'tfViet',nhat:'tfNhat',kysis:'tfKysis'};
+  const cls = {all:'on-all',viet:'on-viet',nhat:'on-nhat',kysis:'on-kysis'};
+  const el = document.getElementById(map[type]);
+  if(el) el.classList.add(cls[type]);
+  populateNganhSelect(type);
+  const trigger = document.getElementById('nganhTrigger');
+  const label = document.getElementById('nganhLabel');
+  if(trigger) { trigger.classList.remove('has-value','open'); }
+  if(label) label.textContent = 'Ngành nghề';
+  closeNganhDrop();
   document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
   updateCatCounts();
   renderJobs();
@@ -2151,8 +2130,12 @@ function filterCat(cat) {
   currentCat = (currentCat === cat) ? null : cat;
   currentPage = 1;
   document.querySelectorAll('.ccat').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCat));
+  const trigger = document.getElementById('nganhTrigger');
+  const label = document.getElementById('nganhLabel');
+  if(trigger) trigger.classList.toggle('has-value', !!currentCat);
+  if(label) label.textContent = currentCat || 'Ngành nghề';
   renderJobs();
-  if(currentCat) setTimeout(() => document.getElementById('jobsList').scrollIntoView({behavior:'smooth', block:'start'}), 80);
+  if(currentCat) setTimeout(() => document.getElementById('jobsList')?.scrollIntoView({behavior:'smooth', block:'start'}), 80);
 }
 
 // ── MODAL ──
@@ -2226,7 +2209,7 @@ function closeModal() {
 }
 
 document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') { closeAdmin(); closeArticle(); closeArticles(); closeCompare(); closeSaved(); closeModal(); closeApply(); }
+  if(e.key === 'Escape') { closeAdmin(); closeCompare(); closeSaved(); closeModal(); closeApply(); }
 });
 
 // ── APPLY FORM ──
@@ -2573,97 +2556,13 @@ function closeCompare() {
   document.getElementById('compareOverlay').classList.remove('open');
 }
 
-// ── ARTICLES MODULE ──
-const ART_KEY = 'tp_articles';
-const ADMIN_EMAIL = 'trungtokutei@gmail.com';
-const ART_CATS = {tokutei:'📋 Tokutei','japan-life':'🗾 Cuộc sống Nhật',experience:'💡 Kinh nghiệm',news:'📰 Tin tức'};
-const ART_COLORS = {tokutei:'#356854','japan-life':'#22a85a',experience:'#f59e0b',news:'#E53935'};
-const ART_EMOJIS = {tokutei:'📋','japan-life':'🗾',experience:'💡',news:'📰'};
-
-function isAdmin() { const u=getCurrentUser(); return !!(u&&u.email===ADMIN_EMAIL); }
-function getArticles() { try{return JSON.parse(localStorage.getItem(ART_KEY)||'[]');}catch{return[];} }
-function saveArticles(a) { localStorage.setItem(ART_KEY,JSON.stringify(a)); }
-
-function formatDate(s) {
-  if(!s) return '';
-  try{return new Date(s+'T00:00:00').toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});}catch{return s;}
-}
-
-function initSampleArticles() {
-  if(getArticles().length) return;
-  saveArticles([
-    {id:'art_1',title:'Tokutei là gì? Toàn bộ thông tin bạn cần biết về visa đặc định kỹ năng',category:'tokutei',thumbnail:'',excerpt:'Visa Tokutei (特定技能) là loại visa lao động đặc biệt của Nhật Bản, cho phép người nước ngoài làm việc trong 14 ngành nghề thiếu nhân lực — không cần bằng đại học.',content:'Visa Tokutei (特定技能) là gì?\n\nTokutei Ginou là visa lao động cấp bậc kỹ năng đặc định của Nhật Bản, được giới thiệu năm 2019 nhằm giải quyết tình trạng thiếu nhân lực nghiêm trọng tại nhiều ngành công nghiệp.\n\nCó 2 loại Tokutei:\n\n• Tokutei 1 (特定技能1号): Thời hạn tối đa 5 năm, không được đưa gia đình sang. Yêu cầu JLPT N4 và thi kỹ năng ngành tương ứng.\n\n• Tokutei 2 (特定技能2号): Được gia hạn vô thời hạn, được đưa gia đình sang theo. Yêu cầu kỹ năng cao hơn, hiện mở cho 12 ngành.\n\n14 ngành được phép:\n\nNông nghiệp, Ngư nghiệp, Chế biến thực phẩm, Dịch vụ ăn uống, Xây dựng, Đóng tàu & Cơ khí tàu, Ô tô, Hàng không, Lưu trú/Khách sạn, Vệ sinh tòa nhà, Điều dưỡng/Hộ lý, Nhóm ngành Cơ khí, Nhóm ngành Điện tử, Nông sản trồng trọt.\n\nĐiều kiện cơ bản:\n\nTuổi từ 18 trở lên. Có chứng chỉ tiếng Nhật (JLPT N4 hoặc tương đương). Có chứng chỉ kỹ năng ngành tương ứng. Đặc biệt: thực tập sinh đã hoàn thành 3 năm TTS được miễn thi kỹ năng — chuyển thẳng sang Tokutei.',publishedAt:'2026-05-10',status:'published'},
-    {id:'art_2',title:'Chi phí sinh hoạt Nhật Bản 2026: Bao nhiêu tiền là đủ sống và tiết kiệm?',category:'japan-life',thumbnail:'',excerpt:'Sinh hoạt tại Nhật tốn bao nhiêu? Tiền nhà, tiền ăn, đi lại — tất cả chi phí thực tế mà người lao động Tokutei cần biết trước khi sang.',content:'Chi phí sinh hoạt thực tế tại Nhật Bản năm 2026\n\nMột trong những câu hỏi phổ biến nhất: "Sống ở Nhật tốn bao nhiêu?" Câu trả lời ngắn gọn: đủ sống và tiết kiệm được — nếu bạn biết chi tiêu hợp lý.\n\nChi phí hàng tháng (ước tính cho tỉnh trung bình):\n\n• Tiền nhà/KTX: ¥20,000–¥40,000 (nhiều công ty trợ cấp 50%)\n• Tiền ăn (tự nấu): ¥25,000–¥40,000\n• Đi lại (xe đạp + tàu điện): ¥8,000–¥18,000\n• Điện/Nước/Gas: ¥8,000–¥15,000\n• Bảo hiểm y tế + hưu trí (bắt buộc): ¥18,000–¥25,000\n• Điện thoại: ¥1,000–¥3,000 (gói SIM giá rẻ)\n• Chi tiêu linh tinh: ¥15,000–¥25,000\n\nTổng ước tính: ¥95,000–¥166,000/tháng\nTiết kiệm được: ¥50,000–¥120,000/tháng (8–20 triệu VNĐ)\n\nMẹo tiết kiệm hiệu quả:\n\n• Mua thực phẩm lúc siêu thị gần đóng cửa — giảm 20–50%\n• Dùng xe đạp cho khoảng cách dưới 5km thay vì xe buýt\n• Đăng ký gói SIM giá rẻ (格安SIM): chỉ ¥1,000–¥2,000/tháng\n• Tận dụng 100-yen shop (Daiso, Seria) cho đồ dùng hằng ngày\n• Nấu ăn theo nhóm với đồng nghiệp — tiết kiệm và vui hơn',publishedAt:'2026-05-08',status:'published'},
-    {id:'art_3',title:'Kinh nghiệm thi JLPT N3: Đậu trong 6 tháng từ con số 0',category:'experience',thumbnail:'',excerpt:'Lộ trình học tiếng Nhật từ mức 0 đến N3 trong 6 tháng — tài liệu cụ thể, thời gian biểu và những mẹo thi thực tế từ người đã trải qua.',content:'Lộ trình học JLPT N3 trong 6 tháng từ đầu\n\nCâu hỏi hay nhất tôi nhận được: "Học N3 cần bao lâu?" Với 2 giờ/ngày nghiêm túc và đúng tài liệu, 6 tháng là hoàn toàn khả thi.\n\nTháng 1–2: Xây nền Hiragana, Katakana và Kanji N5\n\n• Tuần 1: Học thuộc 46 Hiragana (5–7 ngày)\n• Tuần 2: Học thuộc 46 Katakana\n• Tuần 3–8: 15 Kanji/ngày + ngữ pháp Genki I (bài 1–12)\n• App hỗ trợ: Anki (flashcard), LingoDeer\n\nTháng 3–4: Nâng lên N4\n\n• Hoàn thành Genki II hoặc Minna no Nihongo II\n• Từ vựng theo chủ đề (mỗi ngày 20 từ)\n• Nghe: NHK Web Easy 30 phút/ngày\n• Bắt đầu làm đề thi thử N4\n\nTháng 5–6: Tập trung ôn N3\n\n• Tài liệu chính: Try! N3 + Shin Kanzen Master N3\n• Làm 2–3 đề thi thử/tuần, chữa kỹ từng lỗi sai\n• Tập Choukai (nghe): nhiều người trượt vì phần này\n• Mục tiêu điểm: 120+ (ngưỡng đậu là 95/180)\n\nMẹo quan trọng nhất:\n\n• Học đều đặn mỗi ngày quan trọng hơn học nhiều 1 ngày rồi nghỉ\n• Đừng bỏ qua Dokkai (đọc hiểu) — chiếm 60/180 điểm\n• Đăng ký thi ít nhất 3 tháng trước — slot đầy rất nhanh\n• Thi tháng 7 hoặc tháng 12 — chỉ có 2 kỳ/năm',publishedAt:'2026-05-05',status:'published'}
-  ]);
-}
-
-function artCardHTML(a) {
-  const color=ART_COLORS[a.category]||'#888';
-  const emoji=ART_EMOJIS[a.category]||'📄';
-  const label=ART_CATS[a.category]||a.category;
-  const thumb=a.thumbnail
-    ? `<img src="${a.thumbnail}" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML='<span style=font-size:32px>${emoji}</span>'">`
-    : `<span style="font-size:32px">${emoji}</span>`;
-  return `<div class="acard" onclick="openArticle('${a.id}')">
-    <div class="acard-thumb" style="${a.thumbnail?'':'background:'+color+'22'}">${thumb}</div>
-    <div class="acard-body">
-      <span class="acat-badge ${a.category}">${label}</span>
-      <h3>${a.title}</h3>
-      <p class="acard-excerpt">${a.excerpt}</p>
-      <div class="acard-ft"><span>${formatDate(a.publishedAt)}</span><span class="acard-read">Đọc tiếp →</span></div>
-    </div>
-  </div>`;
-}
-
-function renderArticlePreview() {
-  const grid=document.getElementById('artPreviewGrid');
-  if(!grid) return;
-  const arts=getArticles().filter(a=>a.status==='published').sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)).slice(0,3);
-  grid.innerHTML=arts.length?arts.map(artCardHTML).join(''):'<p style="color:var(--text-3);text-align:center;padding:40px;grid-column:1/-1">Chưa có bài viết nào.</p>';
-}
-
-let currentArtCat='all';
-function openArticles(cat) {
-  currentArtCat=cat||'all';
-  renderArticlesPanel();
-  document.getElementById('artsOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeArticles() {
-  document.getElementById('artsOverlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-function renderArticlesPanel() {
-  const all=getArticles().filter(a=>a.status==='published').sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt));
-  document.querySelectorAll('.acat-tab').forEach(t=>t.classList.toggle('on',t.dataset.cat===currentArtCat));
-  const filtered=currentArtCat==='all'?all:all.filter(a=>a.category===currentArtCat);
-  const list=document.getElementById('artsList');
-  list.innerHTML=filtered.length?filtered.map(artCardHTML).join(''):'<div class="arts-empty"><div style="font-size:40px;margin-bottom:12px">📭</div><p style="font-size:15px;font-weight:600;color:var(--text-2)">Chưa có bài viết nào</p></div>';
-}
-
-function openArticle(id) {
-  const a=getArticles().find(x=>x.id===id);
-  if(!a) return;
-  const color=ART_COLORS[a.category]||'#888';
-  const emoji=ART_EMOJIS[a.category]||'📄';
-  const label=ART_CATS[a.category]||a.category;
-  const bodyHTML=a.content.split(/\n\n+/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
-  document.getElementById('artdContent').innerHTML=`
-    ${a.thumbnail?`<img src="${a.thumbnail}" class="artd-thumb" alt="">`:`<div class="artd-thumb-ph" style="background:${color}22">${emoji}</div>`}
-    <div class="artd-content">
-      <div class="artd-meta">
-        <span class="acat-badge ${a.category}">${label}</span>
-        <span style="font-size:12px;color:var(--text-3)">${formatDate(a.publishedAt)}</span>
-      </div>
-      <h2 class="artd-title">${a.title}</h2>
-      <div class="artd-body">${bodyHTML}</div>
-    </div>`;
-  document.getElementById('artdOverlay').classList.add('open');
-}
-function closeArticle() { document.getElementById('artdOverlay').classList.remove('open'); }
-
 // ── GOOGLE SHEETS SYNC ──
+const ADMIN_EMAIL = 'trungtokutei@gmail.com';
+function isAdmin() { const u=getCurrentUser(); return !!(u&&u.email===ADMIN_EMAIL); }
+function getArticles() { return []; }
+function saveArticles() {}
+function formatDate(s) { if(!s)return''; try{return new Date(s+'T00:00:00').toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});}catch{return s;} }
+
 const GSHEET_URL_KEY = 'tp_gsheet_url';
 
 function saveGSheetUrl() {
@@ -2710,14 +2609,16 @@ async function syncFromGSheet() {
     const g = r => (r||'').trim();
     const newJobs = rows.slice(1).filter(r=>r.some(c=>c.trim())).map((r,i)=>({
       id:'gs_'+Date.now()+'_'+i,
-      type:g(r[0])||'viet', category:g(r[1]), title:g(r[2]),
-      city:g(r[3]), salary:g(r[4]), japanese:g(r[5]),
-      gender:g(r[6]), workHours:g(r[7]),
-      daysOff:g(r[8]), overtime:g(r[9]), raise:g(r[10]),
-      bonus:g(r[11]), housing:g(r[12]), desc:g(r[13]),
-      status:g(r[14])||'active'
+      type:g(r[0])||'viet',
+      title:g(r[1]),
+      category:[g(r[2]),g(r[3])].filter(Boolean).join(','),
+      city:g(r[4]), salary:g(r[5]), japanese:g(r[6]),
+      gender:g(r[7]), workHours:g(r[8]),
+      daysOff:g(r[9]), overtime:g(r[10]), raise:g(r[11]),
+      bonus:g(r[12]), housing:g(r[13]), desc:g(r[14]),
+      status:g(r[15])||'active'
     })).filter(j=>j.title);
-    if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột C - title bị trống?)';return;}
+    if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột B - title bị trống?)';return;}
     // Push lên Supabase để mọi người dùng đều thấy
     statusEl.textContent=`⏳ Đang lưu lên Supabase...`;
     // Xóa hết job cũ từ Sheet trước, rồi insert lại — đảm bảo inactive được áp dụng
@@ -3058,7 +2959,7 @@ function renderAdminPanel() {
     ?arts.map(a=>`<div class="admin-art-row">
         <div class="admin-art-info">
           <div class="admin-art-title">${a.title}</div>
-          <div class="admin-art-meta"><span>${ART_CATS[a.category]||a.category}</span><span>${formatDate(a.publishedAt)}</span><span>${sl(a.status)}</span></div>
+          <div class="admin-art-meta"><span>${a.category||''}</span><span>${formatDate(a.publishedAt)}</span><span>${sl(a.status)}</span></div>
         </div>
         <div class="admin-art-actions">
           <button class="admin-btn-edit" onclick="adminEdit('${a.id}')">Sửa</button>
@@ -3096,8 +2997,6 @@ function adminDelete(id) {
   if(!confirm('Xoá bài viết này?')) return;
   saveArticles(getArticles().filter(a=>a.id!==id));
   renderAdminPanel();
-  renderArticlePreview();
-  if(document.getElementById('artsOverlay').classList.contains('open')) renderArticlesPanel();
 }
 function adminSaveArticle() {
   const title=document.getElementById('af-art-title').value.trim();
@@ -3116,8 +3015,6 @@ function adminSaveArticle() {
   }
   saveArticles(arts);
   renderAdminPanel();
-  renderArticlePreview();
-  if(document.getElementById('artsOverlay').classList.contains('open')) renderArticlesPanel();
 }
 
 
@@ -3131,9 +3028,11 @@ function adminSaveArticle() {
   // Restore login state
   const savedUser = getCurrentUser();
   if(savedUser) { renderNavUser(savedUser); updateSavedCount(); }
-  // Articles module
-  initSampleArticles();
-  renderArticlePreview();
+  populateNganhSelect();
+  initNganhPanelEvents();
+  document.addEventListener('click', (e) => {
+    if(!document.getElementById('nganhSelectWrap')?.contains(e.target)) closeNganhDrop();
+  });
   // Supabase: load jobs + real-time
   syncFromSupabase();
   sb.channel('jobs_rt')
@@ -3155,7 +3054,7 @@ function adminSaveArticle() {
 
 <script>
 function openZaloQR() {
-  window.open('https://zalo.me/0386887691', '_blank');
+  window.open('https://zalo.me/0367935698', '_blank');
 }
 function closeZaloQR() {
   document.getElementById('zaloQRModal').style.display = 'none';
@@ -3167,11 +3066,11 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closeZaloQR()
 <!-- CHAT VỚI ADMIN — FLOATING BUTTON -->
 <div id="chatFloatWrap" style="position:fixed;bottom:28px;right:22px;z-index:8888;display:flex;flex-direction:column;align-items:flex-end;gap:10px">
   <div id="chatFloatMenu" style="display:none;flex-direction:column;gap:8px;align-items:flex-end">
-    <a href="https://www.facebook.com/trungphamtokutei" target="_blank" onclick="closeChatFloat()" style="display:flex;align-items:center;gap:9px;background:#2a5442;color:#fff;padding:10px 18px;border-radius:50px;font-size:13px;font-weight:600;text-decoration:none;box-shadow:0 4px 18px rgba(42,84,66,.4);white-space:nowrap;transition:transform .15s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
+    <a href="https://www.facebook.com/profile.php?id=100083745456974" target="_blank" onclick="closeChatFloat()" style="display:flex;align-items:center;gap:9px;background:var(--primary);color:#fff;padding:10px 18px;border-radius:50px;font-size:13px;font-weight:600;text-decoration:none;box-shadow:0 4px 18px rgba(181,66,106,.4);white-space:nowrap;transition:transform .15s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
       Facebook
     </a>
-    <button onclick="closeChatFloat();openZaloQR()" style="display:flex;align-items:center;gap:9px;background:#356854;color:#fff;padding:10px 18px;border-radius:50px;font-size:13px;font-weight:600;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(53,104,84,.4);white-space:nowrap;font-family:inherit;transition:transform .15s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
+    <button onclick="closeChatFloat();openZaloQR()" style="display:flex;align-items:center;gap:9px;background:var(--primary);color:#fff;padding:10px 18px;border-radius:50px;font-size:13px;font-weight:600;border:none;cursor:pointer;box-shadow:0 4px 18px rgba(181,66,106,.4);white-space:nowrap;font-family:inherit;transition:transform .15s" onmouseenter="this.style.transform='translateY(-2px)'" onmouseleave="this.style.transform=''">
       <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor"><path d="M16 2C8.268 2 2 8.044 2 15.5c0 4.197 2.012 7.94 5.152 10.437L6 30l4.34-2.26C11.493 28.226 13.706 28.5 16 28.5c7.732 0 14-6.044 14-13.5S23.732 2 16 2zm1.5 18.3-3.7-4-7.3 4 8-8.5 3.8 4 7.2-4-8 8.5z"/></svg>
       Zalo
     </button>
