@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#2D2CDB" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M3 20 L12 3 L21 20 Z"/>
-  <path d="M8 12 Q12 9.5 16 12"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <g transform="translate(16,16)" fill="#B5426A">
+    <path d="M0,0 C-1.5,-0.5 -4,-3 -3.5,-7 C-3,-10 -1.5,-11.5 0,-10 C1.5,-11.5 3,-10 3.5,-7 C4,-3 1.5,-0.5 0,0Z" transform="rotate(0)" opacity=".95"/>
+    <path d="M0,0 C-1.5,-0.5 -4,-3 -3.5,-7 C-3,-10 -1.5,-11.5 0,-10 C1.5,-11.5 3,-10 3.5,-7 C4,-3 1.5,-0.5 0,0Z" transform="rotate(72)" opacity=".95"/>
+    <path d="M0,0 C-1.5,-0.5 -4,-3 -3.5,-7 C-3,-10 -1.5,-11.5 0,-10 C1.5,-11.5 3,-10 3.5,-7 C4,-3 1.5,-0.5 0,0Z" transform="rotate(144)" opacity=".95"/>
+    <path d="M0,0 C-1.5,-0.5 -4,-3 -3.5,-7 C-3,-10 -1.5,-11.5 0,-10 C1.5,-11.5 3,-10 3.5,-7 C4,-3 1.5,-0.5 0,0Z" transform="rotate(216)" opacity=".95"/>
+    <path d="M0,0 C-1.5,-0.5 -4,-3 -3.5,-7 C-3,-10 -1.5,-11.5 0,-10 C1.5,-11.5 3,-10 3.5,-7 C4,-3 1.5,-0.5 0,0Z" transform="rotate(288)" opacity=".95"/>
+    <circle cx="0" cy="0" r="2.2" fill="white" opacity=".9"/>
+  </g>
 </svg>
