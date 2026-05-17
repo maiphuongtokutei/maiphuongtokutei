@@ -4,10 +4,5 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: meta-externalagent
+User-agent: Facebot
 Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-Sitemap: https://nippontokutei.com/sitemap.xml
