@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1200px; height:630px; overflow:hidden; background:#1E0818; }
+</style>
+</head>
+<body>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1A0812"/>
+      <stop offset="50%" stop-color="#3D1530"/>
+      <stop offset="100%" stop-color="#622040"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#B5426A" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#B5426A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="1200" height="3" fill="#B5426A"/>
+
+  <!-- Decorative: concentric circles top-right (kamon) -->
+  <circle cx="1110" cy="80"  r="220" fill="none" stroke="#B5426A" stroke-width="0.7" opacity="0.10"/>
+  <circle cx="1110" cy="80"  r="160" fill="none" stroke="#B5426A" stroke-width="0.7" opacity="0.10"/>
+  <circle cx="1110" cy="80"  r="100" fill="none" stroke="#B5426A" stroke-width="0.7" opacity="0.10"/>
+  <circle cx="1110" cy="80"  r="45"  fill="none" stroke="#B5426A" stroke-width="0.7" opacity="0.10"/>
+
+  <!-- Decorative: concentric circles bottom-left -->
+  <circle cx="90"   cy="550" r="180" fill="none" stroke="#B5426A" stroke-width="0.7" opacity="0.08"/>
+  <circle cx="90"   cy="550" r="120" fill="none" stroke="#B5426A" stroke-width="0.7" opacity="0.08"/>
+  <circle cx="90"   cy="550" r="65"  fill="none" stroke="#B5426A" stroke-width="0.7" opacity="0.08"/>
+
+  <!-- Corner marks (Japanese printing registration) -->
+  <line x1="60"   y1="55"  x2="115"  y2="55"  stroke="white" stroke-width="1" opacity="0.2"/>
+  <line x1="60"   y1="55"  x2="60"   y2="110" stroke="white" stroke-width="1" opacity="0.2"/>
+  <line x1="1140" y1="55"  x2="1085" y2="55"  stroke="white" stroke-width="1" opacity="0.2"/>
+  <line x1="1140" y1="55"  x2="1140" y2="110" stroke="white" stroke-width="1" opacity="0.2"/>
+  <line x1="60"   y1="575" x2="115"  y2="575" stroke="white" stroke-width="1" opacity="0.2"/>
+  <line x1="60"   y1="575" x2="60"   y2="520" stroke="white" stroke-width="1" opacity="0.2"/>
+  <line x1="1140" y1="575" x2="1085" y2="575" stroke="white" stroke-width="1" opacity="0.2"/>
+  <line x1="1140" y1="575" x2="1140" y2="520" stroke="white" stroke-width="1" opacity="0.2"/>
+
+  <!-- ── Logo mark: 5-petal flower centered at (600, 222) ── -->
+  <g transform="translate(600,222)">
+    <ellipse cx="0" cy="-22" rx="9.2" ry="16.8" fill="#B5426A" opacity=".95"/>
+    <ellipse cx="0" cy="-22" rx="9.2" ry="16.8" fill="#B5426A" transform="rotate(72)" opacity=".95"/>
+    <ellipse cx="0" cy="-22" rx="9.2" ry="16.8" fill="#B5426A" transform="rotate(144)" opacity=".95"/>
+    <ellipse cx="0" cy="-22" rx="9.2" ry="16.8" fill="#B5426A" transform="rotate(216)" opacity=".95"/>
+    <ellipse cx="0" cy="-22" rx="9.2" ry="16.8" fill="#B5426A" transform="rotate(288)" opacity=".95"/>
+    <circle  cx="0" cy="0"  r="8.8" fill="white" opacity=".75"/>
+  </g>
+
+  <!-- "MAI PHƯƠNG" — light, spaced -->
+  <text x="600" y="294"
+        text-anchor="middle"
+        font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="17" font-weight="300"
+        fill="white" opacity="0.65"
+        letter-spacing="9">MAI PHƯƠNG</text>
+
+  <!-- Separator line -->
+  <line x1="500" y1="310" x2="700" y2="310" stroke="#B5426A" stroke-width="0.8" opacity="0.55"/>
+
+  <!-- "TOKUTEI" — bold, dominant -->
+  <text x="600" y="382"
+        text-anchor="middle"
+        font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="70" font-weight="700"
+        fill="white"
+        letter-spacing="12">TOKUTEI</text>
+
+  <!-- Tagline -->
+  <text x="600" y="416"
+        text-anchor="middle"
+        font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="14" font-weight="400"
+        fill="white" opacity="0.45"
+        letter-spacing="5">TOKUTEI &amp; KỸ SƯ VIỆT - NHẬT</text>
+
+  <!-- Bottom divider -->
+  <line x1="500" y1="440" x2="700" y2="440" stroke="white" stroke-width="0.5" opacity="0.12"/>
+
+  <!-- URL -->
+  <text x="600" y="466"
+        text-anchor="middle"
+        font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"
+        font-size="12" font-weight="300"
+        fill="white" opacity="0.28"
+        letter-spacing="2">maiphuongtokutei.github.io/maiphuongtokutei</text>
+
+  <!-- Bottom accent bar -->
+  <rect x="0" y="627" width="1200" height="3" fill="#B5426A"/>
+</svg>
+</body>
+</html>
