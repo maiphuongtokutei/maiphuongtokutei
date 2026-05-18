@@ -1671,6 +1671,10 @@ function scrollToSearch() {
   setTimeout(() => inp.focus(), 400);
 }
 
+function noDia(s) {
+  return (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+}
+
 function doSearch(val) {
   currentSearch = val.trim().toLowerCase();
   currentPage = 1;
@@ -1943,12 +1947,12 @@ function renderJobs() {
     else jobs = jobs.filter(j => (j.city||'').toLowerCase().includes(currentPref.toLowerCase()));
   }
   if(currentSearch) {
-    const q = currentSearch;
+    const q = noDia(currentSearch);
     jobs = jobs.filter(j =>
-      (j.title||'').toLowerCase().includes(q) ||
-      (j.city||'').toLowerCase().includes(q) ||
-      (j.category||'').toLowerCase().includes(q) ||
-      (j.desc||'').toLowerCase().includes(q)
+      noDia(j.title).includes(q) ||
+      noDia(j.city).includes(q) ||
+      noDia(j.category).includes(q) ||
+      noDia(j.desc).includes(q)
     );
   }
 
