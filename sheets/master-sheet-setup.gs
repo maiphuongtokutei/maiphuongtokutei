@@ -108,7 +108,7 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '</div>' +
 '<script>' +
 'var TOKUTEI_CATS=["Chế biến thực phẩm","Nhóm 1","Nhóm 2","Nhóm 1+2","Đúc nóng","Đúc lạnh","Dập kim loại","Kim loại tấm","Tekko","Rèn","Gia công cơ khí","Hoàn thiện sản phẩm","Đúc nhựa","Hàn","Sơn kim loại","Lắp ráp thiết bị điện","Lắp ráp thiết bị điện tử","Sản xuất bảng mạch in (PCB)","Kiểm tra máy móc","Bảo trì máy móc","Đóng gói công nghiệp","Mạ điện","Xử lý oxy hóa nhôm (Anodize)","Đường ống","Cốp pha","Phá dỡ","Cốt thép","Sơn xây dựng","Chống thấm","Giàn giáo","Bê tông","Xây trát","San lấp","Ốp lát","Lái máy xây dựng","Hoàn thiện nội thất","Mộc xây dựng","Hoàn thiện ngoại thất","Hàn xây dựng","Điện","Thi công cách nhiệt","Lợp mái","Kim loại tấm xây dựng","Điều dưỡng","Nhà hàng","Vệ sinh tòa nhà","Bảo dưỡng ô tô","Nông nghiệp","Lưu trú / Khách sạn","Ngư nghiệp","Đóng tàu","Hàng không","Vận tải","Lâm nghiệp","May","In ấn"];' +
-'var KYSIS_CATS=["Kỹ sư Cơ khí","Kỹ sư Thiết kế cơ khí, điện","Kỹ sư Điện","Kỹ sư Hóa học","Kỹ sư Quản lý thi công xây dựng","Kỹ sư Quản lý thi công cầu đường","Kỹ sư Thiết kế xây dựng","Kỹ sư Quản lý thi công thiết bị","Kỹ sư Bảo dưỡng ô tô","Kỹ sư IT","Kỹ sư Khối kinh tế","Kỹ sư Nhà hàng - Khách sạn"];' +
+'var KYSIS_CATS=["Kỹ thuật & Sản xuất","Xây dựng & Công trình","IT & Công nghệ","Kinh tế & Văn phòng"];' +
 'function onTypeChange(){' +
 'var type=document.getElementById("type").value;' +
 'var sel=document.getElementById("category");' +
