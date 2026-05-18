@@ -1528,7 +1528,7 @@ const NGANH_TOKUTEI_GROUPS = [
   {g:'① Gia công cơ khí - kim loại', items:['Đúc nóng','Đúc lạnh','Dập kim loại','Kim loại tấm','Tekko','Rèn','Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Hàn','Sơn kim loại','Lắp ráp thiết bị điện','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']},
   {g:'② Lắp ráp điện - điện tử', items:['Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Lắp ráp thiết bị điện','Lắp ráp thiết bị điện tử','Sản xuất bảng mạch in (PCB)','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']},
   {g:'③ Xử lý bề mặt kim loại', items:['Mạ điện','Xử lý oxy hóa nhôm (Anodize)']},
-  {g:'Xây dựng', items:['Đường ống','Cốp pha','Phá dỡ','Cốt thép','Sơn xây dựng','Chống thấm','Giàn giáo','Bê tông','Xây trát','San lấp','Ốp lát','Lái máy xây dựng','Hoàn thiện nội thất','Mộc xây dựng','Hoàn thiện ngoại thất','Hàn xây dựng','Điện','Thi công cách nhiệt','Lợp mái']},
+  {g:'Xây dựng', items:['Nhóm ngành xây dựng','Đường ống','Cốp pha','Phá dỡ','Cốt thép','Sơn xây dựng','Chống thấm','Giàn giáo','Bê tông','Xây trát','San lấp','Ốp lát','Lái máy xây dựng','Hoàn thiện nội thất','Mộc xây dựng','Hoàn thiện ngoại thất','Hàn xây dựng','Điện','Thi công cách nhiệt','Lợp mái','Kim loại tấm xây dựng']},
   {g:'Điều dưỡng', items:['Điều dưỡng']},
   {g:'Nhà hàng', items:['Nhà hàng']},
   {g:'Nông nghiệp', items:['Nông nghiệp']},
@@ -1544,14 +1544,11 @@ const NGANH_TOKUTEI_GROUPS = [
   {g:'In ấn', items:['In ấn']},
 ];
 const NGANH_KYSIS_GROUPS = [
-  {g:'Kỹ thuật & Sản xuất', items:['Cơ khí','Điện - Điện tử','Xây dựng','Hóa học & Vật liệu','Ô tô']},
-  {g:'Công nghệ thông tin (IT)', items:['Lập trình viên','Kỹ sư hệ thống / Mạng','AI & Data Science']},
-  {g:'Thực phẩm & Nông nghiệp', items:['Chế biến thực phẩm','Nông nghiệp']},
-  {g:'Kinh tế & Ngôn ngữ', items:['Phiên dịch / Thông dịch','Xuất nhập khẩu','Quản trị kinh doanh / Marketing']},
+  {g:'Kỹ sư', items:['Kỹ sư Cơ khí','Kỹ sư Thiết kế cơ khí, điện','Kỹ sư Điện','Kỹ sư Hóa học','Kỹ sư Quản lý thi công xây dựng','Kỹ sư Quản lý thi công cầu đường','Kỹ sư Thiết kế xây dựng','Kỹ sư Quản lý thi công thiết bị','Kỹ sư Bảo dưỡng ô tô','Kỹ sư IT','Kỹ sư Khối kinh tế','Kỹ sư Nhà hàng - Khách sạn']},
 ];
 const NHOM_1_ITEMS = new Set(['Đúc nóng','Đúc lạnh','Dập kim loại','Kim loại tấm','Tekko','Rèn','Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Hàn','Sơn kim loại','Lắp ráp thiết bị điện','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']);
 const NHOM_2_ITEMS = new Set(['Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Lắp ráp thiết bị điện','Lắp ráp thiết bị điện tử','Sản xuất bảng mạch in (PCB)','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']);
-const NHOM_XD_ITEMS = new Set(['đường ống','cốp pha','phá dỡ','cốt thép','sơn xây dựng','chống thấm','giàn giáo','bê tông','xây trát','san lấp','ốp lát','lái máy xây dựng','hoàn thiện nội thất','mộc xây dựng','hoàn thiện ngoại thất','hàn xây dựng','điện','thi công cách nhiệt','lợp mái']);
+const NHOM_XD_ITEMS = new Set(['đường ống','cốp pha','phá dỡ','cốt thép','sơn xây dựng','chống thấm','giàn giáo','bê tông','xây trát','san lấp','ốp lát','lái máy xây dựng','hoàn thiện nội thất','mộc xây dựng','hoàn thiện ngoại thất','hàn xây dựng','điện','thi công cách nhiệt','lợp mái','kim loại tấm xây dựng']);
 
 function jobMatchesCat(jcat, selectedCat) {
   if(!jcat || !selectedCat) return false;
@@ -1570,6 +1567,8 @@ function jobMatchesCat(jcat, selectedCat) {
   if(selLow === 'xây dựng' && parts.some(p => NHOM_XD_ITEMS.has(p))) return true;
   // Xây dựng sub: khi filter là ngành phụ XD, khớp job được tag "xây dựng" (chung)
   if(NHOM_XD_ITEMS.has(selLow) && parts.some(p => p === 'xây dựng')) return true;
+  // Nhóm ngành xây dựng: khớp job có category là "xây dựng" chung (nhận nhiều ngành)
+  if(selLow === 'nhóm ngành xây dựng' && parts.some(p => p === 'xây dựng')) return true;
   return false;
 }
 

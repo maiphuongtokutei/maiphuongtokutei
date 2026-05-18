@@ -107,13 +107,13 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '<button class="btn-save" id="btnSave" onclick="doSave()">Lưu vào sheet</button>' +
 '</div>' +
 '<script>' +
-'var TOKUTEI_CATS=["Chế biến thực phẩm","Nhóm 1","Nhóm 2","Nhóm 1+2","Đúc nóng","Đúc lạnh","Dập kim loại","Kim loại tấm","Tekko","Rèn","Gia công cơ khí","Hoàn thiện sản phẩm","Đúc nhựa","Hàn","Sơn kim loại","Lắp ráp thiết bị điện","Lắp ráp thiết bị điện tử","Sản xuất bảng mạch in (PCB)","Kiểm tra máy móc","Bảo trì máy móc","Đóng gói công nghiệp","Mạ điện","Xử lý oxy hóa nhôm (Anodize)","Xây dựng","Điều dưỡng","Nhà hàng","Vệ sinh tòa nhà","Bảo dưỡng ô tô","Nông nghiệp","Lưu trú / Khách sạn","Ngư nghiệp","Đóng tàu","Hàng không","Vận tải","Lâm nghiệp","May","In ấn"];' +
-'var KYSIS_CATS=["Lập trình viên","Kỹ sư hệ thống / Mạng","AI & Data Science","Cơ khí","Điện - Điện tử","Hóa học & Vật liệu","Ô tô","Phiên dịch / Thông dịch","Xuất nhập khẩu","Quản trị kinh doanh / Marketing"];' +
+'var TOKUTEI_CATS=["Chế biến thực phẩm","Nhóm 1","Nhóm 2","Nhóm 1+2","Đúc nóng","Đúc lạnh","Dập kim loại","Kim loại tấm","Tekko","Rèn","Gia công cơ khí","Hoàn thiện sản phẩm","Đúc nhựa","Hàn","Sơn kim loại","Lắp ráp thiết bị điện","Lắp ráp thiết bị điện tử","Sản xuất bảng mạch in (PCB)","Kiểm tra máy móc","Bảo trì máy móc","Đóng gói công nghiệp","Mạ điện","Xử lý oxy hóa nhôm (Anodize)","Đường ống","Cốp pha","Phá dỡ","Cốt thép","Sơn xây dựng","Chống thấm","Giàn giáo","Bê tông","Xây trát","San lấp","Ốp lát","Lái máy xây dựng","Hoàn thiện nội thất","Mộc xây dựng","Hoàn thiện ngoại thất","Hàn xây dựng","Điện","Thi công cách nhiệt","Lợp mái","Kim loại tấm xây dựng","Điều dưỡng","Nhà hàng","Vệ sinh tòa nhà","Bảo dưỡng ô tô","Nông nghiệp","Lưu trú / Khách sạn","Ngư nghiệp","Đóng tàu","Hàng không","Vận tải","Lâm nghiệp","May","In ấn"];' +
+'var KYSIS_CATS=["Kỹ sư Cơ khí","Kỹ sư Thiết kế cơ khí, điện","Kỹ sư Điện","Kỹ sư Hóa học","Kỹ sư Quản lý thi công xây dựng","Kỹ sư Quản lý thi công cầu đường","Kỹ sư Thiết kế xây dựng","Kỹ sư Quản lý thi công thiết bị","Kỹ sư Bảo dưỡng ô tô","Kỹ sư IT","Kỹ sư Khối kinh tế","Kỹ sư Nhà hàng - Khách sạn"];' +
 'function onTypeChange(){' +
 'var type=document.getElementById("type").value;' +
 'var sel=document.getElementById("category");' +
 'sel.innerHTML="<option value=\\"\\">-- Chọn ngành --</option>";' +
-'var list=type==="kysis"?KYSIS_CATS:(type?TOKUTEI_CATS:[]);' +
+'var list=(type==="kysis"||type==="Kỹ sư")?KYSIS_CATS:(type?TOKUTEI_CATS:[]);' +
 'list.forEach(function(c){var o=document.createElement("option");o.value=o.textContent=c;sel.appendChild(o);});}' +
 'function doSave(){' +
 'var get=function(id){return document.getElementById(id).value.trim();};' +
@@ -390,6 +390,7 @@ function buildJob(r, i) {
     housing:   String(r[13]|| '').trim(),
     desc:      String(r[14]|| '').trim(),
     status:    'active',
+    updatedAt: r[19] ? (r[19] instanceof Date ? r[19].toISOString() : new Date(r[19]).toISOString()) : null,
   };
 }
 
