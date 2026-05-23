@@ -551,14 +551,10 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
   .mock-field input,input,select,textarea{font-size:16px!important}
 
   /* Touch targets tối thiểu 44×44px */
-  .jcard .save-btn{position:static;width:44px;height:44px}
-  .jcard-top{padding-right:0}
+  .save-btn{width:36px;height:36px}
   .modal-close{width:44px;height:44px;border-radius:12px}
-  .jcard-cta{padding:13px 16px;font-size:14px}
+  .jcard-cta{min-height:36px}
   .btn{padding:13px 22px}
-
-  /* Job card padding gọn hơn trên mobile */
-  .jcard{padding:16px}
 
   /* Stats row gọn */
   .sitem{padding:18px 8px}
@@ -571,33 +567,70 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 .jobs-section-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
 .jobs-section-title{font-size:17px;font-weight:700}
 .jobs-count{font-size:13px;color:var(--text-3)}
-.jobs-list{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-@media(max-width:1024px){.jobs-list{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.jobs-list{grid-template-columns:1fr}}
-.jcard{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:11px;transition:transform .2s,box-shadow .2s;position:relative}
-.jcard:hover{transform:translateY(-2px);box-shadow:var(--sh2)}
-.jcard-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-right:36px}
-.jcard-cat{font-size:11px;color:var(--text-3);background:var(--surface-alt);padding:3px 9px;border-radius:100px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
-.jcat-nhom1{background:#fff3e0;color:#b45309}
-.jcat-nhom2{background:#e8e8ff;color:var(--nhat,#2D2CDB)}
-.jcard-title{font-size:15px;font-weight:700;color:var(--text-1);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.jcard-meta{display:flex;flex-wrap:wrap;gap:6px}
-.jcard-meta span{font-size:12px;color:var(--text-2);display:inline-flex;align-items:center;gap:4px}
-.jcard-sal{font-size:15px;font-weight:800;letter-spacing:-.01em;min-height:1.2em}
-.jcard.viet .jcard-sal{color:var(--viet)}
-.jcard.nhat .jcard-sal{color:var(--nhat)}
-.jcard-desc{font-size:12px;color:var(--text-3);line-height:1.55}
-@media(max-width:600px){.jcard-desc{display:none}}
-.jcard-footer{display:flex;align-items:center;gap:8px;margin-top:auto}
-.jcard-cta{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--primary);color:#fff;border:1.5px solid var(--primary);border-radius:100px;font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;flex:1}
-.status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px}
-.status-badge.active{background:#e8f8ef;color:#22a85a}
-.status-badge.active::before{content:'';width:6px;height:6px;background:#22a85a;border-radius:50%;display:inline-block}
-.status-badge.expired{background:#f4f4f6;color:#a1a1aa}
-.status-badge.expired::before{content:'';width:6px;height:6px;background:#a1a1aa;border-radius:50%;display:inline-block}
-.jcard.expired{opacity:.65}
+.jobs-list{display:flex;flex-direction:column;background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.jcard{display:flex;align-items:center;gap:14px;padding:12px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;background:#fff;position:relative}
+.jcard:last-child{border-bottom:none}
+.jcard:hover{background:var(--surface-alt)}
+.jcard.expired{opacity:.55}
 .jcard.expired .jcard-cta{background:var(--text-3);pointer-events:none}
-.jcard-cta:hover{background:#8B2B4F;color:#fff}
+.jcard-type{flex:0 0 90px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.jcard.nhat .jcard-type{color:var(--nhat)}
+.jcard.kysis .jcard-type{color:var(--kysis)}
+.jcard-cat{flex:0 0 180px;font-size:11px;color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jcat-nhom1,.jcat-nhom2{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:100px;margin-right:4px}
+.jcat-nhom1{background:#fff3e0;color:#b45309}
+.jcat-nhom2{background:#e8e8ff;color:#2D2CDB}
+.jcard-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.jcard-title{font-size:14px;font-weight:600;color:var(--text-1);line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jcard-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--text-3);min-width:0}
+.jcard-meta span{display:inline-flex;align-items:center;gap:3px;max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jcard-meta svg{color:var(--text-3);flex-shrink:0}
+.jcard-sal{flex:0 0 auto;font-size:13px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;text-align:right;max-width:240px;overflow:hidden;text-overflow:ellipsis}
+.jcard.nhat .jcard-sal{color:var(--nhat)}
+.jcard.kysis .jcard-sal{color:var(--kysis)}
+.jcard-sal-empty{color:var(--text-3);font-weight:500;font-size:11px}
+.jcard-acts{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.jcard-cta{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 14px;background:var(--primary);color:#fff;border:none;border-radius:100px;font-size:12px;font-weight:700;text-decoration:none;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s}
+.jcard-cta:hover{background:#8B2B4F}
+.jcard-cta-disabled{background:var(--surface-alt);color:var(--text-3);cursor:not-allowed}
+.jcard-cta-disabled:hover{background:var(--surface-alt)}
+.status-pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;background:#fef3c7;color:#92400e;white-space:nowrap}
+
+/* IMAGE LIGHTBOX */
+.lb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:400;display:none;align-items:center;justify-content:center;padding:16px}
+.lb-overlay.open{display:flex}
+.lb-box{background:#0a0a0a;border-radius:14px;width:100%;max-width:1100px;max-height:96vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb-hd{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#1a1a1a;color:#fff;flex-shrink:0;border-bottom:1px solid #2a2a2a}
+.lb-title{flex:1;min-width:0;font-size:13px;font-weight:600;color:rgba(255,255,255,.9);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-close{flex-shrink:0;width:44px;height:44px;border:none;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:24px;line-height:1;cursor:pointer;font-family:inherit;padding:0;transition:background .15s;display:inline-flex;align-items:center;justify-content:center}
+.lb-close:hover{background:rgba(255,255,255,.22)}
+.lb-body{flex:1;display:flex;align-items:center;justify-content:center;padding:14px;background:#0a0a0a;min-height:200px;overflow:auto}
+.lb-body img{max-width:100%;max-height:calc(96vh - 90px);width:auto;height:auto;display:none;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.lb-loading{color:rgba(255,255,255,.6);font-size:13px;display:flex;align-items:center;gap:8px}
+.lb-loading-spin{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:600px){
+  .lb-overlay{padding:0}
+  .lb-box{max-height:100vh;border-radius:0;height:100vh;height:100dvh}
+  .lb-hd{padding:8px 10px;gap:8px}
+  .lb-title{display:none}
+  .lb-body{padding:8px}
+  .lb-body img{max-height:calc(100dvh - 76px);max-width:100%}
+}
+@media(max-width:900px){
+  .jcard{flex-wrap:wrap;gap:8px 12px}
+  .jcard-type{flex:0 0 auto;font-size:10px;padding:2px 8px;border-radius:100px;background:var(--nhat-soft)}
+  .jcard.kysis .jcard-type{background:var(--kysis-soft)}
+  .jcard-cat{flex:1 1 auto;font-size:11px}
+  .jcard-body{flex:1 1 100%;order:3}
+  .jcard-sal{order:4;flex:1 1 auto;text-align:left;font-size:14px}
+  .jcard-acts{order:5;margin-left:auto}
+}
+@media(max-width:480px){
+  .jcard{padding:11px 12px;gap:6px 10px}
+  .jcard-title{white-space:normal;font-size:13px;-webkit-line-clamp:2;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+  .jcard-meta{font-size:10.5px;gap:8px}
+}
 #jobsPagination{grid-column:1/-1;display:flex;justify-content:center;padding:28px 0 8px}
 .pg{display:flex;align-items:center;gap:4px}
 .pg-btn{min-width:40px;height:40px;padding:0 10px;border:1.5px solid var(--border);background:#fff;color:var(--text-2);font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;transition:all .15s;font-family:inherit;display:inline-flex;align-items:center;justify-content:center}
@@ -679,7 +712,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 
 /* ── SAVE BUTTON ── */
 .save-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:var(--text-3);flex-shrink:0;font-family:inherit}
-.jcard .save-btn{position:absolute;top:14px;right:14px}
 .save-btn:hover{border-color:var(--primary);color:var(--primary);background:var(--primary-soft)}
 .save-btn.saved{background:var(--primary-soft);border-color:var(--primary);color:var(--primary)}
 
@@ -2001,32 +2033,27 @@ function renderJobs() {
   }
 
   container.innerHTML = jobs.map(j => {
-    const sal = j.salary || 'Liên hệ để biết lương';
-    const desc = j.desc ? j.desc.slice(0, 80) + (j.desc.length > 80 ? '…' : '') : '';
     const isActive = j.status === 'active';
-    const saved = isSaved(j.id);
-    return `<div class="jcard ${j.type}${isActive?'':' expired'}" data-id="${j.id}" onclick="openJob('${j.id}')" style="cursor:pointer">
-      <div style="display:flex;flex-direction:column;gap:10px">
-          <div class="jcard-top">
-            <span class="jbadge jbadge-${j.type}">${j.type==='kysis'?'Kỹ sư':'Tokutei'}</span>
-            ${renderJobCat(j.category||'')}
-            <span class="status-badge ${isActive?'active':'expired'}">${isActive?'Đang tuyển':'Hết hạn'}</span>
-          </div>
-          <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
-            <div class="jcard-title">${j.title}</div>
-            ${j.gender?`<span style="font-size:11px;font-weight:600;color:var(--text-3);white-space:nowrap;flex-shrink:0;display:inline-flex;align-items:center;gap:3px">${ICONS.user}${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
-          </div>
-          <div class="jcard-meta">
-            ${j.city?`<span>${ICONS.pin}${j.city}</span>`:''}
-            ${j.japanese?`<span>${ICONS.lang}${j.japanese}</span>`:''}
-          </div>
-          <div class="jcard-sal">${sal}</div>
-          ${desc?`<div class="jcard-desc">${desc}</div>`:''}
+    const sal = (j.salary||'').trim();
+    const typeName = j.type==='kysis' ? 'Kỹ sư' : 'Tokutei';
+    const hasImg = !!(j.imageUrl||'').trim();
+    const imgBtn = hasImg
+      ? `<button class="jcard-cta" onclick="event.stopPropagation();openImage('${j.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg> Xem ảnh</button>`
+      : `<button class="jcard-cta jcard-cta-disabled" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 3l18 18"/></svg> Chưa có ảnh</button>`;
+    return `<div class="jcard ${j.type}${isActive?'':' expired'}" data-id="${j.id}" ${hasImg?`onclick="openImage('${j.id}')"`:''}>
+      <div class="jcard-type">${typeName}</div>
+      <div class="jcard-cat">${renderJobCat(j.category||'')}</div>
+      <div class="jcard-body">
+        <div class="jcard-title">${j.title}</div>
+        <div class="jcard-meta">
+          ${j.city?`<span>${ICONS.pin}${j.city}</span>`:''}
+          ${j.japanese?`<span>${ICONS.lang}${j.japanese}</span>`:''}
+          ${j.gender?`<span>${ICONS.user}${j.gender==='Không yêu cầu'?'Nam và Nữ':j.gender}</span>`:''}
+          ${!isActive?`<span class="status-pill">Hết hạn</span>`:''}
+        </div>
       </div>
-      <div class="jcard-footer">
-        <button class="save-btn${saved?' saved':''}" data-id="${j.id}" onclick="event.stopPropagation();toggleSave('${j.id}')" title="${saved?'Bỏ lưu':'Lưu việc làm'}">${saved?SVG_BOOKMARK_FILL:SVG_BOOKMARK_OUT}</button>
-        <button class="jcard-cta" onclick="event.stopPropagation();openJob('${j.id}')">Xem chi tiết ${ICONS.arrow}</button>
-      </div>
+      <div class="jcard-sal">${sal||'<span class="jcard-sal-empty">Liên hệ</span>'}</div>
+      <div class="jcard-acts">${imgBtn}</div>
     </div>`;
   }).join('');
 }
@@ -2635,8 +2662,8 @@ async function syncFromGSheet() {
       daysOff:g(r[9]), overtime:g(r[10]), raise:g(r[11]),
       bonus:g(r[12]), housing:g(r[13]), desc:g(r[14]),
       status:g(r[15])||'active',
-      updatedAt:toISO(g(r[19]))
-    })).filter(j=>j.title);
+      imageUrl:g(r[16])
+    })).filter(j=>j.title).reverse();
     if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột B - title bị trống?)';return;}
     // Push lên Supabase để mọi người dùng đều thấy
     statusEl.textContent=`⏳ Đang lưu lên Supabase...`;
@@ -3109,6 +3136,53 @@ document.addEventListener('click', function(e) {
   if(!document.getElementById('chatFloatWrap').contains(e.target)) closeChatFloat();
 });
 lucide.createIcons();
+
+// Image lightbox
+function driveId(url){
+  if(!url) return null;
+  const m = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if(m) return m[1];
+  const m2 = url.match(/[?&]id=([^&]+)/);
+  if(m2) return m2[1];
+  return null;
+}
+function driveViewUrl(url){
+  const id = driveId(url);
+  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w2000` : url;
+}
+function openImage(id){
+  const j = getJobs().find(x => x.id === id);
+  if(!j || !j.imageUrl) return;
+  const img = document.getElementById('lbImg');
+  const loading = document.getElementById('lbLoading');
+  img.style.display = 'none';
+  loading.style.display = 'flex';
+  loading.innerHTML = '<span class="lb-loading-spin"></span> Đang tải ảnh…';
+  img.src = driveViewUrl(j.imageUrl);
+  img.alt = j.title;
+  document.getElementById('lbTitle').textContent = `${j.category||'—'} · ${j.title}`;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeImage(){
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeImage(); });
 </script>
+
+<!-- IMAGE LIGHTBOX -->
+<div class="lb-overlay" id="lb" onclick="if(event.target===this)closeImage()">
+  <div class="lb-box">
+    <div class="lb-hd">
+      <div class="lb-title" id="lbTitle">—</div>
+      <button class="lb-close" onclick="closeImage()" aria-label="Đóng">×</button>
+    </div>
+    <div class="lb-body">
+      <div class="lb-loading" id="lbLoading"><span class="lb-loading-spin"></span> Đang tải ảnh…</div>
+      <img id="lbImg" alt="" onload="document.getElementById('lbLoading').style.display='none';this.style.display='block'" onerror="document.getElementById('lbLoading').textContent='Không tải được ảnh'">
+    </div>
+  </div>
+</div>
 </body>
 </html>
