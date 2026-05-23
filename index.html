@@ -905,7 +905,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 
   <div class="hero-in">
     <h1>Mai Phương <span class="l2">Tokutei</span></h1>
-    <p class="hero-sub">Hỗ trợ tìm, đăng ký ứng tuyển các đơn hàng Tokutei, Kỹ sư hai đầu Nhật - Việt</p>
+    <p class="hero-sub">Hỗ trợ Tokutei, Kỹ sư đầu Nhật miễn phí hoàn toàn</p>
 
     <!-- CTA buttons -->
     <div class="hero-acts">
@@ -930,7 +930,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
 <!-- STATS -->
 <div class="stats">
   <div class="stats-in stag">
-    <div class="sitem"><div class="snum" id="stat-viet" style="color:var(--viet)">0</div><div class="slabel" style="font-weight:700;color:var(--viet)">Tokutei đầu Việt</div></div>
     <div class="sitem"><div class="snum" id="stat-nhat" style="color:var(--nhat)">0</div><div class="slabel" style="font-weight:700;color:var(--nhat)">Tokutei đầu Nhật</div></div>
     <div class="sitem"><div class="snum" id="stat-kysis" style="color:var(--kysis)">0</div><div class="slabel" style="font-weight:700;color:var(--kysis)">Việc kỹ sư</div></div>
   </div>
@@ -949,7 +948,6 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
         </div>
         <div class="filter-type-row">
           <button class="tf-btn on-all" id="tfAll" onclick="filterType('all')">Tất cả</button>
-          <button class="tf-btn" id="tfViet" onclick="filterType('viet')">Đầu Việt</button>
           <button class="tf-btn" id="tfNhat" onclick="filterType('nhat')">Đầu Nhật</button>
           <button class="tf-btn" id="tfKysis" onclick="filterType('kysis')">Kỹ sư</button>
         </div>
@@ -1110,9 +1108,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
           </div>
           <select id="adminJobFilterType" onchange="renderAdminJobs()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;background:#fff;outline:none">
             <option value="">Tất cả loại</option>
-            <option value="viet">Đầu Việt</option>
             <option value="nhat">Đầu Nhật</option>
-            <option value="both">Cả hai đầu</option>
             <option value="kysis">Kỹ sư</option>
           </select>
           <select id="adminJobFilterStatus" onchange="renderAdminJobs()" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:9px;font-size:13px;font-family:inherit;background:#fff;outline:none">
@@ -1731,7 +1727,7 @@ function renderFilterChips() {
   const chips = [];
   if(currentSearch) chips.push(`<button class="fchip fchip-search" onclick="clearSearch()">🔍 "${currentSearch}" <span class="fchip-x">×</span></button>`);
   if(currentType && currentType !== 'all') {
-    const lbl = currentType==='viet'?'Đầu Việt':currentType==='nhat'?'Đầu Nhật':'Kỹ sư';
+    const lbl = currentType==='nhat'?'Đầu Nhật':'Kỹ sư';
     chips.push(`<button class="fchip fchip-${currentType}" onclick="filterType('all')">${lbl} <span class="fchip-x">×</span></button>`);
   }
   if(currentCat) chips.push(`<button class="fchip fchip-cat" onclick="setFilterNganh('')">${currentCat} <span class="fchip-x">×</span></button>`);
@@ -1844,7 +1840,7 @@ function clearAllFilters() {
   closeNganhDrop();
   const ks = document.getElementById('khuvucSelect');
   if(ks) { ks.value = ''; ks.classList.remove('has-value'); }
-  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('on-all','on-viet','on-nhat','on-kysis'));
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('on-all','on-nhat','on-kysis'));
   const tfAll = document.getElementById('tfAll');
   if(tfAll) tfAll.classList.add('on-all');
   document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
@@ -1857,11 +1853,9 @@ function getJobs() {
 
 function updateStats() {
   const jobs = getJobs().filter(j => j.status === 'active');
-  const sv = document.getElementById('stat-viet');
   const sn = document.getElementById('stat-nhat');
   const sk = document.getElementById('stat-kysis');
-  if(sv) sv.textContent = jobs.filter(j => j.type === 'viet' || j.type === 'both').length;
-  if(sn) sn.textContent = jobs.filter(j => j.type === 'nhat' || j.type === 'both').length;
+  if(sn) sn.textContent = jobs.filter(j => j.type === 'nhat').length;
   if(sk) sk.textContent = jobs.filter(j => j.type === 'kysis').length;
   updateGroupCounts();
 }
@@ -1905,7 +1899,7 @@ function renderHeroJobs(filters) {
       jobs=jobs.filter(j=>jpR(j.japanese)>=ur);
     }
   }
-  ['viet','nhat','kysis'].forEach(type => {
+  ['nhat','kysis'].forEach(type => {
     const panel = document.getElementById('panel-' + type);
     if(!panel) return;
     const typeJobs = jobs.filter(j => j.type === type || (j.type === 'both' && (type === 'viet' || type === 'nhat')));
@@ -1920,9 +1914,7 @@ function renderHeroJobs(filters) {
               <div class="mtitle">${j.title}</div>
               <div class="mmeta">${[gender, j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
             </div>
-            ${j.type==='both'
-              ? `<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0;align-items:flex-end"><span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span></div>`
-              : `<span class="jbadge jbadge-${j.type}" style="flex-shrink:0">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+            <span class="jbadge jbadge-${j.type}" style="flex-shrink:0">${j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>
           </div>`;
         }).join('')
       : `<p style="text-align:center;color:var(--text-3);padding:20px 14px;font-size:13px;font-weight:500">Không có kết quả phù hợp</p>`;
@@ -2131,9 +2123,9 @@ function filterType(type) {
   currentType = type;
   currentCat = null;
   currentPage = 1;
-  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('on-all','on-viet','on-nhat','on-kysis'));
-  const map = {all:'tfAll',viet:'tfViet',nhat:'tfNhat',kysis:'tfKysis'};
-  const cls = {all:'on-all',viet:'on-viet',nhat:'on-nhat',kysis:'on-kysis'};
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('on-all','on-nhat','on-kysis'));
+  const map = {all:'tfAll',nhat:'tfNhat',kysis:'tfKysis'};
+  const cls = {all:'on-all',nhat:'on-nhat',kysis:'on-kysis'};
   const el = document.getElementById(map[type]);
   if(el) el.classList.add(cls[type]);
   populateNganhSelect(type);
@@ -2266,7 +2258,7 @@ function submitApply() {
   if(!name) { alert('Vui lòng nhập họ tên để tiếp tục.'); return; }
 
   const j = applyJobId ? getJobs().find(x => x.id === applyJobId) : null;
-  const jobLine = j ? `\n📌 Vị trí: ${j.title} (${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':j.type==='both'?'Đầu Việt + Đầu Nhật':'Đầu Nhật'})${j.city ? `\n📍 Địa điểm: ${j.city}` : ''}` : '';
+  const jobLine = j ? `\n📌 Vị trí: ${j.title} (${j.type==='kysis'?'Kỹ sư':'Đầu Nhật'})${j.city ? `\n📍 Địa điểm: ${j.city}` : ''}` : '';
 
   const text =
 `♻️ ĐƠN ỨNG TUYỂN TOKUTEI${jobLine}
@@ -2552,10 +2544,10 @@ function openCompare() {
     <div style="overflow-x:auto">
       <table style="width:100%;border-collapse:collapse;min-width:${n*200}px">
         <thead>
-          <tr>${selected.map(j=>`<th style="padding:12px 14px;text-align:left;background:${j.type==='viet'?'var(--viet)':j.type==='kysis'?'var(--kysis)':j.type==='both'?'var(--primary)':'var(--nhat)'};color:#fff;font-size:13px;font-weight:800">${j.title}</th>`).join('')}</tr>
+          <tr>${selected.map(j=>`<th style="padding:12px 14px;text-align:left;background:${j.type==='kysis'?'var(--kysis)':'var(--nhat)'};color:#fff;font-size:13px;font-weight:800">${j.title}</th>`).join('')}</tr>
         </thead>
         <tbody>
-          ${row('Loại hình', selected.map(j=>j.type==='viet'?'Tokutei đầu Việt':j.type==='kysis'?'Kỹ sư đầu Nhật':j.type==='both'?'Tokutei đầu Việt + Nhật':'Tokutei đầu Nhật'))}
+          ${row('Loại hình', selected.map(j=>j.type==='kysis'?'Kỹ sư đầu Nhật':'Tokutei đầu Nhật'))}
           ${row('Ngành nghề', selected.map(j=>j.category||''))}
           ${row('Địa điểm', selected.map(j=>j.city||''))}
           ${row('Mức lương', selected.map(j=>`<strong style="font-size:14px">${j.salary||'Liên hệ'}</strong>`))}
@@ -2732,9 +2724,7 @@ function renderAdminSideStats() {
   if(!el) return;
   el.innerHTML = [
     ['Tổng việc làm', jobs.length],
-    ['VN Đầu Việt', jobs.filter(j=>j.type==='viet').length],
     ['JP Đầu Nhật', jobs.filter(j=>j.type==='nhat').length],
-    ['VN+JP 2 đầu', jobs.filter(j=>j.type==='both').length],
     ['🎓 Kỹ sư', jobs.filter(j=>j.type==='kysis').length],
     ['📄 Bài viết', arts.length],
   ].map(([l,v])=>`<div class="admin-sb-stat"><span class="admin-sb-stat-lbl">${l}</span><span class="admin-sb-stat-val">${v}</span></div>`).join('');
@@ -2747,8 +2737,7 @@ function renderAdminJobsStats() {
   if(!el) return;
   el.innerHTML = [
     ['Tổng việc làm', jobs.length, 'var(--text-1)'],
-    ['vn Đầu Việt', jobs.filter(j=>j.type==='viet'||j.type==='both').length, '#16A34A'],
-    ['jp Đầu Nhật', jobs.filter(j=>j.type==='nhat'||j.type==='both').length, 'var(--primary)'],
+    ['jp Đầu Nhật', jobs.filter(j=>j.type==='nhat').length, 'var(--primary)'],
     ['✅ Đang hiển thị', jobs.filter(j=>j.status==='active').length, '#16A34A'],
   ].map(([l,v,c])=>`<div style="background:#fff;border-radius:12px;padding:20px 24px;box-shadow:var(--sh)"><div style="font-size:32px;font-weight:800;color:${c};line-height:1">${v}</div><div style="font-size:12px;color:var(--text-3);margin-top:6px">${l}</div></div>`).join('');
 }
