@@ -1604,7 +1604,8 @@ async function syncFromSupabase() {
   try {
     const { data, error } = await sb.from('jobs').select('*').order('updatedAt', { ascending: false });
     if (data && !error) {
-      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      const clean = data.filter(j => j.type === 'nhat' || j.type === 'kysis');
+      localStorage.setItem(STORE_KEY, JSON.stringify(clean));
       updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs(); updateCatCounts();
       if(document.getElementById('adminOverlay')?.classList.contains('open')) {
         renderAdminJobs(); renderAdminSideStats();
@@ -1613,7 +1614,7 @@ async function syncFromSupabase() {
   } catch(e) { /* offline — dùng cache localStorage */ }
 }
 const SEED_JOBS = [{"id":"mp2vkfxjxguo","type":"both","title":"Làm bánh mỳ","category":"🍱 Chế biến thực phẩm","city":"Osaka","salary":"20man","gender":"Nam","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:58:42.727Z"},{"id":"mp2u5ouc4568","type":"kysis","title":"Kỹ sư xây dựng","category":"🏗️ Xây dựng / Kiến trúc","city":"Mie - Komono","salary":"1300 Y/H","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"10-45h","raise":"Có","bonus":"Không","housing":"2man/tháng","desc":"Vệ sinh sửa chữa giàn giáo","status":"active","updatedAt":"2026-05-12T16:19:14.820Z"},{"id":"mp2tj8y8rzpt","type":"viet","title":"Làm bánh mochi","category":"🍱 Chế biến thực phẩm","city":"Tokyo","salary":"","gender":"Nam","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:01:47.792Z"},{"id":"mp2ka8qloryz","type":"nhat","title":"gdfgd","category":"🏗️ Xây dựng","city":"fdgdf","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:51.069Z"},{"id":"mp2ka4rqtwwx","type":"nhat","title":"retgfd","category":"🏗️ Xây dựng","city":"AAA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:45.926Z"},{"id":"mp2k9ym4mnxs","type":"nhat","title":"122","category":"🌾 Nông nghiệp","city":"AA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:37.948Z"},{"id":"mp2k9ih0679v","type":"viet","title":"1111","category":"🌾 Nông nghiệp","city":"Aichi","salary":"","gender":"","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:17.028Z"},{"id":"mp2bgskkpbj1","type":"nhat","title":"Làm bánh Pizza","category":"🍱 Chế biến thực phẩm","city":"Yamagata - Yonezawa","salary":"1100y/h","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"40h/tháng","raise":"Có","bonus":"~10man","company":"","housing":"2man","desc":"Làm việc tại dây chuyền chế biến thực phẩm đông lạnh. Bao ký túc xá, 2 bữa/ngày.","status":"active","updatedAt":"2026-05-12T08:07:16.258Z"},{"id":"mp2bgsklo2sk","type":"viet","title":"Công nhân xây dựng (型枠工)","category":"🏗️ Xây dựng","city":"Osaka 大阪","salMin":200000,"salMax":240000,"japanese":"N4以上","company":"Osaka Build Corp.","desc":"Gia công cốp pha, lắp dựng khung bê tông. OT được trả 125%.","status":"active"},{"id":"mp2bgskl9otm","type":"nhat","title":"Điều dưỡng viên tại cơ sở chăm sóc người già","category":"💊 Điều dưỡng / Hộ lý","city":"Hokkaido 北海道","salMin":210000,"salMax":250000,"japanese":"N3以上","company":"Sapporo Care Center","desc":"Chăm sóc người cao tuổi, hỗ trợ sinh hoạt hàng ngày. Không cần kinh nghiệm.","status":"active"},{"id":"mp2bgsklr9ql","type":"nhat","title":"Thợ hàn công nghiệp (溶接)","category":"🏗️ Xây dựng","city":"Kanagawa 神奈川","salMin":230000,"salMax":280000,"japanese":"N4以上","company":"Kawasaki Steel Works","desc":"Hàn kết cấu thép tại xưởng. Có chứng chỉ hàn được ưu tiên.","status":"active"}];
-if (!localStorage.getItem(STORE_KEY)) { localStorage.setItem(STORE_KEY, JSON.stringify(SEED_JOBS)); }
+if (!localStorage.getItem(STORE_KEY)) { localStorage.setItem(STORE_KEY, JSON.stringify(SEED_JOBS.filter(j=>j.type==='nhat'||j.type==='kysis'))); }
 const SAVED_KEY  = 'tp_saved_jobs';
 const ZALO_URL   = 'https://zalo.me/0367935698';
 const FB_URL     = 'https://www.facebook.com/profile.php?id=100083745456974';
@@ -2638,11 +2639,12 @@ async function syncFromGSheet() {
     if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột B - title bị trống?)';return;}
     // Push lên Supabase để mọi người dùng đều thấy
     statusEl.textContent=`⏳ Đang lưu lên Supabase...`;
-    // Xóa hết job cũ từ Sheet trước, rồi insert lại — đảm bảo inactive được áp dụng
+    // Xóa hết job cũ từ Sheet + job có type không hợp lệ (Việt cũ)
     const { error: delErr } = await sb.from('jobs').delete().like('id', 'gs_%');
     if(delErr) { statusEl.textContent=`❌ Lỗi xóa job cũ: ${delErr.message}`; return; }
+    await sb.from('jobs').delete().not('type','in','("nhat","kysis")');
     const { error: sbErr } = await sb.from('jobs').insert(newJobs);
-    const manual = getJobs().filter(j=>!j.id.startsWith('gs_'));
+    const manual = getJobs().filter(j=>!j.id.startsWith('gs_') && (j.type==='nhat'||j.type==='kysis'));
     saveJobs([...manual,...newJobs]);
     renderAdminJobs(); renderAdminSideStats(); updateCatCounts(); renderJobs(); renderHeroJobs();
     if(sbErr) statusEl.textContent=`⚠️ Đã lưu local (${newJobs.length} jobs) nhưng lỗi Supabase: ${sbErr.message}`;
