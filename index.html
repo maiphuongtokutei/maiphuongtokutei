@@ -2769,10 +2769,9 @@ function renderAdminJobs() {
     return city;
   };
   const typeBadge = t => {
-    if(t==='viet') return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#E6F9EE;color:#16A34A">vn Đầu Việt</span>`;
-    if(t==='nhat') return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#e8f2ee;color:var(--primary)">jp Đầu Nhật</span>`;
-    if(t==='both') return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#E6F9EE;color:#16A34A">vn</span><span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#e8f2ee;color:var(--primary)">jp</span>`;
-    return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#FFF7ED;color:#EA580C">🎓 Kỹ sư</span>`;
+    if(t==='kysis') return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#FFF7ED;color:#EA580C">🎓 Kỹ sư</span>`;
+    if(t==='nhat') return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#e8f2ee;color:var(--primary)">Tokutei</span>`;
+    return `<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#f4f4f6;color:#999">?</span>`;
   };
   const catIcon = cat => {
     const m={'Chế biến thực phẩm':'🍱','Xây dựng':'🏗️','Điều dưỡng':'❤️','Hộ lý / Điều dưỡng viên':'❤️','Nông nghiệp':'🌾','Lập trình viên':'💻','Cơ khí':'⚙️','Điện - Điện tử':'⚡','Hóa học & Vật liệu':'🧪','Ô tô':'🚗','AI & Data Science':'🤖','Phiên dịch / Thông dịch':'🗣️','Xuất nhập khẩu':'📦','Quản trị kinh doanh / Marketing':'📊'};
