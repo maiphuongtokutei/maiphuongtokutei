@@ -1308,7 +1308,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
           <summary style="font-size:12px;color:var(--text-3);cursor:pointer;user-select:none">📋 Xem hướng dẫn các cột trong Google Sheet</summary>
           <div style="margin-top:10px;font-size:12px;color:var(--text-2);line-height:2;background:var(--surface-alt);padding:12px;border-radius:8px">
             <strong>Hàng 1: tiêu đề cột (bỏ qua khi đồng bộ)</strong><br>
-            A: <code>type</code> — viet / nhat / both / kysis<br>
+            A: <code>type</code> — Nhật / Nhật-Việt / Kỹ sư / Việt<br>
             B: <code>title</code> — Tên vị trí ⭐ <em>bắt buộc</em><br>
             C: <code>category</code> — Ngành chính (dropdown)<br>
             D: <code>category_sub</code> — Ngành phụ (nhập tay, để trống nếu không cần)<br>
@@ -1933,12 +1933,11 @@ function renderHeroJobs(filters) {
 function renderJobs() {
   const container = document.getElementById('jobsList');
   if(!container) return;
-  let jobs = getJobs().filter(j => j.status === 'active');
-  if(currentType === 'viet') jobs = jobs.filter(j => j.type === 'viet' || j.type === 'both');
-  else if(currentType === 'nhat') jobs = jobs.filter(j => j.type === 'nhat' || j.type === 'both');
+  let jobs = getJobs().filter(j => j.status === 'active' && (j.type === 'nhat' || j.type === 'kysis'));
+  if(currentType === 'nhat') jobs = jobs.filter(j => j.type === 'nhat');
   else if(currentType === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
   else if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
-  else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type !== 'kysis');
+  else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type === 'nhat');
   if(currentCat) jobs = jobs.filter(j => jobMatchesCat(j.category||'', currentCat));
   if(currentPref) {
     const REGIONS={'Hokkaido':['Hokkaido'],'Tohoku':['Aomori','Iwate','Miyagi','Akita','Yamagata','Fukushima'],'Kanto':['Ibaraki','Tochigi','Gunma','Saitama','Chiba','Tokyo','Kanagawa'],'Chubu':['Niigata','Toyama','Ishikawa','Fukui','Yamanashi','Nagano','Shizuoka','Aichi','Mie'],'Kansai':['Shiga','Kyoto','Osaka','Hyogo','Nara','Wakayama'],'Chugoku':['Tottori','Shimane','Okayama','Hiroshima','Yamaguchi'],'Shikoku':['Tokushima','Kagawa','Ehime','Kochi'],'Kyushu':['Fukuoka','Saga','Nagasaki','Kumamoto','Oita','Miyazaki','Kagoshima'],'Okinawa':['Okinawa']};
@@ -2015,7 +2014,7 @@ function renderJobs() {
     return `<div class="jcard ${j.type}${isActive?'':' expired'}" data-id="${j.id}" onclick="openJob('${j.id}')" style="cursor:pointer">
       <div style="display:flex;flex-direction:column;gap:10px">
           <div class="jcard-top">
-            ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+            <span class="jbadge jbadge-${j.type}">${j.type==='kysis'?'Kỹ sư':'Tokutei'}</span>
             ${renderJobCat(j.category||'')}
             <span class="status-badge ${isActive?'active':'expired'}">${isActive?'Đang tuyển':'Hết hạn'}</span>
           </div>
@@ -2184,7 +2183,7 @@ function openJob(id) {
     <div class="modal-hd">
       <div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-          ${j.type==='both'?`<span class="jbadge jbadge-viet">Tokutei đầu Việt</span><span class="jbadge jbadge-nhat">Tokutei đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Tokutei đầu Việt':j.type==='kysis'?'Kỹ sư đầu Nhật':'Tokutei đầu Nhật'}</span>`}
+          <span class="jbadge jbadge-${j.type}">${j.type==='kysis'?'Kỹ sư':'Tokutei'}</span>
           ${j.category?`<span style="font-size:12px;color:var(--text-3)">${j.category}</span>`:''}
         </div>
         <div class="modal-title">${j.title}</div>
@@ -2492,7 +2491,7 @@ function renderSavedPanel() {
       <div class="scard-cb" onclick="toggleCompareSelect('${id}')">${checked?'✓':''}</div>
       <div class="scard-body" onclick="closeSaved();openJob('${id}')">
         <div class="scard-top">
-          ${j.type==='both'?`<span class="jbadge jbadge-viet">Đầu Việt</span><span class="jbadge jbadge-nhat">Đầu Nhật</span>`:`<span class="jbadge jbadge-${j.type}">${j.type==='viet'?'Đầu Việt':j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>`}
+          <span class="jbadge jbadge-${j.type}">${j.type==='kysis'?'Kỹ sư':'Tokutei'}</span>
           <span class="status-badge ${isActive?'active':'expired'}" style="font-size:10px">${isActive?'Đang tuyển':'Hết hạn'}</span>
         </div>
         <div class="scard-title">${j.title}</div>
@@ -2629,9 +2628,12 @@ async function syncFromGSheet() {
     const rows = parseCSV(csv);
     if(rows.length < 2){statusEl.textContent='⚠️ Sheet trống';return;}
     const g = r => (r||'').trim();
-    const newJobs = rows.slice(1).filter(r=>r.some(c=>c.trim())).map((r,i)=>({
+    const toType=t=>{const v=(t||'').toLowerCase();return v.startsWith('k')?'kysis':'nhat'};
+    const isViet=t=>{const v=(t||'').toLowerCase();return v==='viet'||v==='việt'};
+    const toISO=s=>{if(!s)return null;const m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);return m?`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`:null};
+    const newJobs = rows.slice(1).filter(r=>r.some(c=>c.trim())).filter(r=>!isViet(g(r[0]))).map((r,i)=>({
       id:'gs_'+Date.now()+'_'+i,
-      type:g(r[0])||'viet',
+      type:toType(g(r[0])),
       title:g(r[1]),
       category:[g(r[2]),g(r[3])].filter(Boolean).join(','),
       city:g(r[4]), salary:g(r[5]), japanese:g(r[6]),
@@ -2639,7 +2641,7 @@ async function syncFromGSheet() {
       daysOff:g(r[9]), overtime:g(r[10]), raise:g(r[11]),
       bonus:g(r[12]), housing:g(r[13]), desc:g(r[14]),
       status:g(r[15])||'active',
-      updatedAt:g(r[19])||null
+      updatedAt:toISO(g(r[19]))
     })).filter(j=>j.title);
     if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột B - title bị trống?)';return;}
     // Push lên Supabase để mọi người dùng đều thấy
