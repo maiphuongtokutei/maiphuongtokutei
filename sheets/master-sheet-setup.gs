@@ -617,14 +617,22 @@ function _safeISO(v) {
   }
 }
 
-// 1 dòng → object Supabase (web chỉ biết type 'nhat' | 'kysis')
+// 1 dòng → object Supabase
+// type: 'nhat' | 'kysis' | 'both' | 'viet' | 'kysis_viet'
+// loai_don: giữ nguyên giá trị gốc từ sheet để web lọc đúng
 function buildJob(r, i) {
-  const t       = normalizeType(r[0]);
-  const webType = (t === 'kysis_nhat') ? 'kysis' : 'nhat';
+  const t = normalizeType(r[0]);
+  const webType =
+    t === 'kysis_nhat' ? 'kysis'
+    : t === 'kysis_viet' ? 'kysis_viet'
+    : t === 'viet'      ? 'viet'
+    : t === 'both'      ? 'both'
+    : 'nhat';
   const catMain = String(r[2] || '').trim();
   const catSub  = String(r[3] || '').trim();
   return {
     id:        'gs_' + i,
+    loai_don:  String(r[0] || '').trim(),   // ← bắt buộc để TokuteiViet lọc đúng
     type:      webType,
     title:     String(r[1] || '').trim(),
     category:  [catMain, catSub].filter(Boolean).join(','),
@@ -679,9 +687,9 @@ function _pushSupabase() {
   const last = sheet.getLastRow();
   const rows = (last < 2 ? [] : sheet.getRange(2, 1, last - 1, 22).getValues())
     .filter(function(r) {
-      if (!r[1]) return false;
+      if (!r[1]) return false;  // bỏ dòng không có tên việc
       if (String(r[15] || '').toLowerCase().trim() === 'inactive') return false;
-      return _isForNhat(normalizeType(r[0]));
+      return true;  // push TẤT CẢ loại: Nhật, Việt, Nhật-Việt, Kỹ sư đầu Nhật/Việt
     });
 
   const payload = rows.map(function(r, i) { return buildJob(r, i); });
