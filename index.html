@@ -892,7 +892,7 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
       <span class="logo-text">Mai Phương <em>Tokutei</em></span>
     </a>
     <ul class="nav-links">
-      <li><a href="#hero-search" onclick="event.preventDefault();document.getElementById('mockTypeTabs').scrollIntoView({behavior:'smooth',block:'center'})">Tìm việc làm</a></li>
+      <li><a href="#hero-search" onclick="event.preventDefault();document.getElementById('filterBar').scrollIntoView({behavior:'smooth',block:'center'})">Tìm việc làm</a></li>
       <li><a href="#categories">Danh mục</a></li>
     </ul>
     <div class="nav-right" id="navRight">
@@ -1189,11 +1189,9 @@ footer{background:var(--text-1);color:rgba(255,255,255,.5);padding:52px 0 28px}
         <div class="ajf-grid">
           <div class="af2" style="grid-column:1/-1">
             <label>Loại Tokutei *</label>
-            <input type="hidden" id="ajf-type" value="viet">
+            <input type="hidden" id="ajf-type" value="nhat">
             <div class="type-picker">
-              <button type="button" class="type-pick-btn on" data-val="viet" onclick="adminPickType('viet')">Tokutei đầu Việt<small>Phí dịch vụ · Từ Việt Nam</small></button>
-              <button type="button" class="type-pick-btn" data-val="nhat" onclick="adminPickType('nhat')">Tokutei đầu Nhật<small>0 đồng · Đang ở Nhật</small></button>
-              <button type="button" class="type-pick-btn" data-val="both" onclick="adminPickType('both')">Việt - Nhật<small>Tuyển cả hai đầu</small></button>
+              <button type="button" class="type-pick-btn on" data-val="nhat" onclick="adminPickType('nhat')">Tokutei đầu Nhật<small>0 đồng · Đang ở Nhật</small></button>
               <button type="button" class="type-pick-btn" data-val="kysis" onclick="adminPickType('kysis')">Kỹ sư<small>IT · Cơ khí · Xây dựng</small></button>
             </div>
           </div>
@@ -1612,42 +1610,56 @@ function renderJobCat(cat) {
   if(parts.length > 1) return parts.map(p => `<span class="jcard-cat">${p}</span>`).join('');
   return `<span class="jcard-cat">${c}</span>`;
 }
-function switchTab(type) {
-  document.querySelectorAll('.mtt').forEach(b => b.classList.remove('on'));
-  const el = document.querySelector(`.mtt.${type}`);
-  if (el) el.classList.add('on');
-  document.querySelectorAll('.jobs-panel').forEach(p => p.classList.remove('on'));
-  const panel = document.getElementById('panel-' + type);
-  if (panel) panel.classList.add('on');
-}
-
-function heroSelectType(type) {
-  filterType(type);
-  setTimeout(() => document.getElementById('jobsList').scrollIntoView({behavior:'smooth'}), 120);
-}
-
 // ── JOB DATA ──
 const STORE_KEY  = 'tp_tokutei_jobs';
 
 // ── SUPABASE ──
-const SB_URL  = 'https://guiyhpaeackfdsptjbol.supabase.co';
-const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1aXlocGFlYWNrZmRzcHRqYm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NTcwMDIsImV4cCI6MjA5NDUzMzAwMn0.jYXm2e1Wwkl8lLXOmT6JZkUxjZUKIdAPc6NdyEyFgeU';
+const SB_URL  = 'https://nkvgptpcedikhflbiwac.supabase.co';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rdmdwdHBjZWRpa2hmbGJpd2FjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE5Njc4MjgsImV4cCI6MjA5NzU0MzgyOH0.IMwfr1aV1YD51gNmQ_he6Qu2Hrwsl5guwpWlEybLjtc';
 const sb = window.supabase.createClient(SB_URL, SB_ANON);
 
 async function syncFromSupabase() {
   try {
-    const { data, error } = await sb.from('jobs').select('*').order('updatedAt', { ascending: false });
+    const { data, error } = await sb.from('jobs')
+      .select('id,loai_don,ten_cv,nganh,nganh_phu,tinh,luong,tieng_nhat,gioi_tinh,gio_lam,ngay_nghi,tang_ca,tang_luong,thuong,nha_o,mo_ta,trang_thai,link_anh,created_at')
+      .eq('trang_thai', 'active')
+      .order('created_at', { ascending: false });
     if (data && !error) {
-      const clean = data.filter(j => j.type === 'nhat' || j.type === 'kysis');
+      const clean = data.map(r => {
+        const s = noDia(r.loai_don || '');
+        const type = (s.includes('viet') && !s.includes('nhat')) ? null
+                     : s.includes('ky su') ? 'kysis' : 'nhat';
+        if (!type) return null;
+        return {
+          id:        r.id,
+          type,
+          title:     r.ten_cv     || '',
+          category:  r.nganh      || '',
+          city:      r.tinh       || '',
+          salary:    r.luong      || '',
+          japanese:  r.tieng_nhat || '',
+          gender:    r.gioi_tinh  || '',
+          workHours: r.gio_lam    || '',
+          daysOff:   r.ngay_nghi  || '',
+          overtime:  r.tang_ca    || '',
+          raise:     r.tang_luong || '',
+          bonus:     r.thuong     || '',
+          housing:   r.nha_o      || '',
+          desc:      r.mo_ta      || '',
+          status:    r.trang_thai || 'active',
+          imageUrl:  r.link_anh   || '',
+          updatedAt: r.created_at || '',
+        };
+      }).filter(Boolean);
       localStorage.setItem(STORE_KEY, JSON.stringify(clean));
-      updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs(); updateCatCounts();
+      updateStats(); renderJobs();
       if(document.getElementById('adminOverlay')?.classList.contains('open')) {
         renderAdminJobs(); renderAdminSideStats();
       }
     }
   } catch(e) { /* offline — dùng cache localStorage */ }
 }
-const SEED_JOBS = [{"id":"mp2vkfxjxguo","type":"both","title":"Làm bánh mỳ","category":"🍱 Chế biến thực phẩm","city":"Osaka","salary":"20man","gender":"Nam","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:58:42.727Z"},{"id":"mp2u5ouc4568","type":"kysis","title":"Kỹ sư xây dựng","category":"🏗️ Xây dựng / Kiến trúc","city":"Mie - Komono","salary":"1300 Y/H","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"10-45h","raise":"Có","bonus":"Không","housing":"2man/tháng","desc":"Vệ sinh sửa chữa giàn giáo","status":"active","updatedAt":"2026-05-12T16:19:14.820Z"},{"id":"mp2tj8y8rzpt","type":"viet","title":"Làm bánh mochi","category":"🍱 Chế biến thực phẩm","city":"Tokyo","salary":"","gender":"Nam","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T16:01:47.792Z"},{"id":"mp2ka8qloryz","type":"nhat","title":"gdfgd","category":"🏗️ Xây dựng","city":"fdgdf","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:51.069Z"},{"id":"mp2ka4rqtwwx","type":"nhat","title":"retgfd","category":"🏗️ Xây dựng","city":"AAA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:45.926Z"},{"id":"mp2k9ym4mnxs","type":"nhat","title":"122","category":"🌾 Nông nghiệp","city":"AA","salary":"","gender":"","japanese":"N4以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:37.948Z"},{"id":"mp2k9ih0679v","type":"viet","title":"1111","category":"🌾 Nông nghiệp","city":"Aichi","salary":"","gender":"","japanese":"N5以上","workHours":"","daysOff":"","overtime":"","raise":"","bonus":"","housing":"","desc":"","status":"active","updatedAt":"2026-05-12T11:42:17.028Z"},{"id":"mp2bgskkpbj1","type":"nhat","title":"Làm bánh Pizza","category":"🍱 Chế biến thực phẩm","city":"Yamagata - Yonezawa","salary":"1100y/h","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"40h/tháng","raise":"Có","bonus":"~10man","company":"","housing":"2man","desc":"Làm việc tại dây chuyền chế biến thực phẩm đông lạnh. Bao ký túc xá, 2 bữa/ngày.","status":"active","updatedAt":"2026-05-12T08:07:16.258Z"},{"id":"mp2bgsklo2sk","type":"viet","title":"Công nhân xây dựng (型枠工)","category":"🏗️ Xây dựng","city":"Osaka 大阪","salMin":200000,"salMax":240000,"japanese":"N4以上","company":"Osaka Build Corp.","desc":"Gia công cốp pha, lắp dựng khung bê tông. OT được trả 125%.","status":"active"},{"id":"mp2bgskl9otm","type":"nhat","title":"Điều dưỡng viên tại cơ sở chăm sóc người già","category":"💊 Điều dưỡng / Hộ lý","city":"Hokkaido 北海道","salMin":210000,"salMax":250000,"japanese":"N3以上","company":"Sapporo Care Center","desc":"Chăm sóc người cao tuổi, hỗ trợ sinh hoạt hàng ngày. Không cần kinh nghiệm.","status":"active"},{"id":"mp2bgsklr9ql","type":"nhat","title":"Thợ hàn công nghiệp (溶接)","category":"🏗️ Xây dựng","city":"Kanagawa 神奈川","salMin":230000,"salMax":280000,"japanese":"N4以上","company":"Kawasaki Steel Works","desc":"Hàn kết cấu thép tại xưởng. Có chứng chỉ hàn được ưu tiên.","status":"active"}];
+const SEED_JOBS = [{"id":"mp2u5ouc4568","type":"kysis","title":"Kỹ sư xây dựng","category":"🏗️ Xây dựng / Kiến trúc","city":"Mie - Komono","salary":"1300 Y/H","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"10-45h","raise":"Có","bonus":"Không","housing":"2man/tháng","desc":"Vệ sinh sửa chữa giàn giáo","status":"active","updatedAt":"2026-05-12T16:19:14.820Z"},{"id":"mp2bgskkpbj1","type":"nhat","title":"Làm bánh Pizza","category":"🍱 Chế biến thực phẩm","city":"Yamagata - Yonezawa","salary":"1100y/h","gender":"Nam","japanese":"N4以上","workHours":"8:00 - 17:00","daysOff":"Theo lịch của công ty","overtime":"40h/tháng","raise":"Có","bonus":"~10man","housing":"2man","desc":"Làm việc tại dây chuyền chế biến thực phẩm đông lạnh. Bao ký túc xá, 2 bữa/ngày.","status":"active","updatedAt":"2026-05-12T08:07:16.258Z"}];
 if (!localStorage.getItem(STORE_KEY)) { localStorage.setItem(STORE_KEY, JSON.stringify(SEED_JOBS.filter(j=>j.type==='nhat'||j.type==='kysis'))); }
 const SAVED_KEY  = 'tp_saved_jobs';
 const ZALO_URL   = 'https://zalo.me/0367935698';
@@ -1673,21 +1685,6 @@ const ICONS = {
   arrow:   `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`,
 };
 
-const CAT_ICON = {
-  'Chế biến thực phẩm':'utensils','Nhóm ngành 1 (Cơ khí)':'factory',
-  'Nhóm ngành 2 (Điện tử)':'cpu','Xây dựng':'hard-hat',
-  'Điều dưỡng':'heart-pulse','Nhà hàng':'chef-hat',
-  'Vệ sinh tòa nhà':'sparkles','Bảo dưỡng ô tô':'car',
-  'Nông nghiệp':'sprout','Lưu trú / Khách sạn':'building-2',
-  'Ngư nghiệp':'fish','Đóng tàu':'anchor','Hàng không':'plane',
-  'Vận tải':'truck','Lâm nghiệp':'tree-pine','May':'scissors','In ấn':'printer',
-  'Cơ khí':'cog','Điện - Điện tử':'zap','Hóa học & Vật liệu':'flask-conical',
-  'Ô tô':'car','Lập trình viên':'laptop','Kỹ sư hệ thống / Mạng':'server',
-  'AI & Data Science':'brain','Phiên dịch / Thông dịch':'languages',
-  'Xuất nhập khẩu':'package','Quản trị kinh doanh / Marketing':'trending-up',
-};
-
-let currentGroup = null; // null | 'tokutei' | 'kysis'
 let currentType = 'all';
 let currentCat = null;
 let currentSearch = '';
@@ -1723,7 +1720,6 @@ function setFilterNganh(val, skipSelect) {
   if(trigger) trigger.classList.toggle('has-value', !!val);
   if(label) label.textContent = val || 'Ngành nghề';
   document.querySelectorAll('#nganhPanel .cs-flat-item').forEach(b => b.classList.toggle('cs-selected', b.dataset.val === val));
-  document.querySelectorAll('.ccat').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCat));
   renderJobs();
 }
 function toggleNganhDrop(e) {
@@ -1736,11 +1732,6 @@ function toggleNganhDrop(e) {
 function closeNganhDrop() {
   document.getElementById('nganhPanel')?.classList.remove('open');
   document.getElementById('nganhTrigger')?.classList.remove('open');
-}
-function toggleNganhGroup(el) {
-  const items = el.nextElementSibling;
-  const isOpen = items.classList.toggle('open');
-  el.classList.toggle('open', isOpen);
 }
 function selectNganhItem(val) {
   setFilterNganh(val);
@@ -1878,7 +1869,6 @@ function clearAllFilters() {
   document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('on-all','on-nhat','on-kysis'));
   const tfAll = document.getElementById('tfAll');
   if(tfAll) tfAll.classList.add('on-all');
-  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
   renderJobs();
 }
 
@@ -1892,69 +1882,6 @@ function updateStats() {
   const sk = document.getElementById('stat-kysis');
   if(sn) sn.textContent = jobs.filter(j => j.type === 'nhat').length;
   if(sk) sk.textContent = jobs.filter(j => j.type === 'kysis').length;
-  updateGroupCounts();
-}
-
-function updateCatCounts() {
-  let jobs = getJobs().filter(j => j.status === 'active');
-  if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
-  else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type !== 'kysis');
-  document.querySelectorAll('.ccat[data-cat]').forEach(el => {
-    const count = jobs.filter(j => (j.category||'').toLowerCase().includes(el.dataset.cat.toLowerCase())).length;
-    const countEl = el.querySelector('.ccat-c');
-    if(countEl) countEl.textContent = count + ' việc';
-  });
-}
-
-const FLAG_VN_SVG = (w,h) => `<svg viewBox="0 0 3 2" style="width:${w}px;height:${h}px;border-radius:4px;display:block;border:1px solid rgba(0,0,0,.08)" xmlns="http://www.w3.org/2000/svg"><rect width="3" height="2" fill="#DA251D"/><polygon points="1.5,0.38 1.66,0.88 2.15,0.88 1.74,1.16 1.9,1.65 1.5,1.37 1.1,1.65 1.26,1.16 0.85,0.88 1.34,0.88" fill="#FFCD00"/></svg>`;
-const FLAG_JP_SVG = (w,h) => `<svg viewBox="0 0 3 2" style="width:${w}px;height:${h}px;border-radius:4px;display:block;border:1px solid rgba(0,0,0,.08)" xmlns="http://www.w3.org/2000/svg"><rect width="3" height="2" fill="#fff"/><circle cx="1.5" cy="1" r="0.6" fill="#BC002D"/></svg>`;
-
-function getHeroFlagHTML(type) {
-  if (type === 'viet') return FLAG_VN_SVG(36,24);
-  if (type === 'nhat') return FLAG_JP_SVG(36,24);
-  if (type === 'both') return `<div style="display:flex;flex-direction:column;gap:2px;flex-shrink:0">${FLAG_VN_SVG(36,16)}${FLAG_JP_SVG(36,16)}</div>`;
-  return `<div style="width:36px;height:36px;flex-shrink:0;background:#FCEEF4;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(181,66,106,.15)">🎓</div>`;
-}
-
-function renderHeroJobs(filters) {
-  let jobs = getJobs().filter(j => j.status === 'active');
-  if(filters) {
-    const {cat, pref, japanese} = filters;
-    if(cat) jobs = jobs.filter(j => (j.category||'').toLowerCase().includes(cat.toLowerCase()));
-    if(pref) {
-      const R={'Hokkaido':['Hokkaido'],'Tohoku':['Aomori','Iwate','Miyagi','Akita','Yamagata','Fukushima'],'Kanto':['Ibaraki','Tochigi','Gunma','Saitama','Chiba','Tokyo','Kanagawa'],'Chubu':['Niigata','Toyama','Ishikawa','Fukui','Yamanashi','Nagano','Shizuoka','Aichi','Mie'],'Kansai':['Shiga','Kyoto','Osaka','Hyogo','Nara','Wakayama'],'Chugoku':['Tottori','Shimane','Okayama','Hiroshima','Yamaguchi'],'Shikoku':['Tokushima','Kagawa','Ehime','Kochi'],'Kyushu':['Fukuoka','Saga','Nagasaki','Kumamoto','Oita','Miyazaki','Kagoshima'],'Okinawa':['Okinawa']};
-      const list = R[pref];
-      if(list) jobs = jobs.filter(j => list.some(p => (j.city||'').toLowerCase().includes(p.toLowerCase())));
-      else jobs = jobs.filter(j => (j.city||'').toLowerCase().includes(pref.toLowerCase()));
-    }
-    if(japanese) {
-      const rank={n1:1,n2:2,n3:3,n4:4,n5:5};
-      const jpR=s=>{const t=(s||'').toLowerCase();if(t.includes('n1'))return 1;if(t.includes('n2'))return 2;if(t.includes('n3'))return 3;if(t.includes('n4'))return 4;if(t.includes('n5'))return 5;return 6;};
-      const ur=rank[japanese.toLowerCase()]||6;
-      jobs=jobs.filter(j=>jpR(j.japanese)>=ur);
-    }
-  }
-  ['nhat','kysis'].forEach(type => {
-    const panel = document.getElementById('panel-' + type);
-    if(!panel) return;
-    const typeJobs = jobs.filter(j => j.type === type || (j.type === 'both' && (type === 'viet' || type === 'nhat')));
-    const icoStyle = type==='viet'?'background:var(--viet-soft);color:var(--viet)':type==='kysis'?'background:var(--kysis-soft);color:var(--kysis)':'background:var(--nhat-soft);color:var(--nhat)';
-    panel.innerHTML = typeJobs.length
-      ? typeJobs.map(j => {
-          const sal = j.salary || '';
-          const gender = j.gender && j.gender !== 'Không yêu cầu' ? j.gender : '';
-          return `<div class="mjob" onclick="scrollToJob('${j.id}')" title="Xem trong danh sách việc làm">
-            <div class="mjob-ico" style="${icoStyle}"><i data-lucide="${CAT_ICON[j.category]||'briefcase'}"></i></div>
-            <div class="minfo">
-              <div class="mtitle">${j.title}</div>
-              <div class="mmeta">${[gender, j.city, j.japanese, sal].filter(Boolean).join(' · ')}</div>
-            </div>
-            <span class="jbadge jbadge-${j.type}" style="flex-shrink:0">${j.type==='kysis'?'Kỹ sư':'Đầu Nhật'}</span>
-          </div>`;
-        }).join('')
-      : `<p style="text-align:center;color:var(--text-3);padding:20px 14px;font-size:13px;font-weight:500">Không có kết quả phù hợp</p>`;
-  });
-  lucide.createIcons();
 }
 
 function renderJobs() {
@@ -1963,8 +1890,6 @@ function renderJobs() {
   let jobs = getJobs().filter(j => j.status === 'active' && (j.type === 'nhat' || j.type === 'kysis'));
   if(currentType === 'nhat') jobs = jobs.filter(j => j.type === 'nhat');
   else if(currentType === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
-  else if(currentGroup === 'kysis') jobs = jobs.filter(j => j.type === 'kysis');
-  else if(currentGroup === 'tokutei') jobs = jobs.filter(j => j.type === 'nhat');
   if(currentCat) jobs = jobs.filter(j => jobMatchesCat(j.category||'', currentCat));
   if(currentPref) {
     const REGIONS={'Hokkaido':['Hokkaido'],'Tohoku':['Aomori','Iwate','Miyagi','Akita','Yamagata','Fukushima'],'Kanto':['Ibaraki','Tochigi','Gunma','Saitama','Chiba','Tokyo','Kanagawa'],'Chubu':['Niigata','Toyama','Ishikawa','Fukui','Yamanashi','Nagano','Shizuoka','Aichi','Mie'],'Kansai':['Shiga','Kyoto','Osaka','Hyogo','Nara','Wakayama'],'Chugoku':['Tottori','Shimane','Okayama','Hiroshima','Yamaguchi'],'Shikoku':['Tokushima','Kagawa','Ehime','Kochi'],'Kyushu':['Fukuoka','Saga','Nagasaki','Kumamoto','Oita','Miyazaki','Kagoshima'],'Okinawa':['Okinawa']};
@@ -2041,7 +1966,7 @@ function renderJobs() {
     const imgBtn = hasImg
       ? `<button class="jcard-cta" onclick="event.stopPropagation();openImage('${j.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg> Xem ảnh</button>`
       : `<button class="jcard-cta jcard-cta-disabled" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 3l18 18"/></svg> Chưa có ảnh</button>`;
-    return `<div class="jcard ${j.type}${isActive?'':' expired'}" data-id="${j.id}" ${hasImg?`onclick="openImage('${j.id}')"`:''}>
+    return `<div class="jcard ${j.type}${isActive?'':' expired'}" data-id="${j.id}" onclick="openJob('${j.id}')">
       <div class="jcard-type">${typeName}</div>
       <div class="jcard-cat">${renderJobCat(j.category||'')}</div>
       <div class="jcard-body">
@@ -2059,94 +1984,10 @@ function renderJobs() {
   }).join('');
 }
 
-function scrollToJob(id) {
-  // Reset tất cả filter
-  currentGroup = null;
-  currentCat = null;
-  currentSearch = '';
-  currentPref = null;
-  const inp = document.getElementById('searchInput');
-  if(inp) inp.value = '';
-  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
-  document.getElementById('groupGrid').style.display = 'grid';
-  document.getElementById('subcatLevel').style.display = 'none';
-
-  // Tìm vị trí job trong danh sách để xác định trang (sort phải khớp renderJobs)
-  const allJobs = getJobs().filter(j => j.status === 'active');
-  allJobs.sort((a, b) => {
-    const ta = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-    const tb = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-    return tb - ta;
-  });
-  const idx = allJobs.findIndex(j => j.id === id);
-  currentPage = idx === -1 ? 1 : Math.ceil((idx + 1) / JOBS_PER_PAGE);
-
-  renderJobs();
-
-  // Scroll đến section rồi highlight card
-  setTimeout(() => {
-    document.getElementById('categories').scrollIntoView({behavior:'smooth', block:'start'});
-    setTimeout(() => {
-      const card = document.querySelector(`.jcard[data-id="${id}"]`);
-      if(card) {
-        card.scrollIntoView({behavior:'smooth', block:'center'});
-        card.classList.add('jcard-flash');
-        setTimeout(() => card.classList.remove('jcard-flash'), 1500);
-      }
-    }, 400);
-  }, 80);
-}
-
 function goToPage(page) {
   currentPage = page;
   renderJobs();
   setTimeout(() => document.getElementById('jobsList').scrollIntoView({behavior:'smooth', block:'start'}), 50);
-}
-
-function getJobFlagHTML(type) {
-  if (type === 'viet') return FLAG_VN_SVG(48,32);
-  if (type === 'nhat') return FLAG_JP_SVG(48,32);
-  if (type === 'both') return `<div style="display:flex;flex-direction:column;gap:3px;flex-shrink:0">${FLAG_VN_SVG(48,21)}${FLAG_JP_SVG(48,21)}</div>`;
-  return `<div style="width:48px;height:32px;flex-shrink:0;background:#FCEEF4;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(181,66,106,.15)">🎓</div>`;
-}
-
-function selectGroup(group) {
-  currentGroup = group;
-  currentCat = null;
-  currentPage = 1;
-  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
-  document.getElementById('groupGrid').style.display = 'none';
-  document.getElementById('subcatLevel').style.display = 'block';
-  document.getElementById('catGridTokutei').style.display = group === 'tokutei' ? 'grid' : 'none';
-  document.getElementById('catGridKysis').style.display = group === 'kysis' ? 'grid' : 'none';
-  document.getElementById('subcatTitle').textContent = group === 'tokutei' ? 'Tokutei' : 'Kỹ sư';
-  updateCatCounts();
-  renderJobs();
-}
-
-function backToGroups() {
-  currentGroup = null;
-  currentCat = null;
-  currentType = 'all';
-  currentPage = 1;
-  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
-  document.getElementById('groupGrid').style.display = 'grid';
-  document.getElementById('subcatLevel').style.display = 'none';
-  const trigger = document.getElementById('nganhTrigger');
-  const label = document.getElementById('nganhLabel');
-  if(trigger) { trigger.classList.remove('has-value','open'); }
-  if(label) label.textContent = 'Ngành nghề';
-  closeNganhDrop();
-  updateGroupCounts();
-  renderJobs();
-}
-
-function updateGroupCounts() {
-  const jobs = getJobs().filter(j => j.status === 'active');
-  const gt = document.getElementById('gc-tokutei');
-  const gk = document.getElementById('gc-kysis');
-  if(gt) gt.textContent = jobs.filter(j => j.type !== 'kysis').length + ' việc';
-  if(gk) gk.textContent = jobs.filter(j => j.type === 'kysis').length + ' việc';
 }
 
 function filterType(type) {
@@ -2164,21 +2005,7 @@ function filterType(type) {
   if(trigger) { trigger.classList.remove('has-value','open'); }
   if(label) label.textContent = 'Ngành nghề';
   closeNganhDrop();
-  document.querySelectorAll('.ccat').forEach(c => c.classList.remove('active'));
-  updateCatCounts();
   renderJobs();
-}
-
-function filterCat(cat) {
-  currentCat = (currentCat === cat) ? null : cat;
-  currentPage = 1;
-  document.querySelectorAll('.ccat').forEach(c => c.classList.toggle('active', c.dataset.cat === currentCat));
-  const trigger = document.getElementById('nganhTrigger');
-  const label = document.getElementById('nganhLabel');
-  if(trigger) trigger.classList.toggle('has-value', !!currentCat);
-  if(label) label.textContent = currentCat || 'Ngành nghề';
-  renderJobs();
-  if(currentCat) setTimeout(() => document.getElementById('jobsList')?.scrollIntoView({behavior:'smooth', block:'start'}), 80);
 }
 
 // ── MODAL ──
@@ -2237,6 +2064,7 @@ function openJob(id) {
         <div class="modal-desc" style="margin-bottom:16px">${j.desc}</div>
       `:''}
 
+      ${(j.imageUrl||'').trim()?`<button onclick="openImage('${j.id}')" style="border:1.5px solid var(--border);cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;width:100%;margin-bottom:10px;padding:12px;border-radius:10px;background:#fff;color:var(--text-1);display:flex;align-items:center;justify-content:center;gap:8px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg> Xem ảnh đơn hàng</button>`:''}
       <button onclick="openApplyForm('${j.id}')" class="modal-cta" style="border:none;cursor:pointer;font-family:inherit;font-size:15px;width:100%;margin-bottom:0;display:flex;align-items:center;justify-content:center;gap:8px">
         ${ICONS.file} Điền đơn ứng tuyển
       </button>
@@ -2339,6 +2167,7 @@ QUÁ TRÌNH LÀM VIỆC
 const AUTH_USERS_KEY = 'tp_auth_users';
 const AUTH_USER_KEY  = 'tp_current_user';
 
+function encPass(p) { try { return btoa(p); } catch { return btoa(unescape(encodeURIComponent(p))); } }
 function getUsers() { try { return JSON.parse(localStorage.getItem(AUTH_USERS_KEY)||'[]'); } catch(e){return[];} }
 function saveUsers(u) { localStorage.setItem(AUTH_USERS_KEY, JSON.stringify(u)); }
 function getCurrentUser() { try { return JSON.parse(localStorage.getItem(AUTH_USER_KEY)||'null'); } catch(e){return null;} }
@@ -2367,7 +2196,7 @@ async function submitLogin() {
   const err   = document.getElementById('loginErr');
   if(!email || !pass) { showErr(err,'Vui lòng nhập đầy đủ thông tin'); return; }
   const users = getUsers();
-  const user  = users.find(u => u.email===email && u.password===btoa(pass));
+  const user  = users.find(u => u.email===email && u.password===encPass(pass));
   if(!user) { showErr(err,'Email hoặc mật khẩu không đúng'); return; }
   err.classList.remove('show');
   if(email === ADMIN_EMAIL) {
@@ -2386,7 +2215,7 @@ function submitRegister() {
   if(pass.length < 6)      { showErr(err,'Mật khẩu tối thiểu 6 ký tự'); return; }
   const users = getUsers();
   if(users.find(u => u.email===email)) { showErr(err,'Email này đã được đăng ký'); return; }
-  users.push({name, email, password:btoa(pass), avatar:null});
+  users.push({name, email, password:encPass(pass), avatar:null});
   saveUsers(users);
   err.classList.remove('show');
   loginSuccess({name, email, avatar:null, provider:'email'});
@@ -2650,12 +2479,30 @@ async function syncFromGSheet() {
     const rows = parseCSV(csv);
     if(rows.length < 2){statusEl.textContent='⚠️ Sheet trống';return;}
     const g = r => (r||'').trim();
-    const toType=t=>{const v=(t||'').toLowerCase();return v.startsWith('k')?'kysis':'nhat'};
-    const isViet=t=>{const v=(t||'').toLowerCase();return v==='viet'||v==='việt'};
+    // Phân nhánh "Loại đơn" — giống normalizeType trong Apps Script:
+    // Nhật / Nhật-Việt / Indonesia → nhat · Kỹ sư đầu Nhật → kysis · Việt / Kỹ sư đầu Việt → không lên web này
+    const toBranch=t=>{
+      const v=(t||'').toLowerCase().trim();
+      if(!v) return 'nhat';
+      const isK = v.includes('kỹ sư')||v.includes('ky su')||v.includes('kysis');
+      const dauViet = v.includes('đầu việt')||v.includes('dau viet');
+      if(isK) return dauViet?'kysis_viet':'kysis';
+      if(v==='viet'||v==='việt') return 'viet';
+      if(v.includes('nhật-việt')||v.includes('nhat-viet')) return 'nhat';
+      if(v.includes('indonesia')) return 'nhat';
+      if(v.includes('nhật')||v.includes('nhat')) return 'nhat';
+      if(v.includes('việt')||v.includes('viet')) return 'viet';
+      return 'nhat';
+    };
     const toISO=s=>{if(!s)return null;const m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);return m?`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`:null};
-    const newJobs = rows.slice(1).filter(r=>r.some(c=>c.trim())).filter(r=>!isViet(g(r[0]))).map((r,i)=>({
+    // Tìm cột theo header (hàng 1) — cột ảnh / ngày cập nhật có thể nằm bất kỳ đâu
+    const headers = rows[0].map(h => noDia(g(h)));
+    const findCol = (re, min) => { for(let c=headers.length-1; c>=(min||0); c--) if(re.test(headers[c])) return c; return -1; };
+    const imgCol = findCol(/anh|image|hinh|photo/, 16);
+    const updCol = findCol(/cap nhat|updated/, 16);
+    const newJobs = rows.slice(1).filter(r=>r.some(c=>c.trim())).filter(r=>{const b=toBranch(g(r[0]));return b==='nhat'||b==='kysis';}).map((r,i)=>({
       id:'gs_'+Date.now()+'_'+i,
-      type:toType(g(r[0])),
+      type:toBranch(g(r[0])),
       title:g(r[1]),
       category:[g(r[2]),g(r[3])].filter(Boolean).join(','),
       city:g(r[4]), salary:g(r[5]), japanese:g(r[6]),
@@ -2663,21 +2510,15 @@ async function syncFromGSheet() {
       daysOff:g(r[9]), overtime:g(r[10]), raise:g(r[11]),
       bonus:g(r[12]), housing:g(r[13]), desc:g(r[14]),
       status:g(r[15])||'active',
-      imageUrl:g(r[16])
+      imageUrl:imgCol>=0?g(r[imgCol]):'',
+      updatedAt:updCol>=0?toISO(g(r[updCol])):null
     })).filter(j=>j.title).reverse();
     if(!newJobs.length){statusEl.textContent='⚠️ Không có job nào (cột B - title bị trống?)';return;}
-    // Push lên Supabase để mọi người dùng đều thấy
-    statusEl.textContent=`⏳ Đang lưu lên Supabase...`;
-    // Xóa hết job cũ từ Sheet + job có type không hợp lệ (Việt cũ)
-    const { error: delErr } = await sb.from('jobs').delete().like('id', 'gs_%');
-    if(delErr) { statusEl.textContent=`❌ Lỗi xóa job cũ: ${delErr.message}`; return; }
-    await sb.from('jobs').delete().not('type','in','("nhat","kysis")');
-    const { error: sbErr } = await sb.from('jobs').insert(newJobs);
+    // Chỉ lưu local — Supabase được quản lý bởi job_processor_supabase.py (không ghi đè)
     const manual = getJobs().filter(j=>!j.id.startsWith('gs_') && (j.type==='nhat'||j.type==='kysis'));
     saveJobs([...manual,...newJobs]);
-    renderAdminJobs(); renderAdminSideStats(); updateCatCounts(); renderJobs(); renderHeroJobs();
-    if(sbErr) statusEl.textContent=`⚠️ Đã lưu local (${newJobs.length} jobs) nhưng lỗi Supabase: ${sbErr.message}`;
-    else statusEl.textContent=`✅ Đã đồng bộ ${newJobs.length} việc làm lên Supabase thành công!`;
+    renderAdminJobs(); renderAdminSideStats(); updateStats(); renderJobs();
+    statusEl.textContent=`✅ Đã load ${newJobs.length} việc làm vào bộ nhớ cục bộ.`;
   } catch(e) {
     statusEl.textContent='❌ Lỗi: '+e.message+'. Kiểm tra sheet có chia sẻ công khai không.';
   }
@@ -2867,7 +2708,7 @@ async function adminBulkDelete() {
   adminSelectedIds.clear();
   renderAdminJobs();
   renderAdminSideStats();
-  updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs();
+  updateStats(); renderJobs();
 }
 
 async function adminToggleJobStatus(id) {
@@ -2880,7 +2721,7 @@ async function adminToggleJobStatus(id) {
   job.status = newStatus;
   saveJobs(jobs);
   renderAdminJobs();
-  updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs();
+  updateStats(); renderJobs();
 }
 
 function adminShowJobForm(id) {
@@ -2889,7 +2730,7 @@ function adminShowJobForm(id) {
     const j = getJobs().find(x => x.id === id);
     if(!j) return;
     adminJobEditId = id;
-    adminPickType(j.type || 'viet');
+    adminPickType(j.type === 'kysis' ? 'kysis' : 'nhat');
     document.getElementById('ajf-cat').value = j.category || '';
     document.getElementById('ajf-title').value = j.title || '';
     document.getElementById('ajf-city').value = j.city || '';
@@ -2915,7 +2756,7 @@ function adminResetJobForm() {
   ['ajf-title','ajf-city','ajf-salary','ajf-japanese','ajf-workHours','ajf-daysOff','ajf-overtime','ajf-raise','ajf-bonus','ajf-housing','ajf-desc'].forEach(i => document.getElementById(i).value = '');
   document.getElementById('ajf-gender').value = '';
   document.getElementById('ajf-status').value = 'active';
-  adminPickType('viet');
+  adminPickType('nhat');
   document.getElementById('adminJobFormTitle').textContent = 'Thêm việc làm mới';
 }
 
@@ -2928,7 +2769,7 @@ async function adminDeleteJob(id) {
   saveJobs(getJobs().filter(j => j.id !== id));
   renderAdminJobs();
   renderAdminSideStats();
-  updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs();
+  updateStats(); renderJobs();
 }
 
 async function adminSaveJob() {
@@ -2965,7 +2806,7 @@ async function adminSaveJob() {
   }
   saveJobs(jobs);
   renderAdminSideStats();
-  updateStats(); updateGroupCounts(); renderHeroJobs(); renderJobs();
+  updateStats(); renderJobs();
   adminNav('jobs-list');
 }
 
@@ -3065,10 +2906,7 @@ function adminSaveArticle() {
 // Init
 (function loadSite() {
   updateStats();
-  updateGroupCounts();
-  renderHeroJobs();
   renderJobs();
-  updateCatCounts();
   // Restore login state
   const savedUser = getCurrentUser();
   if(savedUser) { renderNavUser(savedUser); updateSavedCount(); }

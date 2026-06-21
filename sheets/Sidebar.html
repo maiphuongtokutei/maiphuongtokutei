@@ -1,133 +1,52 @@
+<!--
+  ⚠️ BẢN THAM KHẢO — KHÔNG ĐƯỢC LOAD LÚC CHẠY.
+  Form thật nằm trong hằng số SIDEBAR_HTML của master-sheet-setup.gs
+  (showSidebar() dùng HtmlService.createHtmlOutput(SIDEBAR_HTML)).
+  Nếu sửa form: sửa SIDEBAR_HTML trong .gs, rồi cập nhật file này cho khớp.
+-->
 <!DOCTYPE html>
 <html>
 <head>
   <base target="_top">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Google Sans', Arial, sans-serif;
-      font-size: 13px;
-      color: #202124;
-      background: #f8f9fa;
-    }
-
-    .header {
-      background: #1a3c5e;
-      color: white;
-      padding: 14px 16px;
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
+    body { font-family: 'Google Sans', Arial, sans-serif; font-size: 13px; color: #202124; background: #f8f9fa; }
+    .header { background: #1a3c5e; color: white; padding: 14px 16px; font-size: 15px; font-weight: 600; position: sticky; top: 0; z-index: 10; }
     .form-body { padding: 12px 16px 80px; }
-
-    .section-label {
-      font-size: 10px;
-      font-weight: 700;
-      color: #1a3c5e;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      margin: 16px 0 8px;
-      padding-bottom: 5px;
-      border-bottom: 2px solid #e8f0fe;
-    }
-    .mgmt-label {
-      color: #4a3580;
-      border-bottom-color: #ede7ff;
-    }
-
+    .section-label { font-size: 10px; font-weight: 700; color: #1a3c5e; text-transform: uppercase; letter-spacing: .07em; margin: 16px 0 8px; padding-bottom: 5px; border-bottom: 2px solid #e8f0fe; }
     .field { margin-bottom: 10px; }
-
-    label {
-      display: block;
-      font-size: 11px;
-      font-weight: 600;
-      color: #5f6368;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 4px;
-    }
+    label { display: block; font-size: 11px; font-weight: 600; color: #5f6368; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
     label .req { color: #e8305a; margin-left: 2px; }
-
-    input, select, textarea {
-      width: 100%;
-      border: 1px solid #dadce0;
-      border-radius: 6px;
-      padding: 7px 10px;
-      font-size: 13px;
-      color: #202124;
-      background: #fff;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      font-family: inherit;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: #2D2CDB;
-      box-shadow: 0 0 0 2px rgba(45,44,219,0.12);
-    }
+    input, select, textarea { width: 100%; border: 1px solid #dadce0; border-radius: 6px; padding: 7px 10px; font-size: 13px; color: #202124; background: #fff; outline: none; transition: border-color .15s, box-shadow .15s; font-family: inherit; }
+    input:focus, select:focus, textarea:focus { border-color: #2D2CDB; box-shadow: 0 0 0 2px rgba(45,44,219,.12); }
     textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
-
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-    .footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 10px 16px;
-      background: #fff;
-      border-top: 1px solid #e8eaed;
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-save {
-      flex: 1;
-      background: #2D2CDB;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .btn-save:hover  { background: #1e1db8; }
-    .btn-save:disabled { background: #9aa0a6; cursor: not-allowed; }
-
-    .btn-clear {
-      background: transparent;
-      color: #5f6368;
-      border: 1px solid #dadce0;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      cursor: pointer;
-    }
+    .footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 10px 16px; background: #fff; border-top: 1px solid #e8eaed; display: flex; gap: 8px; }
+    .btn-save { flex: 1; background: #2D2CDB; color: white; border: none; border-radius: 8px; padding: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-save:hover { background: #1e1db8; } .btn-save:disabled { background: #9aa0a6; cursor: not-allowed; }
+    .btn-clear { background: transparent; color: #5f6368; border: 1px solid #dadce0; border-radius: 8px; padding: 10px 14px; font-size: 13px; cursor: pointer; }
     .btn-clear:hover { background: #f1f3f4; }
-
-    .toast {
-      position: fixed;
-      bottom: 68px;
-      left: 16px;
-      right: 16px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      display: none;
-      z-index: 100;
-      text-align: center;
-    }
+    .toast { position: fixed; bottom: 68px; left: 16px; right: 16px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; display: none; z-index: 100; text-align: center; }
     .toast.success { background: #e6f4ea; color: #137333; border: 1px solid #b7dfbf; }
-    .toast.error   { background: #fce8e6; color: #c5221f; border: 1px solid #f5c6c4; }
-
-    .hint { font-size: 11px; color: #9aa0a6; margin-top: 3px; }
+    .toast.error { background: #fce8e6; color: #c5221f; border: 1px solid #f5c6c4; }
+    .np{position:relative}
+    .np-trg{width:100%;border:1px solid #dadce0;border-radius:6px;padding:7px 10px;font-size:13px;background:#fff;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;color:#202124}
+    .np-trg:hover{border-color:#2D2CDB}
+    .np-trg.ph{color:#9aa0a6}
+    .np-trg .cv{color:#5f6368;font-size:10px;transition:transform .15s}
+    .np-trg.op .cv{transform:rotate(180deg)}
+    .np-pn{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #dadce0;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);max-height:320px;overflow-y:auto;z-index:50;padding:4px}
+    .np-gh,.np-fl,.np-it{width:100%;border:none;background:transparent;cursor:pointer;font-family:inherit;text-align:left;border-radius:5px}
+    .np-gh{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:13px;font-weight:600;color:#1a3c5e}
+    .np-gh:hover{background:#f1f3f4}
+    .np-gh .cv{font-size:10px;color:#5f6368;transition:transform .15s}
+    .np-gh.op .cv{transform:rotate(180deg)}
+    .np-gi{display:none;padding:2px 0 4px 8px;border-left:2px solid #e8eaed;margin-left:14px}
+    .np-gi.op{display:block}
+    .np-fl{padding:8px 10px;font-size:13px;color:#202124;display:block}
+    .np-it{padding:6px 10px;font-size:12px;color:#3c4043;display:block}
+    .np-fl:hover,.np-it:hover{background:#e8f0fe;color:#1a3c5e}
+    .np-fl.sel,.np-it.sel{background:#2D2CDB;color:#fff}
   </style>
 </head>
 <body>
@@ -143,10 +62,12 @@
       <label>Loại việc <span class="req">*</span></label>
       <select id="type" onchange="onTypeChange()">
         <option value="">-- Chọn --</option>
-        <option value="viet">Tokutei Đầu Việt (VN → JP)</option>
-        <option value="nhat">Tokutei Đầu Nhật (đang ở JP)</option>
-        <option value="both">Nhật - Việt (cả hai)</option>
-        <option value="kysis">Kỹ sư IT</option>
+        <option value="Nhật">Tokutei Đầu Nhật (đang ở JP)</option>
+        <option value="Việt">Tokutei Đầu Việt (VN → JP)</option>
+        <option value="Nhật-Việt">Nhật - Việt (cả hai)</option>
+        <option value="Indonesia">Indonesia (đầu Nhật)</option>
+        <option value="Kỹ sư đầu Nhật">Kỹ sư đầu Nhật</option>
+        <option value="Kỹ sư đầu Việt">Kỹ sư đầu Việt</option>
       </select>
     </div>
     <div class="field">
@@ -160,9 +81,11 @@
 
   <div class="field">
     <label>Ngành nghề <span class="req">*</span></label>
-    <select id="category">
-      <option value="">-- Chọn loại việc trước --</option>
-    </select>
+    <div class="np" id="npPicker">
+      <button type="button" class="np-trg ph" id="npTrg" onclick="tNP(event)"><span id="npTxt">-- Chọn loại việc trước --</span><span class="cv">▾</span></button>
+      <div class="np-pn" id="npPn" hidden></div>
+    </div>
+    <input type="hidden" id="category">
   </div>
 
   <div class="field">
@@ -191,11 +114,9 @@
   <div class="field">
     <label>Giới tính</label>
     <select id="gender">
-      <option value="Không yêu cầu">Không yêu cầu</option>
       <option value="Nam">Nam</option>
       <option value="Nữ">Nữ</option>
-      <option value="Nam ưu tiên">Nam ưu tiên</option>
-      <option value="Nữ ưu tiên">Nữ ưu tiên</option>
+      <option value="Nam Nữ">Nam Nữ</option>
     </select>
   </div>
 
@@ -213,7 +134,7 @@
     </div>
     <div class="field">
       <label>Ngày nghỉ</label>
-      <input type="text" id="daysOff" placeholder="VD: Thứ 7 & CN">
+      <input type="text" id="daysOff" placeholder="VD: Thứ 7 &amp; CN">
     </div>
   </div>
 
@@ -239,6 +160,11 @@
     </div>
   </div>
 
+  <div class="field">
+    <label>Link ảnh (Google Drive)</label>
+    <input type="text" id="imageUrl" placeholder="VD: https://drive.google.com/file/d/...">
+  </div>
+
   <div class="section-label">Mô tả</div>
 
   <div class="field">
@@ -246,11 +172,11 @@
   </div>
 
   <div id="mgmt-section" style="display:none">
-    <div class="section-label mgmt-label">Quản lý nội bộ</div>
+    <div class="section-label">Quản lý nội bộ</div>
 
     <div class="field">
       <label>Nguồn</label>
-      <input type="text" id="nguon" placeholder="VD: Đối tác ABC, Referral anh Minh...">
+      <input type="text" id="nguon" placeholder="VD: Đối tác ABC">
     </div>
 
     <div class="row2">
@@ -271,102 +197,125 @@
 
 <div class="footer">
   <button class="btn-clear" onclick="clearForm()" title="Xóa form">↺</button>
-  <button class="btn-save" id="btnSave" onclick="saveJob()">Lưu vào sheet</button>
+  <button class="btn-save" id="btnSave" onclick="doSave()">Lưu vào sheet</button>
 </div>
 
 <script>
-  const TOKUTEI_CATS = [
-    'Chế biến thực phẩm','Nhóm ngành 1 (Cơ khí)','Nhóm ngành 2 (Điện tử)',
-    'Xây dựng','Điều dưỡng','Nhà hàng','Vệ sinh tòa nhà','Bảo dưỡng ô tô',
-    'Nông nghiệp','Lưu trú / Khách sạn','Ngư nghiệp','Đóng tàu','Hàng không',
-    'Vận tải','Lâm nghiệp','May','In ấn',
+  var TG = [
+    {g:'Chế biến thực phẩm', items:['Chế biến thực phẩm']},
+    {g:'① Gia công cơ khí - kim loại', items:['Đúc nóng','Đúc lạnh','Dập kim loại','Kim loại tấm','Tekko','Rèn','Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Hàn','Sơn kim loại','Lắp ráp thiết bị điện','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']},
+    {g:'② Lắp ráp điện - điện tử', items:['Gia công cơ khí','Hoàn thiện sản phẩm','Đúc nhựa','Lắp ráp thiết bị điện','Lắp ráp thiết bị điện tử','Sản xuất bảng mạch in (PCB)','Kiểm tra máy móc','Bảo trì máy móc','Đóng gói công nghiệp']},
+    {g:'③ Xử lý bề mặt kim loại', items:['Mạ điện','Xử lý oxy hóa nhôm (Anodize)']},
+    {g:'Xây dựng', items:['Nhóm ngành xây dựng','Đường ống','Cốp pha','Phá dỡ','Cốt thép','Sơn xây dựng','Chống thấm','Giàn giáo','Bê tông','Xây trát','San lấp','Ốp lát','Lái máy xây dựng','Hoàn thiện nội thất','Mộc xây dựng','Hoàn thiện ngoại thất','Hàn xây dựng','Điện','Thi công cách nhiệt','Lợp mái','Kim loại tấm xây dựng']},
+    {g:'Điều dưỡng', items:['Điều dưỡng']},
+    {g:'Nhà hàng', items:['Nhà hàng']},
+    {g:'Nông nghiệp', items:['Nông nghiệp']},
+    {g:'Vệ sinh tòa nhà', items:['Vệ sinh tòa nhà']},
+    {g:'Bảo dưỡng ô tô', items:['Bảo dưỡng ô tô']},
+    {g:'Lưu trú / Khách sạn', items:['Lưu trú / Khách sạn']},
+    {g:'Ngư nghiệp', items:['Ngư nghiệp']},
+    {g:'Đóng tàu', items:['Đóng tàu']},
+    {g:'Hàng không', items:['Hàng không']},
+    {g:'Vận tải', items:['Vận tải']},
+    {g:'Lâm nghiệp', items:['Lâm nghiệp']},
+    {g:'May', items:['May']},
+    {g:'In ấn', items:['In ấn']}
   ];
-  const KYSIS_CATS = [
-    'Lập trình viên','Kỹ sư hệ thống / Mạng','AI & Data Science',
-    'Cơ khí','Điện - Điện tử','Hóa học & Vật liệu','Ô tô',
-    'Phiên dịch / Thông dịch','Xuất nhập khẩu','Quản trị kinh doanh / Marketing',
-  ];
+  var KC = ['Kỹ thuật & Sản xuất','Xây dựng & Công trình','IT & Công nghệ','Kinh tế & Văn phòng'];
 
-  function onTypeChange() {
-    const type = document.getElementById('type').value;
-    const sel  = document.getElementById('category');
-    sel.innerHTML = '';
-    const placeholder = document.createElement('option');
-    placeholder.value = '';
-    placeholder.textContent = '-- Chọn ngành --';
-    sel.appendChild(placeholder);
+  function escA(s){ return String(s).replace(/"/g,'&quot;'); }
 
-    const list = type === 'kysis' ? KYSIS_CATS : (type ? TOKUTEI_CATS : []);
-    list.forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = opt.textContent = c;
-      sel.appendChild(opt);
-    });
+  function buildNP(t){
+    var p = document.getElementById('npPn');
+    if(!t){ p.innerHTML=''; return; }
+    if(t.indexOf('Kỹ') !== -1){
+      p.innerHTML = KC.map(function(v){ return '<button type="button" class="np-fl" data-v="'+escA(v)+'" onclick="pickN(this)">'+v+'</button>'; }).join('');
+    } else {
+      p.innerHTML = TG.map(function(o){
+        if(o.items.length === 1) return '<button type="button" class="np-fl" data-v="'+escA(o.items[0])+'" onclick="pickN(this)">'+o.items[0]+'</button>';
+        return '<button type="button" class="np-gh" onclick="tNG(this)"><span>'+o.g+'</span><span class="cv">▾</span></button><div class="np-gi">'+o.items.map(function(v){ return '<button type="button" class="np-it" data-v="'+escA(v)+'" onclick="pickN(this)">'+v+'</button>'; }).join('')+'</div>';
+      }).join('');
+    }
   }
 
-  function saveJob() {
-    const get = id => document.getElementById(id).value.trim();
+  function tNP(e){
+    if(e) e.stopPropagation();
+    var tr = document.getElementById('npTrg'), pn = document.getElementById('npPn');
+    if(!document.getElementById('type').value){ alert('Vui lòng chọn Loại việc trước'); return; }
+    var op = pn.hidden;
+    pn.hidden = !op;
+    tr.classList.toggle('op', op);
+  }
+  function tNG(el){ el.classList.toggle('op'); el.nextElementSibling.classList.toggle('op'); }
+  function pickN(el){
+    var v = el.getAttribute('data-v');
+    document.getElementById('category').value = v;
+    document.getElementById('npTxt').textContent = v;
+    var tr = document.getElementById('npTrg');
+    tr.classList.remove('op','ph');
+    document.getElementById('npPn').hidden = true;
+    document.querySelectorAll('#npPn .np-fl,#npPn .np-it').forEach(function(b){ b.classList.remove('sel'); });
+    el.classList.add('sel');
+  }
+  document.addEventListener('click', function(e){
+    var p = document.getElementById('npPicker');
+    if(p && !p.contains(e.target)){
+      document.getElementById('npPn').hidden = true;
+      document.getElementById('npTrg').classList.remove('op');
+    }
+  });
 
-    if (!get('type'))     { showToast('Vui lòng chọn loại việc', 'error'); return; }
-    if (!get('category')) { showToast('Vui lòng chọn ngành nghề', 'error'); return; }
-    if (!get('title'))    { showToast('Vui lòng nhập tên công việc', 'error'); return; }
+  function onTypeChange(){
+    var type = document.getElementById('type').value;
+    document.getElementById('category').value = '';
+    document.getElementById('npTxt').textContent = type ? '-- Chọn ngành --' : '-- Chọn loại việc trước --';
+    var tr = document.getElementById('npTrg');
+    tr.classList.add('ph'); tr.classList.remove('op');
+    document.getElementById('npPn').hidden = true;
+    buildNP(type);
+  }
 
-    const data = {
-      type:      get('type'),      category:  get('category'),
-      title:     get('title'),     city:      get('city'),
-      salary:    get('salary'),    japanese:  get('japanese'),
-      gender:    get('gender'),
-      workHours: get('workHours'), daysOff:   get('daysOff'),
-      overtime:  get('overtime'),  raise:     get('raise'),
-      bonus:     get('bonus'),     housing:   get('housing'),
-      desc:      get('desc'),      status:    get('status'),
-      nguon:     get('nguon'),
-      hoaHong:   get('hoaHong'),
-      phiNet:    get('phiNet'),
+  function doSave(){
+    var get = function(id){ return document.getElementById(id).value.trim(); };
+    if(!get('type'))     { showToast('Vui lòng chọn loại việc', 'error'); return; }
+    if(!get('category')) { showToast('Vui lòng chọn ngành nghề', 'error'); return; }
+    if(!get('title'))    { showToast('Vui lòng nhập tên công việc', 'error'); return; }
+
+    var data = {
+      type: get('type'), category: get('category'), title: get('title'), city: get('city'),
+      salary: get('salary'), japanese: get('japanese'), gender: get('gender'),
+      workHours: get('workHours'), daysOff: get('daysOff'), overtime: get('overtime'), raise: get('raise'),
+      bonus: get('bonus'), housing: get('housing'), desc: get('desc'), status: get('status'),
+      imageUrl: get('imageUrl'),
+      nguon: get('nguon'), hoaHong: get('hoaHong'), phiNet: get('phiNet')
     };
 
-    const btn = document.getElementById('btnSave');
-    btn.disabled = true;
-    btn.textContent = 'Đang lưu...';
-
+    var btn = document.getElementById('btnSave');
+    btn.disabled = true; btn.textContent = 'Đang lưu...';
     google.script.run
-      .withSuccessHandler(() => {
-        showToast('✅ Đã lưu!', 'success');
-        clearForm();
-        btn.disabled = false;
-        btn.textContent = 'Lưu vào sheet';
-      })
-      .withFailureHandler(err => {
-        showToast('❌ ' + err.message, 'error');
-        btn.disabled = false;
-        btn.textContent = 'Lưu vào sheet';
-      })
+      .withSuccessHandler(function(){ showToast('✅ Đã lưu và sync lên web!', 'success'); clearForm(); btn.disabled = false; btn.textContent = 'Lưu vào sheet'; })
+      .withFailureHandler(function(err){ showToast('❌ ' + err.message, 'error'); btn.disabled = false; btn.textContent = 'Lưu vào sheet'; })
       .saveJob(data);
   }
 
-  function clearForm() {
-    const textFields = ['title','city','salary','workHours','daysOff','overtime','raise','bonus','housing','desc','nguon','hoaHong','phiNet'];
-    textFields.forEach(id => document.getElementById(id).value = '');
-    document.getElementById('type').value     = '';
-    document.getElementById('status').value   = 'active';
+  function clearForm(){
+    ['title','city','salary','workHours','daysOff','overtime','raise','bonus','housing','desc','imageUrl','nguon','hoaHong','phiNet'].forEach(function(id){ document.getElementById(id).value = ''; });
+    document.getElementById('type').value = '';
+    document.getElementById('status').value = 'active';
     document.getElementById('japanese').value = 'Không yêu cầu';
-    document.getElementById('gender').value   = 'Không yêu cầu';
+    document.getElementById('gender').value = 'Nam Nữ';
     onTypeChange();
   }
 
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast ' + type;
-    t.style.display = 'block';
+  function showToast(msg, type){
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.className = 'toast ' + type; t.style.display = 'block';
     clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.style.display = 'none', 3000);
+    t._timer = setTimeout(function(){ t.style.display = 'none'; }, 3000);
   }
 
   google.script.run
-    .withSuccessHandler(function(owner) {
-      if (owner) document.getElementById('mgmt-section').style.display = 'block';
-    })
+    .withSuccessHandler(function(owner){ if(owner) document.getElementById('mgmt-section').style.display = 'block'; })
     .isOwner();
 </script>
 </body>

@@ -1,23 +1,27 @@
 // ============================================================
-// TokuteiJob — All-in-one (không cần file HTML riêng)
-// ─────────────────────────────────────────────────────────────
-// Cài đặt (CHỈ CẦN 1 FILE NÀY):
-//   1. Paste toàn bộ file này vào Apps Script (Code.gs)
-//   2. Save → Reload Sheet → cho phép quyền
-//   3. Menu → ⚙️ Thiết lập sheet   (chạy 1 lần)
-//   4. Menu → 🌐 Tạo Sheet Công Khai (chạy 1 lần)
+// TokuteiJob — Script quản lý Sheet JOB
+// Sync đồng thời lên 2 web: maiphuongtokutei.com + nippontokutei.com
+// Kiến trúc giống Sheet_JOB_AppScript_FULL.js (nippontokutei)
 // ============================================================
 
-// ── SUPABASE ─────────────────────────────────────────────────
-const SUPABASE_URL = 'https://guiyhpaeackfdsptjbol.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1aXlocGFlYWNrZmRzcHRqYm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NTcwMDIsImV4cCI6MjA5NDUzMzAwMn0.jYXm2e1Wwkl8lLXOmT6JZkUxjZUKIdAPc6NdyEyFgeU';
+// ── SUPABASE: maiphuongtokutei.com (guiyh) ───────────────────
+// Script này chỉ dùng cho sheet phụ/backup của Web-MP.
+// Sync nippontokutei.com được xử lý bởi Sheet_JOB_AppScript_FULL.js
+const SB_MP_URL = 'https://guiyhpaeackfdsptjbol.supabase.co';
+const SB_MP_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1aXlocGFlYWNrZmRzcHRqYm9sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5NTcwMDIsImV4cCI6MjA5NDUzMzAwMn0.jYXm2e1Wwkl8lLXOmT6JZkUxjZUKIdAPc6NdyEyFgeU';
 
-// ── 1 TAB DUY NHẤT ───────────────────────────────────────────
-// A: type   B: title     C: category  D: category_sub  E: city   F: salary
-// G: japanese  H: gender  I: workHours  J: daysOff  K: overtime
-// L: raise  M: bonus  N: housing  O: desc  P: status
-// Q: nguon (nội bộ)  R: hoaHong  S: phiNet  T: updatedAt
-const SHEET_NAME = 'Công Việc';
+// ── TAB NAMES ─────────────────────────────────────────────────
+const SHEET_NAME  = 'Công Việc';
+const INACTIVE_TAB = 'Inactive';
+
+// ── HEADERS cho sheet phụ (A–P = 16 cột công khai + Q = Link ảnh) ──
+const PUB_HEADERS = [
+  'Loại đơn','Tên công việc','Ngành chính','Ngành phụ','Tỉnh/TP','Lương','Tiếng Nhật',
+  'Giới tính','Giờ làm','Ngày nghỉ','Tăng ca',
+  'Tăng lương','Thưởng','Nhà ở','Mô tả','Trạng thái','Link ảnh',
+];
+const PUB_COL_WIDTHS = [100,160,160,130,120,200,110,110,130,130,100,100,110,120,300,90,240];
+const PUB_NCOLS = PUB_HEADERS.length;  // 17
 
 // ── HTML SIDEBAR (nhúng trực tiếp) ───────────────────────────
 const SIDEBAR_HTML = '<!DOCTYPE html>' +
@@ -42,6 +46,26 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '.toast { position: fixed; bottom: 68px; left: 16px; right: 16px; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; display: none; z-index: 100; text-align: center; }' +
 '.toast.success { background: #e6f4ea; color: #137333; border: 1px solid #b7dfbf; }' +
 '.toast.error { background: #fce8e6; color: #c5221f; border: 1px solid #f5c6c4; }' +
+'.np{position:relative}' +
+'.np-trg{width:100%;border:1px solid #dadce0;border-radius:6px;padding:7px 10px;font-size:13px;background:#fff;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:inherit;color:#202124}' +
+'.np-trg:hover{border-color:#2D2CDB}' +
+'.np-trg.ph{color:#9aa0a6}' +
+'.np-trg .cv{color:#5f6368;font-size:10px;transition:transform .15s}' +
+'.np-trg.op .cv{transform:rotate(180deg)}' +
+'.np-pn{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #dadce0;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.1);max-height:320px;overflow-y:auto;z-index:50;padding:4px}' +
+'.np-gh,.np-fl,.np-it{width:100%;border:none;background:transparent;cursor:pointer;font-family:inherit;text-align:left;border-radius:5px}' +
+'.np-gh{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:13px;font-weight:600;color:#1a3c5e}' +
+'.np-gh:hover{background:#f1f3f4}' +
+'.np-gh .cv{font-size:10px;color:#5f6368;transition:transform .15s}' +
+'.np-gh.op .cv{transform:rotate(180deg)}' +
+'.np-gi{display:none;padding:2px 0 4px 8px;border-left:2px solid #e8eaed;margin-left:14px}' +
+'.np-gi.op{display:block}' +
+'.np-fl{padding:8px 10px;font-size:13px;color:#202124;display:block}' +
+'.np-it{padding:6px 10px;font-size:12px;color:#3c4043;display:block}' +
+'.np-fl:hover,.np-it:hover{background:#e8f0fe;color:#1a3c5e}' +
+'.np-fl.sel,.np-it.sel{background:#2D2CDB;color:#fff}' +
+'.big-group-hd{font-size:12px;font-weight:700;color:#5f6368;text-transform:uppercase;padding:12px 10px 4px;border-bottom:1px solid #e8eaed;margin-bottom:4px;letter-spacing:0.05em}' +
+'.cv svg{width:12px;height:12px;stroke-width:2.5px;stroke:currentColor;fill:none;display:block}' +
 '</style></head><body>' +
 '<div class="header">+ Thêm job mới</div>' +
 '<div class="form-body">' +
@@ -50,16 +74,21 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '<div class="field"><label>Loại việc <span class="req">*</span></label>' +
 '<select id="type" onchange="onTypeChange()">' +
 '<option value="">-- Chọn --</option>' +
-'<option value="Việt">Tokutei Đầu Việt (VN → JP)</option>' +
 '<option value="Nhật">Tokutei Đầu Nhật (đang ở JP)</option>' +
+'<option value="Việt">Tokutei Đầu Việt (VN → JP)</option>' +
 '<option value="Nhật-Việt">Nhật - Việt (cả hai)</option>' +
-'<option value="Kỹ sư">Kỹ sư IT</option>' +
+'<option value="Indonesia">Indonesia (đầu Nhật)</option>' +
+'<option value="Kỹ sư đầu Nhật">Kỹ sư đầu Nhật</option>' +
+'<option value="Kỹ sư đầu Việt">Kỹ sư đầu Việt</option>' +
 '</select></div>' +
 '<div class="field"><label>Trạng thái</label>' +
 '<select id="status"><option value="active">active</option><option value="inactive">inactive</option></select>' +
 '</div></div>' +
 '<div class="field"><label>Ngành nghề <span class="req">*</span></label>' +
-'<select id="category"><option value="">-- Chọn loại việc trước --</option></select></div>' +
+'<div class="np" id="npPicker">' +
+'<button type="button" class="np-trg ph" id="npTrg" onclick="tNP(event)"><span id="npTxt">-- Chọn loại việc trước --</span><span class="cv">▾</span></button>' +
+'<div class="np-pn" id="npPn" hidden></div>' +
+'</div><input type="hidden" id="category"></div>' +
 '<div class="field"><label>Tên công việc <span class="req">*</span></label>' +
 '<input type="text" id="title" placeholder="VD: Công nhân chế biến thực phẩm"></div>' +
 '<div class="row2">' +
@@ -91,6 +120,8 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '<div class="field"><label>Thưởng</label><input type="text" id="bonus" placeholder="VD: Thưởng cuối năm"></div>' +
 '<div class="field"><label>Nhà ở</label><input type="text" id="housing" placeholder="VD: Có (miễn phí)"></div>' +
 '</div>' +
+'<div class="field"><label>Link ảnh (Google Drive)</label>' +
+'<input type="text" id="imageUrl" placeholder="VD: https://drive.google.com/file/d/..."></div>' +
 '<div class="section-label">Mô tả</div>' +
 '<div class="field"><textarea id="desc" placeholder="Chi tiết công việc, yêu cầu, phúc lợi..."></textarea></div>' +
 '<div id="mgmt-section" style="display:none">' +
@@ -107,14 +138,51 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 '<button class="btn-save" id="btnSave" onclick="doSave()">Lưu vào sheet</button>' +
 '</div>' +
 '<script>' +
-'var TOKUTEI_CATS=["Chế biến thực phẩm","Nhóm 1","Nhóm 2","Nhóm 1+2","Đúc nóng","Đúc lạnh","Dập kim loại","Kim loại tấm","Tekko","Rèn","Gia công cơ khí","Hoàn thiện sản phẩm","Đúc nhựa","Hàn","Sơn kim loại","Lắp ráp thiết bị điện","Lắp ráp thiết bị điện tử","Sản xuất bảng mạch in (PCB)","Kiểm tra máy móc","Bảo trì máy móc","Đóng gói công nghiệp","Mạ điện","Xử lý oxy hóa nhôm (Anodize)","Đường ống","Cốp pha","Phá dỡ","Cốt thép","Sơn xây dựng","Chống thấm","Giàn giáo","Bê tông","Xây trát","San lấp","Ốp lát","Lái máy xây dựng","Hoàn thiện nội thất","Mộc xây dựng","Hoàn thiện ngoại thất","Hàn xây dựng","Điện","Thi công cách nhiệt","Lợp mái","Kim loại tấm xây dựng","Điều dưỡng","Nhà hàng","Vệ sinh tòa nhà","Bảo dưỡng ô tô","Nông nghiệp","Lưu trú / Khách sạn","Ngư nghiệp","Đóng tàu","Hàng không","Vận tải","Lâm nghiệp","May","In ấn"];' +
-'var KYSIS_CATS=["Kỹ thuật & Sản xuất","Xây dựng & Công trình","IT & Công nghệ","Kinh tế & Văn phòng"];' +
+'var TG=[' +
+  '{g:"Chế biến thực phẩm",items:["Chế biến thực phẩm"]},' +
+  '{g:"① Gia công cơ khí - kim loại",items:["Đúc nóng","Đúc lạnh","Dập kim loại","Kim loại tấm","Tekko","Rèn","Gia công cơ khí","Hoàn thiện sản phẩm","Đúc nhựa","Hàn","Sơn kim loại","Lắp ráp thiết bị điện","Kiểm tra máy móc","Bảo trì máy móc","Đóng gói công nghiệp"]},' +
+  '{g:"② Lắp ráp điện - điện tử",items:["Gia công cơ khí","Hoàn thiện sản phẩm","Đúc nhựa","Lắp ráp thiết bị điện","Lắp ráp thiết bị điện tử","Sản xuất bảng mạch in (PCB)","Kiểm tra máy móc","Bảo trì máy móc","Đóng gói công nghiệp"]},' +
+  '{g:"③ Xử lý bề mặt kim loại",items:["Mạ điện","Xử lý oxy hóa nhôm (Anodize)"]},' +
+  '{g:"Xây dựng",items:["Nhóm ngành xây dựng","Đường ống","Cốp pha","Phá dỡ","Cốt thép","Sơn xây dựng","Chống thấm","Giàn giáo","Bê tông","Xây trát","San lấp","Ốp lát","Lái máy xây dựng","Hoàn thiện nội thất","Mộc xây dựng","Hoàn thiện ngoại thất","Hàn xây dựng","Điện","Thi công cách nhiệt","Lợp mái","Kim loại tấm xây dựng"]},' +
+  '{g:"Điều dưỡng",items:["Điều dưỡng"]},' +
+  '{g:"Nhà hàng",items:["Nhà hàng"]},' +
+  '{g:"Nông nghiệp",items:["Nông nghiệp"]},' +
+  '{g:"Vệ sinh tòa nhà",items:["Vệ sinh tòa nhà"]},' +
+  '{g:"Bảo dưỡng ô tô",items:["Bảo dưỡng ô tô"]},' +
+  '{g:"Lưu trú / Khách sạn",items:["Lưu trú / Khách sạn"]},' +
+  '{g:"Ngư nghiệp",items:["Ngư nghiệp"]},' +
+  '{g:"Đóng tàu",items:["Đóng tàu"]},' +
+  '{g:"Hàng không",items:["Hàng không"]},' +
+  '{g:"Vận tải",items:["Vận tải"]},' +
+  '{g:"Lâm nghiệp",items:["Lâm nghiệp"]},' +
+  '{g:"May",items:["May"]},' +
+  '{g:"In ấn",items:["In ấn"]}' +
+'];' +
+'var KC=["Kỹ thuật & Sản xuất","Xây dựng & Công trình","IT & Công nghệ","Kinh tế & Văn phòng"];' +
+'function escA(s){return String(s).replace(/"/g,"&quot;");}' +
+'function buildNP(t){' +
+  'var p=document.getElementById("npPn");' +
+  'if(!t){p.innerHTML="";return;}' +
+  'if(t.indexOf("Kỹ")!==-1){' +
+    'p.innerHTML=KC.map(function(v){return "<button type=\\"button\\" class=\\"np-fl\\" data-v=\\""+escA(v)+"\\" onclick=\\"pickN(this)\\">"+v+"</button>";}).join("");' +
+  '}else{' +
+    'p.innerHTML=TG.map(function(o){' +
+      'if(o.items.length===1)return "<button type=\\"button\\" class=\\"np-fl\\" data-v=\\""+escA(o.items[0])+"\\" onclick=\\"pickN(this)\\">"+o.items[0]+"</button>";' +
+      'return "<button type=\\"button\\" class=\\"np-gh\\" onclick=\\"tNG(this)\\"><span>"+o.g+"</span><span class=\\"cv\\">▾</span></button><div class=\\"np-gi\\">"+o.items.map(function(v){return "<button type=\\"button\\" class=\\"np-it\\" data-v=\\""+escA(v)+"\\" onclick=\\"pickN(this)\\">"+v+"</button>";}).join("")+"</div>";' +
+    '}).join("");' +
+  '}' +
+'}' +
+'function tNP(e){if(e)e.stopPropagation();var tr=document.getElementById("npTrg"),pn=document.getElementById("npPn");if(!document.getElementById("type").value){alert("Vui lòng chọn Loại việc trước");return;}var op=pn.hidden;pn.hidden=!op;tr.classList.toggle("op",op);}' +
+'function tNG(el){el.classList.toggle("op");el.nextElementSibling.classList.toggle("op");}' +
+'function pickN(el){var v=el.getAttribute("data-v");document.getElementById("category").value=v;document.getElementById("npTxt").textContent=v;var tr=document.getElementById("npTrg");tr.classList.remove("op","ph");document.getElementById("npPn").hidden=true;document.querySelectorAll("#npPn .np-fl,#npPn .np-it").forEach(function(b){b.classList.remove("sel");});el.classList.add("sel");}' +
+'document.addEventListener("click",function(e){var p=document.getElementById("npPicker");if(p&&!p.contains(e.target)){document.getElementById("npPn").hidden=true;document.getElementById("npTrg").classList.remove("op");}});' +
 'function onTypeChange(){' +
 'var type=document.getElementById("type").value;' +
-'var sel=document.getElementById("category");' +
-'sel.innerHTML="<option value=\\"\\">-- Chọn ngành --</option>";' +
-'var list=(type==="kysis"||type==="Kỹ sư")?KYSIS_CATS:(type?TOKUTEI_CATS:[]);' +
-'list.forEach(function(c){var o=document.createElement("option");o.value=o.textContent=c;sel.appendChild(o);});}' +
+'document.getElementById("category").value="";' +
+'document.getElementById("npTxt").textContent=type?"-- Chọn ngành --":"-- Chọn loại việc trước --";' +
+'var tr=document.getElementById("npTrg");tr.classList.add("ph");tr.classList.remove("op");' +
+'document.getElementById("npPn").hidden=true;' +
+'buildNP(type);}' +
 'function doSave(){' +
 'var get=function(id){return document.getElementById(id).value.trim();};' +
 'if(!get("type")){showToast("Vui lòng chọn loại việc","error");return;}' +
@@ -124,15 +192,16 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 'salary:get("salary"),japanese:get("japanese"),gender:get("gender"),' +
 'workHours:get("workHours"),daysOff:get("daysOff"),overtime:get("overtime"),raise:get("raise"),' +
 'bonus:get("bonus"),housing:get("housing"),desc:get("desc"),status:get("status"),' +
+'imageUrl:get("imageUrl"),' +
 'nguon:get("nguon"),hoaHong:get("hoaHong"),phiNet:get("phiNet")};' +
 'var btn=document.getElementById("btnSave");' +
 'btn.disabled=true;btn.textContent="Đang lưu...";' +
 'google.script.run' +
-'.withSuccessHandler(function(){showToast("✅ Đã lưu!","success");clearForm();btn.disabled=false;btn.textContent="Lưu vào sheet";})' +
+'.withSuccessHandler(function(){showToast("✅ Đã lưu và sync lên web!","success");clearForm();btn.disabled=false;btn.textContent="Lưu vào sheet";})' +
 '.withFailureHandler(function(err){showToast("❌ "+err.message,"error");btn.disabled=false;btn.textContent="Lưu vào sheet";})' +
 '.saveJob(data);}' +
 'function clearForm(){' +
-'["title","city","salary","workHours","daysOff","overtime","raise","bonus","housing","desc","nguon","hoaHong","phiNet"].forEach(function(id){document.getElementById(id).value="";});' +
+'["title","city","salary","workHours","daysOff","overtime","raise","bonus","housing","desc","imageUrl","nguon","hoaHong","phiNet"].forEach(function(id){document.getElementById(id).value="";});' +
 'document.getElementById("type").value="";' +
 'document.getElementById("status").value="active";' +
 'document.getElementById("japanese").value="Không yêu cầu";' +
@@ -142,11 +211,12 @@ const SIDEBAR_HTML = '<!DOCTYPE html>' +
 'google.script.run.withSuccessHandler(function(owner){if(owner)document.getElementById("mgmt-section").style.display="block";}).isOwner();' +
 '<\/script></body></html>';
 
-// ── TỰ ĐỘNG CẬP NHẬT NGÀY KHI SỬA ──────────────────────────
+// ── onEdit: cập nhật ngày + move giữa Công Việc ↔ Inactive ──
 function onEdit(e) {
   if (!e || !e.range) return;
   const sheet = e.range.getSheet();
-  if (sheet.getName() !== SHEET_NAME) return;
+  const name  = sheet.getName();
+  if (name !== SHEET_NAME && name !== INACTIVE_TAB) return;
 
   const startRow = e.range.getRow();
   const endRow   = startRow + e.range.getNumRows() - 1;
@@ -154,26 +224,51 @@ function onEdit(e) {
 
   if (endRow < 2 || col === 20) return;
 
+  // Cập nhật ngày sửa (cột T = 20)
   const now = new Date();
   for (let r = Math.max(startRow, 2); r <= endRow; r++) {
-    sheet.getRange(r, 20).setValue(now).setNumberFormat('dd/MM/yyyy HH:mm');
+    sheet.getRange(r, 20).setValue(now);
+  }
+
+  // Nếu sửa cột P (status = 16) → tự move dòng theo trạng thái
+  if (col === 16) {
+    let moved = 0;
+    for (let r = endRow; r >= Math.max(startRow, 2); r--) {
+      const val = String(sheet.getRange(r, 16).getValue()).trim().toLowerCase();
+      if (name === SHEET_NAME && val === 'inactive') {
+        _moveRowToInactive(sheet, r); moved++;
+      } else if (name === INACTIVE_TAB && val === 'active') {
+        _moveRowToActive(sheet, r); moved++;
+      }
+    }
+    if (moved) {
+      const target = name === SHEET_NAME ? 'Inactive' : SHEET_NAME;
+      SpreadsheetApp.getActiveSpreadsheet()
+        .toast('✅ Đã chuyển ' + moved + ' job sang ' + target, 'TokuteiJob', 3);
+    }
   }
 }
 
 // ── MENU ─────────────────────────────────────────────────────
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('🔄 TokuteiJob')
-    .addItem('➕ Thêm job mới',                     'showSidebar')
+    .createMenu('📋 TokuteiJob')
+    .addItem('➕ Thêm job mới',                        'showSidebar')
     .addSeparator()
-    .addItem('📋 Đồng bộ → Sheet Công Khai',        'syncToPublicSheet')
-    .addItem('🚀 Sync tất cả lên web',               'syncToSupabase')
+    .addItem('🌐 Đẩy job lên 2 web (maiphuong + nippon)', 'syncEverything')
+    .addItem('⏰ Cài tự đẩy web (15 phút)',             'setupAutoSync')
     .addSeparator()
-    .addItem('👁️ Hiện / Ẩn cột nội bộ',            'toggleInternalColumns')
-    .addItem('↕️ Sắp xếp theo Ngành nghề',           'sortByCategory')
+    .addItem('📋 Đồng bộ → Sheet Công Khai (Nhật)',    'syncToPublicSheet')
+    .addItem('📂 Đồng bộ → Sheet Đầu Việt',            'syncDauVietSheet')
     .addSeparator()
-    .addItem('⚙️ Thiết lập sheet (chạy 1 lần)',     'setupSourceSheet')
-    .addItem('🌐 Tạo Sheet Công Khai (chạy 1 lần)', 'setupPublicSheet')
+    .addItem('👁️ Hiện / Ẩn cột nội bộ',               'toggleInternalColumns')
+    .addItem('⚙️ Sắp xếp theo Ngành nghề',              'sortByCategory')
+    .addItem('🗂️ Move tất cả job Inactive',             'moveAllInactive')
+    .addSeparator()
+    .addItem('🔽 Cập nhật dropdown "Loại đơn"',         'setupLoaiDonDropdown')
+    .addItem('⚙️ Thiết lập sheet (chạy 1 lần)',         'setupSourceSheet')
+    .addItem('🌐 Tạo Sheet Công Khai (chạy 1 lần)',     'setupPublicSheet')
+    .addItem('🌍 Tạo Sheet Đầu Việt (chạy 1 lần)',      'setupDauVietSheet')
     .addToUi();
 }
 
@@ -185,15 +280,143 @@ function isOwner() {
   return user === owner;
 }
 
-// ── SHEET CÔNG KHAI ──────────────────────────────────────────
-function getPublicSheetId() {
-  return PropertiesService.getScriptProperties().getProperty('PUBLIC_SHEET_ID');
+// ══════════════════════════════════════════════════════════════
+//  PHÂN LOẠI loaiDon → nhánh
+//  nhat | viet | both | kysis_nhat | kysis_viet
+// ══════════════════════════════════════════════════════════════
+function normalizeType(raw) {
+  const s = String(raw || '').trim().toLowerCase();
+  if (!s) return 'nhat';
+  const isK    = s.indexOf('kỹ sư') !== -1 || s.indexOf('ky su') !== -1 || s.indexOf('kysis') !== -1;
+  const dauViet = s.indexOf('đầu việt') !== -1 || s.indexOf('dau viet') !== -1;
+  if (isK) return dauViet ? 'kysis_viet' : 'kysis_nhat';
+  if (s === 'viet' || s === 'việt') return 'viet';
+  if (s.indexOf('nhật-việt') !== -1 || s.indexOf('nhat-viet') !== -1) return 'both';
+  if (s.indexOf('indonesia') !== -1) return 'nhat';
+  if (s.indexOf('nhật') !== -1 || s.indexOf('nhat') !== -1) return 'nhat';
+  if (s.indexOf('việt') !== -1 || s.indexOf('viet') !== -1) return 'viet';
+  return 'nhat';
 }
 
-function getPublicSpreadsheet() {
-  const id = getPublicSheetId();
-  if (!id) throw new Error('Chưa tạo Sheet Công Khai. Vào menu → 🌐 Tạo Sheet Công Khai.');
-  return SpreadsheetApp.openById(id);
+// Job lên web ĐẦU NHẬT? → Nhật / Nhật-Việt / Indonesia / Kỹ sư đầu Nhật
+function _isForNhat(t) { return t === 'nhat' || t === 'both' || t === 'kysis_nhat'; }
+// Job lên web ĐẦU VIỆT (sheet phụ)? → Việt / Nhật-Việt / Kỹ sư đầu Việt
+function _isForViet(t) { return t === 'viet' || t === 'both' || t === 'kysis_viet'; }
+
+// ── SYNC LÊN CẢ 2 WEB + SHEET PHỤ (menu) ────────────────────
+function syncEverything() {
+  const log = [];
+  try {
+    const n = _pushSupabase();
+    log.push('✅ Supabase maiphuong + nippon: ' + n + ' job');
+  } catch (e) {
+    log.push('❌ Supabase: ' + e.message);
+  }
+  try {
+    const n = _syncToPublic(getPublicSheetId(), _isForNhat, '#1a3c5e');
+    log.push('✅ Sheet Công Khai (Nhật): ' + n + ' job');
+  } catch (e) {
+    log.push('⚠️ Sheet Nhật: ' + e.message);
+  }
+  try {
+    const n = _syncToPublic(getDauVietSheetId(), _isForViet, '#B5426A');
+    log.push('✅ Sheet Đầu Việt: ' + n + ' job');
+  } catch (e) {
+    log.push('⚠️ Sheet Việt: ' + e.message);
+  }
+  SpreadsheetApp.getUi().alert('Kết quả đẩy job lên web:\n\n' + log.join('\n'));
+}
+
+// Bản chạy ngầm cho trigger / saveJob (không hiện popup)
+function autoSyncAll() {
+  try { _pushSupabase(); } catch (e) { Logger.log('Supabase: ' + e.message); }
+  try {
+    const pubId = getPublicSheetId();
+    if (pubId) _syncToPublic(pubId, _isForNhat, '#1a3c5e');
+  } catch (e) { Logger.log('Sheet Nhật: ' + e.message); }
+  try {
+    const vietId = getDauVietSheetId();
+    if (vietId) _syncToPublic(vietId, _isForViet, '#B5426A');
+  } catch (e) { Logger.log('Sheet Việt: ' + e.message); }
+}
+
+// Cài trigger tự đẩy web mỗi 15 phút
+function setupAutoSync() {
+  ScriptApp.getProjectTriggers().forEach(function(t) {
+    if (t.getHandlerFunction() === 'autoSyncAll') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('autoSyncAll').timeBased().everyMinutes(15).create();
+  SpreadsheetApp.getActiveSpreadsheet()
+    .toast('⏰ Đã cài tự đẩy web mỗi 15 phút.', 'TokuteiJob', 4);
+}
+
+// ── HÀM SYNC RA SHEET PHỤ ────────────────────────────────────
+function _syncToPublic(sheetId, filterFn, headerColor) {
+  if (!sheetId) throw new Error('Chưa có ID sheet phụ.');
+  const ss    = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) throw new Error('Không tìm thấy tab "' + SHEET_NAME + '"');
+
+  const pubSS = SpreadsheetApp.openById(sheetId);
+  let pubSheet = pubSS.getSheetByName(SHEET_NAME);
+  if (!pubSheet) {
+    pubSheet = pubSS.getSheets()[0];
+    pubSheet.setName(SHEET_NAME);
+    _writePublicHeader(pubSheet, headerColor || '#1a3c5e');
+  }
+
+  const pubLast = pubSheet.getLastRow();
+  if (pubLast > 1) pubSheet.getRange(2, 1, pubLast - 1, PUB_NCOLS).clearContent();
+
+  const last = sheet.getLastRow();
+  if (last < 2) return 0;
+
+  const src = sheet.getRange(2, 1, last - 1, 22).getValues();
+  const data = src
+    .filter(function(r) {
+      if (!r[1]) return false;
+      if (String(r[15] || '').toLowerCase().trim() === 'inactive') return false;
+      return filterFn(normalizeType(r[0]));
+    })
+    .map(function(r) {
+      return r.slice(0, 16).concat([r[21] || '']);  // A–P + cột V (imageUrl) → Q sheet phụ
+    });
+
+  if (data.length) pubSheet.getRange(2, 1, data.length, PUB_NCOLS).setValues(data);
+  return data.length;
+}
+
+function _writePublicHeader(pubSheet, color) {
+  pubSheet.getRange(1, 1, 1, PUB_HEADERS.length)
+    .setValues([PUB_HEADERS])
+    .setBackground(color || '#1a3c5e').setFontColor('#ffffff')
+    .setFontWeight('bold').setHorizontalAlignment('center');
+  pubSheet.setFrozenRows(1);
+  PUB_COL_WIDTHS.forEach(function(w, ci) { pubSheet.setColumnWidth(ci + 1, w); });
+}
+
+// ── WRAPPERS CÓ UI (backward compatible) ─────────────────────
+function syncToPublicSheet() {
+  try {
+    const n = _syncToPublic(getPublicSheetId(), _isForNhat, '#1a3c5e');
+    SpreadsheetApp.getUi().alert('✅ Đã đồng bộ ' + n + ' job sang Sheet Công Khai!');
+  } catch (e) {
+    SpreadsheetApp.getUi().alert('❌ ' + e.message);
+  }
+}
+
+function syncDauVietSheet() {
+  try {
+    const n = _syncToPublic(getDauVietSheetId(), _isForViet, '#B5426A');
+    SpreadsheetApp.getUi().alert('✅ Đã đồng bộ ' + n + ' job sang Sheet Đầu Việt!');
+  } catch (e) {
+    SpreadsheetApp.getUi().alert('❌ ' + e.message);
+  }
+}
+
+// ── SHEET CÔNG KHAI (Đầu Nhật) ───────────────────────────────
+function getPublicSheetId() {
+  return PropertiesService.getScriptProperties().getProperty('PUBLIC_SHEET_ID');
 }
 
 function setupPublicSheet() {
@@ -204,67 +427,55 @@ function setupPublicSheet() {
       SpreadsheetApp.getUi().ButtonSet.YES_NO
     );
     if (btn !== SpreadsheetApp.getUi().Button.YES) return;
-    DriveApp.getFileById(existing).setTrashed(true);
+    try { DriveApp.getFileById(existing).setTrashed(true); } catch(e) {}
   }
 
-  const pub = SpreadsheetApp.create('TokuteiJob — Công Khai');
-  const HEADERS = [
-    'Loại đơn','Tên công việc','Ngành chính','Ngành phụ','Tỉnh/TP','Lương','Tiếng Nhật',
-    'Giới tính','Giờ làm','Ngày nghỉ','Tăng ca',
-    'Tăng lương','Thưởng','Nhà ở','Mô tả','Trạng thái',
-  ];
-  const COL_WIDTHS = [100,160,160,130,120,200,110,110,130,130,100,100,110,120,300,90];
-
-  const sheet = pub.getSheets()[0];
-  sheet.setName(SHEET_NAME);
-  sheet.getRange(1, 1, 1, HEADERS.length)
-    .setValues([HEADERS])
-    .setBackground('#1a3c5e').setFontColor('#ffffff')
-    .setFontWeight('bold').setHorizontalAlignment('center');
-  sheet.setFrozenRows(1);
-  COL_WIDTHS.forEach((w, ci) => sheet.setColumnWidth(ci + 1, w));
+  const pub = SpreadsheetApp.create('TokuteiJob — Công Khai (Đầu Nhật)');
+  _writePublicHeader(pub.getSheets()[0].setName(SHEET_NAME), '#1a3c5e');
+  pub.getSheets()[0].setFrozenRows(1);
 
   PropertiesService.getScriptProperties().setProperty('PUBLIC_SHEET_ID', pub.getId());
-  _doSyncToPublic(pub);
+  _syncToPublic(pub.getId(), _isForNhat, '#1a3c5e');
 
   SpreadsheetApp.getUi().alert(
-    '✅ Đã tạo Sheet Công Khai!\n\n' +
-    'Link: ' + pub.getUrl() + '\n\n' +
-    'Share link này cho Viewer.\n' +
-    '(Chỉ share quyền View — không share Edit)'
+    '✅ Đã tạo Sheet Công Khai!\n\nLink: ' + pub.getUrl() +
+    '\n\nShare quyền Viewer cho người cần xem.'
   );
 }
 
-function syncToPublicSheet() {
-  try {
-    _doSyncToPublic(getPublicSpreadsheet());
-    SpreadsheetApp.getUi().alert('✅ Đã đồng bộ sang Sheet Công Khai!');
-  } catch (e) {
-    SpreadsheetApp.getUi().alert('❌ ' + e.message);
-  }
+// ── SHEET ĐẦU VIỆT ───────────────────────────────────────────
+function getDauVietSheetId() {
+  return PropertiesService.getScriptProperties().getProperty('DAU_VIET_SHEET_ID');
 }
 
-function _doSyncToPublic(pubSS) {
-  const ss       = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet    = ss.getSheetByName(SHEET_NAME);
-  const pubSheet = pubSS.getSheetByName(SHEET_NAME);
-  if (!sheet || !pubSheet) return;
+function setupDauVietSheet() {
+  const existing = getDauVietSheetId();
+  if (existing) {
+    const btn = SpreadsheetApp.getUi().alert(
+      'Sheet Đầu Việt đã tồn tại. Tạo lại sẽ xóa sheet cũ. Tiếp tục?',
+      SpreadsheetApp.getUi().ButtonSet.YES_NO
+    );
+    if (btn !== SpreadsheetApp.getUi().Button.YES) return;
+    try { DriveApp.getFileById(existing).setTrashed(true); } catch(e) {}
+  }
 
-  const pubLast = pubSheet.getLastRow();
-  if (pubLast > 1) pubSheet.getRange(2, 1, pubLast - 1, 16).clearContent();
+  const pub = SpreadsheetApp.create('TokuteiJob — Đầu Việt');
+  _writePublicHeader(pub.getSheets()[0].setName(SHEET_NAME), '#B5426A');
+  pub.getSheets()[0].setFrozenRows(1);
 
-  const last = sheet.getLastRow();
-  if (last < 2) return;
+  PropertiesService.getScriptProperties().setProperty('DAU_VIET_SHEET_ID', pub.getId());
+  _syncToPublic(pub.getId(), _isForViet, '#B5426A');
 
-  const data = sheet.getRange(2, 1, last - 1, 16).getValues()
-                    .filter(r => r[1]);
-  if (data.length) pubSheet.getRange(2, 1, data.length, 16).setValues(data);
+  SpreadsheetApp.getUi().alert(
+    '✅ Đã tạo Sheet Đầu Việt!\n\nLink: ' + pub.getUrl() +
+    '\n\nShare quyền Viewer cho cộng tác viên Đầu Việt.'
+  );
 }
 
 // ── TOGGLE CỘT NỘI BỘ ────────────────────────────────────────
 function toggleInternalColumns() {
   if (!isOwner()) {
-    SpreadsheetApp.getUi().alert('⛔ Chỉ owner mới có quyền xem cột nội bộ.');
+    SpreadsheetApp.getUi().alert('❌ Chỉ owner mới có quyền xem cột nội bộ.');
     return;
   }
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
@@ -288,26 +499,28 @@ function saveJob(data) {
   if (!sheet) throw new Error('Không tìm thấy tab: ' + SHEET_NAME);
 
   const row = [
-    data.type,               // A
-    data.title,              // B
-    data.category,           // C
-    '',                      // D — category_sub (nhập tay trong sheet)
-    data.city,               // E
-    data.salary,             // F
-    data.japanese,           // G
-    data.gender,             // H
-    data.workHours,          // I
-    data.daysOff,            // J
-    data.overtime,           // K
-    data.raise,              // L
-    data.bonus,              // M
-    data.housing,            // N
-    data.desc,               // O
-    data.status || 'active', // P
-    data.nguon   || '',      // Q — nội bộ
-    data.hoaHong || '',      // R — nội bộ
-    data.phiNet  || '',      // S — nội bộ
-    new Date(),              // T — nội bộ
+    data.type,               // A  — loại đơn
+    data.title,              // B  — tên công việc
+    data.category,           // C  — ngành chính
+    '',                      // D  — ngành phụ (nhập tay trong sheet)
+    data.city,               // E  — tỉnh/TP
+    data.salary,             // F  — lương
+    data.japanese,           // G  — tiếng Nhật
+    data.gender,             // H  — giới tính
+    data.workHours,          // I  — giờ làm
+    data.daysOff,            // J  — ngày nghỉ
+    data.overtime,           // K  — tăng ca
+    data.raise,              // L  — tăng lương
+    data.bonus,              // M  — thưởng
+    data.housing,            // N  — nhà ở
+    data.desc,               // O  — mô tả
+    data.status || 'active', // P  — trạng thái
+    data.nguon   || '',      // Q  — nguồn (nội bộ)
+    data.hoaHong || '',      // R  — hoa hồng (nội bộ)
+    data.phiNet  || '',      // S  — phí net (nội bộ)
+    new Date(),              // T  — ngày cập nhật (nội bộ)
+    '',                      // U  — (dự phòng)
+    data.imageUrl || '',     // V  — link ảnh
   ];
 
   const insertAt = sheet.getLastRow() + 1;
@@ -321,11 +534,7 @@ function saveJob(data) {
       .sort([{ column: 3, ascending: true }]);
   }
 
-  try {
-    _doSyncToPublic(getPublicSpreadsheet());
-  } catch (e) {
-    Logger.log('Public sheet chưa setup: ' + e.message);
-  }
+  autoSyncAll();
 }
 
 function sortByCategory() {
@@ -335,145 +544,228 @@ function sortByCategory() {
   if (lastRow < 3) { SpreadsheetApp.getUi().alert('Chưa có dữ liệu để sắp xếp.'); return; }
   sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn())
     .sort([
-      { column: 3, ascending: true },  // C: ngành nghề
-      { column: 2, ascending: true },  // B: tên công việc
+      { column: 3, ascending: true },
+      { column: 2, ascending: true },
     ]);
   SpreadsheetApp.getActiveSpreadsheet().toast('Đã sắp xếp theo ngành nghề ✅', 'TokuteiJob', 3);
 }
 
-// ── SUPABASE ─────────────────────────────────────────────────
-// Map tên hiển thị trong sheet → code gửi lên Supabase/web
-function normalizeType(raw) {
-  const s = String(raw || '').trim();
-  const TABLE = {
-    'viet': 'viet', 'nhat': 'nhat', 'both': 'both', 'kysis': 'kysis',
-    'Việt': 'viet', 'Nhật': 'nhat', 'Nhật-Việt': 'both', 'Kỹ sư': 'kysis',
-    'việt': 'viet', 'nhật': 'nhat', 'nhật-việt': 'both', 'kỹ sư': 'kysis',
-  };
-  if (TABLE[s]) return TABLE[s];
-  // fallback: ghép chứa cả hai thì = both
-  const lo = s.toLowerCase();
-  if (lo.includes('k')) return 'kysis';
-  if (lo.includes('nh') && lo.includes('vi')) return 'both';
-  if (lo.includes('nh')) return 'nhat';
-  if (lo.includes('vi')) return 'viet';
-  return 'viet';
+// ── MOVE INACTIVE ↔ ACTIVE ───────────────────────────────────
+function _moveRowToInactive(sheet, row) {
+  const ss = sheet.getParent();
+  let dest = ss.getSheetByName(INACTIVE_TAB);
+  const lastCol = sheet.getLastColumn();
+  if (!dest) {
+    dest = ss.insertSheet(INACTIVE_TAB);
+    sheet.getRange(1, 1, 1, lastCol).copyTo(dest.getRange(1, 1, 1, lastCol));
+  }
+  const destRow = dest.getLastRow() + 1;
+  sheet.getRange(row, 1, 1, lastCol).copyTo(dest.getRange(destRow, 1, 1, lastCol));
+  sheet.deleteRow(row);
 }
 
-function getSupabaseHeaders() {
+function _moveRowToActive(sheet, row) {
+  const ss = sheet.getParent();
+  const dest = ss.getSheetByName(SHEET_NAME);
+  if (!dest) return;
+  const lastCol = sheet.getLastColumn();
+  const destRow = dest.getLastRow() + 1;
+  sheet.getRange(row, 1, 1, lastCol).copyTo(dest.getRange(destRow, 1, 1, lastCol));
+  sheet.deleteRow(row);
+}
+
+function moveAllInactive() {
+  const ss    = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet || sheet.getLastRow() < 2) {
+    ss.toast('Không có dữ liệu', 'TokuteiJob', 3);
+    return;
+  }
+  const data = sheet.getRange(2, 16, sheet.getLastRow() - 1, 1).getValues();
+  const rows = [];
+  for (let i = data.length - 1; i >= 0; i--) {
+    if (String(data[i][0]).trim().toLowerCase() === 'inactive') rows.push(i + 2);
+  }
+  rows.forEach(r => _moveRowToInactive(sheet, r));
+  ss.toast('✅ Đã chuyển ' + rows.length + ' job sang Inactive', 'TokuteiJob', 3);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  SUPABASE — đẩy lên đồng thời 2 web
+//  maiphuongtokutei.com (SB_MP) + nippontokutei.com (SB_NT)
+// ══════════════════════════════════════════════════════════════
+function _sbHeaders(key) {
   return {
-    'apikey':        SUPABASE_KEY,
-    'Authorization': 'Bearer ' + SUPABASE_KEY,
+    'apikey':        key,
+    'Authorization': 'Bearer ' + key,
     'Content-Type':  'application/json',
     'Prefer':        'return=minimal',
   };
 }
 
+// Chuyển ngày (cột T) sang ISO an toàn
+function _safeISO(v) {
+  try {
+    if (v instanceof Date) return isNaN(v.getTime()) ? new Date().toISOString() : v.toISOString();
+    const s = String(v || '').trim();
+    if (!s) return new Date().toISOString();
+    const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[ T](\d{1,2}):(\d{2}))?/);
+    const d = m ? new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0)) : new Date(s);
+    return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+  } catch (e) {
+    return new Date().toISOString();
+  }
+}
+
+// 1 dòng → object Supabase (web chỉ biết type 'nhat' | 'kysis')
 function buildJob(r, i) {
-  const type    = normalizeType(r[0]);
+  const t       = normalizeType(r[0]);
+  const webType = (t === 'kysis_nhat') ? 'kysis' : 'nhat';
   const catMain = String(r[2] || '').trim();
   const catSub  = String(r[3] || '').trim();
   return {
-    id:        type + '-' + i,
-    type:      type,
+    id:        'gs_' + i,
+    type:      webType,
     title:     String(r[1] || '').trim(),
     category:  [catMain, catSub].filter(Boolean).join(','),
-    city:      String(r[4] || '').trim(),
-    salary:    String(r[5] || '').trim(),
-    japanese:  String(r[6] || '').trim(),
-    gender:    String(r[7] || '').trim(),
-    workHours: String(r[8] || '').trim(),
-    daysOff:   String(r[9] || '').trim(),
-    overtime:  String(r[10]|| '').trim(),
-    raise:     String(r[11]|| '').trim(),
-    bonus:     String(r[12]|| '').trim(),
-    housing:   String(r[13]|| '').trim(),
-    desc:      String(r[14]|| '').trim(),
+    city:      String(r[4]  || '').trim(),
+    salary:    String(r[5]  || '').trim(),
+    japanese:  String(r[6]  || '').trim(),
+    gender:    String(r[7]  || '').trim(),
+    workHours: String(r[8]  || '').trim(),
+    daysOff:   String(r[9]  || '').trim(),
+    overtime:  String(r[10] || '').trim(),
+    raise:     String(r[11] || '').trim(),
+    bonus:     String(r[12] || '').trim(),
+    housing:   String(r[13] || '').trim(),
+    desc:      String(r[14] || '').trim(),
+    imageUrl:  String(r[21] || '').trim(),   // cột V
     status:    'active',
-    updatedAt: r[19] ? (r[19] instanceof Date ? r[19].toISOString() : new Date(r[19]).toISOString()) : null,
+    updatedAt: _safeISO(r[19]),
   };
 }
 
-function syncToSupabase() {
-  const ss    = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) {
-    SpreadsheetApp.getUi().alert('❌ Không tìm thấy tab: "' + SHEET_NAME + '"');
-    return;
-  }
-
-  const rows = sheet.getDataRange().getValues()
-    .slice(1)
-    .filter(r => r[1] && String(r[15] || '').toLowerCase().trim() !== 'inactive');
-
+// Push vào 1 Supabase (xóa job sync cũ → insert mới)
+// Giữ lại job admin thêm tay trên web (id bắt đầu 'job_')
+function _pushToOne(sbUrl, sbKey, payload) {
+  const headers = _sbHeaders(sbKey);
   const delRes = UrlFetchApp.fetch(
-    SUPABASE_URL + '/rest/v1/jobs?id=not.is.null',
-    { method: 'DELETE', headers: getSupabaseHeaders(), muteHttpExceptions: true }
+    sbUrl + '/rest/v1/jobs?id=not.like.job_*',
+    { method: 'DELETE', headers: headers, muteHttpExceptions: true }
   );
-  if (delRes.getResponseCode() >= 300) {
-    SpreadsheetApp.getUi().alert('❌ Lỗi xóa jobs cũ: ' + delRes.getContentText());
-    return;
-  }
+  if (delRes.getResponseCode() >= 300) throw new Error('DELETE ' + sbUrl + ': ' + delRes.getContentText());
+  // Dọn job thêm tay có type không còn dùng trên web (viet/both cũ)
+  UrlFetchApp.fetch(
+    sbUrl + '/rest/v1/jobs?type=not.in.' + encodeURIComponent('("nhat","kysis")'),
+    { method: 'DELETE', headers: headers, muteHttpExceptions: true }
+  );
 
-  if (!rows.length) {
-    SpreadsheetApp.getUi().alert('⚠️ Không có job active nào để sync.');
-    return;
-  }
-
-  const payload = rows.map(function(r, i) { return buildJob(r, i); });
-  const insRes  = UrlFetchApp.fetch(SUPABASE_URL + '/rest/v1/jobs', {
+  if (!payload.length) return;
+  const insRes = UrlFetchApp.fetch(sbUrl + '/rest/v1/jobs', {
     method:             'POST',
-    headers:            getSupabaseHeaders(),
+    headers:            headers,
     payload:            JSON.stringify(payload),
     muteHttpExceptions: true,
   });
+  if (insRes.getResponseCode() >= 300) throw new Error('INSERT ' + sbUrl + ': ' + insRes.getContentText());
+}
 
-  const code = insRes.getResponseCode();
-  if (code >= 300) {
-    SpreadsheetApp.getUi().alert('❌ Lỗi insert (' + code + '): ' + insRes.getContentText());
-  } else {
-    SpreadsheetApp.getUi().alert('✅ Sync thành công!\nĐã đẩy ' + rows.length + ' jobs lên web.');
+// Lõi: đọc sheet → build payload → push lên CẢ 2 Supabase
+function _pushSupabase() {
+  const ss    = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) throw new Error('Không tìm thấy tab: "' + SHEET_NAME + '"');
+
+  const last = sheet.getLastRow();
+  const rows = (last < 2 ? [] : sheet.getRange(2, 1, last - 1, 22).getValues())
+    .filter(function(r) {
+      if (!r[1]) return false;
+      if (String(r[15] || '').toLowerCase().trim() === 'inactive') return false;
+      return _isForNhat(normalizeType(r[0]));
+    });
+
+  const payload = rows.map(function(r, i) { return buildJob(r, i); });
+
+  _pushToOne(SB_MP_URL, SB_MP_KEY, payload);
+  return payload.length;
+}
+
+// Wrapper với UI
+function syncToSupabase() {
+  try {
+    const n = _pushSupabase();
+    SpreadsheetApp.getUi().alert('✅ Sync thành công!\nĐã đẩy ' + n + ' jobs lên maiphuongtokutei.com');
+  } catch (e) {
+    SpreadsheetApp.getUi().alert('❌ Lỗi: ' + e.message);
   }
+}
+
+// ── DROPDOWN cột "Loại đơn" ───────────────────────────────────
+const LOAI_DON_OPTIONS = ['Nhật', 'Việt', 'Nhật-Việt', 'Indonesia', 'Kỹ sư đầu Nhật', 'Kỹ sư đầu Việt'];
+
+function setupLoaiDonDropdown() {
+  const ss   = SpreadsheetApp.getActiveSpreadsheet();
+  const rule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(LOAI_DON_OPTIONS, true)
+    .setAllowInvalid(true)
+    .build();
+  [SHEET_NAME, INACTIVE_TAB].forEach(function(name) {
+    const sheet = ss.getSheetByName(name);
+    if (!sheet) return;
+    const rows = sheet.getMaxRows() - 1;
+    if (rows > 0) sheet.getRange(2, 1, rows, 1).setDataValidation(rule);
+  });
+  ss.toast('✅ Đã cập nhật dropdown "Loại đơn".', 'TokuteiJob', 4);
 }
 
 // ── SETUP: THIẾT LẬP SHEET (chạy 1 lần) ─────────────────────
 function setupSourceSheet() {
   const ss    = SpreadsheetApp.getActiveSpreadsheet();
   let   sheet = ss.getSheetByName(SHEET_NAME);
-
   if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
 
-  const PUB_HEADERS  = ['Loại đơn','Tên công việc','Ngành chính','Ngành phụ','Tỉnh/TP','Lương','Tiếng Nhật','Giới tính','Giờ làm','Ngày nghỉ','Tăng ca','Tăng lương','Thưởng','Nhà ở','Mô tả','Trạng thái'];
-  const PRIV_HEADERS = ['Nguồn','Hoa hồng','Phí net','Ngày cập nhật'];
+  const PUB_HDR  = ['Loại đơn','Tên công việc','Ngành chính','Ngành phụ','Tỉnh/TP','Lương',
+                    'Tiếng Nhật','Giới tính','Giờ làm','Ngày nghỉ','Tăng ca',
+                    'Tăng lương','Thưởng','Nhà ở','Mô tả','Trạng thái'];
+  const PRIV_HDR = ['Nguồn','Hoa hồng','Phí net','Ngày cập nhật'];
 
   sheet.getRange(1, 1, 1, 16)
-    .setValues([PUB_HEADERS])
+    .setValues([PUB_HDR])
     .setBackground('#1a3c5e').setFontColor('#fff')
     .setFontWeight('bold').setHorizontalAlignment('center');
   sheet.getRange(1, 17, 1, 4)
-    .setValues([PRIV_HEADERS])
+    .setValues([PRIV_HDR])
     .setBackground('#4a3580').setFontColor('#fff')
+    .setFontWeight('bold').setHorizontalAlignment('center');
+  // Cột U (21) = dự phòng, cột V (22) = Link ảnh
+  sheet.getRange(1, 21).setValue('(dự phòng)').setBackground('#e8eaed').setFontColor('#666');
+  sheet.getRange(1, 22).setValue('Link ảnh').setBackground('#1a3c5e').setFontColor('#fff')
     .setFontWeight('bold').setHorizontalAlignment('center');
 
   sheet.setFrozenRows(1);
 
-  [100,160,160,130,120,200,110,110,130,130,100,100,110,120,300,90,150,110,110,140]
-    .forEach(function(w, i) { sheet.setColumnWidth(i + 1, w); });
+  [100,160,160,130,120,200,110,110,130,130,100,100,110,120,300,90, // A–P
+   150,110,110,140,  // Q–T
+   80, 240,          // U (dự phòng), V (Link ảnh)
+  ].forEach(function(w, i) { sheet.setColumnWidth(i + 1, w); });
 
   const lastRow = Math.max(sheet.getLastRow(), 2);
   sheet.getRange(2, 20, lastRow - 1, 1).setNumberFormat('dd/MM/yyyy HH:mm');
 
+  // Ẩn cột nội bộ Q–T
   for (let c = 17; c <= 20; c++) sheet.hideColumns(c);
 
   SpreadsheetApp.getUi().alert(
-    '✅ Hoàn tất!\n\n' +
-    'Tab "' + SHEET_NAME + '" đã sẵn sàng.\n\n' +
+    '✅ Sheet đã sẵn sàng!\n\n' +
+    'Cột A–P: dữ liệu công khai\n' +
+    'Cột Q–T: nội bộ (ẩn)\n' +
+    'Cột V: Link ảnh\n\n' +
     'Tiếp theo: Menu → 🌐 Tạo Sheet Công Khai'
   );
 }
 
 // ── HIGHLIGHT ROW & COLUMN KHI CHỌN Ô ───────────────────────
-const HL_COLOR = '#DBEAFE'; // xanh nhạt
+const HL_COLOR = '#DBEAFE';
 
 function onSelectionChange(e) {
   const sheet = e.range.getSheet();
@@ -485,12 +777,9 @@ function onSelectionChange(e) {
   const lastCol = sheet.getLastColumn();
   if (lastRow < 2 || lastCol < 1) return;
 
-  // Xóa highlight cũ (bỏ qua hàng tiêu đề - row 1)
   sheet.getRange(2, 1, lastRow - 1, lastCol).setBackground(null);
-
-  // Highlight toàn dòng (bỏ qua header)
+  // Khôi phục nền tím cột nội bộ Q–T sau khi xóa highlight
+  if (lastCol >= 20) sheet.getRange(2, 17, lastRow - 1, 4).setBackground('#f3f0ff');
   if (row >= 2) sheet.getRange(row, 1, 1, lastCol).setBackground(HL_COLOR);
-
-  // Highlight toàn cột (bỏ qua header)
   sheet.getRange(2, col, lastRow - 1, 1).setBackground(HL_COLOR);
 }
